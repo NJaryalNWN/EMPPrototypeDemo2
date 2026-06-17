@@ -1,0 +1,398 @@
+@custom-variant dark (&:is(.dark *));
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LIGHT — NWN Brand (Material Design 3)
+   Primary Navy: #002855  |  Secondary Orange: #FF6900  |  Accent: #00A3E0
+   Typefaces: Encode Sans Expanded (headlines) · Lato (body/UI)
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root,
+[data-theme="light"] {
+  --font-size: 16px;
+  --radius: 0.75rem;
+  --font-heading: 'Encode Sans Expanded', system-ui, sans-serif;
+  --font-body:    'Lato', system-ui, sans-serif;
+
+  /* Surfaces */
+  --background:         #F0F4F8;
+  --foreground:         #0A1628;
+  --card:               #FFFFFF;
+  --card-foreground:    #0A1628;
+  --popover:            #FFFFFF;
+  --popover-foreground: #0A1628;
+
+  /* Primary — NWN Navy #002855 */
+  --primary:                #002855;
+  --primary-foreground:     #FFFFFF;
+  --primary-container:      #D6E4FF;
+  --on-primary-container:   #001A3D;
+
+  /* Secondary — NWN Orange #FF6900 */
+  --secondary:              #C45200;
+  --secondary-foreground:   #FFFFFF;
+  --secondary-container:    #FFE0CC;
+  --on-secondary-container: #3D1500;
+
+  /* Accent — NWN Blue #00A3E0 */
+  --accent-brand:           #00A3E0;
+  --accent-brand-container: #CCF0FF;
+
+  /* Surface variants */
+  --muted:              #E8EDF5;
+  --muted-foreground:   #4A5568;
+  --accent:             #D6E4FF;
+  --accent-foreground:  #0A1628;
+
+  /* Semantic */
+  --destructive:            #BA1A1A;
+  --destructive-foreground: #FFFFFF;
+  --border:             rgba(0, 40, 85, 0.10);
+  --input:              transparent;
+  --input-background:   #EBF0F7;
+  --switch-background:  #8AA3CC;
+  --ring:               rgba(0, 40, 85, 0.25);
+  --font-weight-medium: 600;
+  --font-weight-normal: 400;
+
+  /* State layers (MD3) */
+  --state-hover:   rgba(0, 40, 85, 0.06);
+  --state-pressed: rgba(0, 40, 85, 0.12);
+  --state-focus:   rgba(0, 40, 85, 0.08);
+
+  /* Status */
+  --status-error-bg:    #FFE8E8;
+  --status-error-fg:    #B91C1C;
+  --status-warning-bg:  #FFF4E0;
+  --status-warning-fg:  #92400E;
+  --status-success-bg:  #D4F0E0;
+  --status-success-fg:  #166534;
+  --status-info-bg:     #CCF0FF;
+  --status-info-fg:     #0369A1;
+
+  /* Charts */
+  --chart-1: #002855;
+  --chart-2: #FF6900;
+  --chart-3: #00A3E0;
+  --chart-4: #485CC7;
+  --chart-5: #166534;
+
+  /* Sidebar — white surface rail (original MD3 light) */
+  --sidebar:                    #FFFFFF;
+  --sidebar-border:             rgba(0, 40, 85, 0.08);
+  --sidebar-icon:               #5E6A84;
+  --sidebar-active-container:   #D6E4FF;
+  --sidebar-active-fg:          #002855;
+  --sidebar-logo-bg:            #002855;
+  --sidebar-logo-fg:            #FFFFFF;
+  --sidebar-foreground:         #0A1628;
+  --sidebar-primary:            #002855;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent:             #D6E4FF;
+  --sidebar-accent-foreground:  #0A1628;
+  --sidebar-ring:               rgba(0, 40, 85, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DARK — NWN Brand (MD3 dark scheme)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.dark,
+[data-theme="dark"] {
+  --font-heading: 'Encode Sans Expanded', system-ui, sans-serif;
+  --font-body:    'Lato', system-ui, sans-serif;
+
+  --background:         #080E1C;
+  --foreground:         #DCE8FF;
+  --card:               #101828;
+  --card-foreground:    #DCE8FF;
+  --popover:            #182038;
+  --popover-foreground: #DCE8FF;
+
+  --primary:                #A8C8FF;
+  --primary-foreground:     #001A3D;
+  --primary-container:      #003470;
+  --on-primary-container:   #D6E4FF;
+
+  --secondary:              #FFB68A;
+  --secondary-foreground:   #5C1C00;
+  --secondary-container:    #7A3000;
+  --on-secondary-container: #FFE0CC;
+
+  --accent-brand:           #4DC8F5;
+  --accent-brand-container: #003B52;
+
+  --muted:              #1A2438;
+  --muted-foreground:   #7A90B4;
+  --accent:             #1A2A48;
+  --accent-foreground:  #DCE8FF;
+
+  --destructive:            #FFB4AB;
+  --destructive-foreground: #690005;
+  --border:             rgba(168, 200, 255, 0.10);
+  --input:              transparent;
+  --input-background:   #1A2438;
+  --switch-background:  #3A4E70;
+  --ring:               rgba(168, 200, 255, 0.25);
+  --font-weight-medium: 600;
+  --font-weight-normal: 400;
+
+  --state-hover:   rgba(168, 200, 255, 0.08);
+  --state-pressed: rgba(168, 200, 255, 0.14);
+  --state-focus:   rgba(168, 200, 255, 0.10);
+
+  --status-error-bg:    rgba(239, 68, 68, 0.16);
+  --status-error-fg:    #FCA5A5;
+  --status-warning-bg:  rgba(251, 146, 60, 0.15);
+  --status-warning-fg:  #FCD34D;
+  --status-success-bg:  rgba(74, 222, 128, 0.14);
+  --status-success-fg:  #86EFAC;
+  --status-info-bg:     rgba(77, 200, 245, 0.15);
+  --status-info-fg:     #7DD3FC;
+
+  --chart-1: #6BA8FF;
+  --chart-2: #FFB68A;
+  --chart-3: #4DC8F5;
+  --chart-4: #9FAEE5;
+  --chart-5: #86EFAC;
+
+  --sidebar:                    #080E1C;
+  --sidebar-border:             rgba(168, 200, 255, 0.08);
+  --sidebar-icon:               rgba(168, 200, 255, 0.50);
+  --sidebar-active-container:   #003470;
+  --sidebar-active-fg:          #A8C8FF;
+  --sidebar-logo-bg:            #003470;
+  --sidebar-logo-fg:            #A8C8FF;
+  --sidebar-foreground:         #DCE8FF;
+  --sidebar-primary:            #A8C8FF;
+  --sidebar-primary-foreground: #001A3D;
+  --sidebar-accent:             #1A2A48;
+  --sidebar-accent-foreground:  #DCE8FF;
+  --sidebar-ring:               rgba(168, 200, 255, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OCEAN — MD3 Blue (seed #0061A4, accent teal)
+   ═══════════════════════════════════════════════════════════════════════════ */
+[data-theme="ocean"] {
+  --font-heading: 'Encode Sans Expanded', system-ui, sans-serif;
+  --font-body:    'Lato', system-ui, sans-serif;
+
+  --background:         #EEF5FF;
+  --foreground:         #001830;
+  --card:               #FFFFFF;
+  --card-foreground:    #001830;
+  --popover:            #FFFFFF;
+  --popover-foreground: #001830;
+
+  --primary:                #0061A4;
+  --primary-foreground:     #FFFFFF;
+  --primary-container:      #D1E4FF;
+  --on-primary-container:   #001D36;
+
+  --secondary:              #006874;
+  --secondary-foreground:   #FFFFFF;
+  --secondary-container:    #97F0FF;
+  --on-secondary-container: #001F24;
+
+  --accent-brand:           #0097C8;
+  --accent-brand-container: #CCF0FF;
+
+  --muted:              #DCE8F5;
+  --muted-foreground:   #3D5068;
+  --accent:             #C8DCEE;
+  --accent-foreground:  #001830;
+
+  --destructive:            #BA1A1A;
+  --destructive-foreground: #FFFFFF;
+  --border:             rgba(0, 97, 164, 0.12);
+  --input:              transparent;
+  --input-background:   #E0EDF8;
+  --switch-background:  #6FA8CC;
+  --ring:               rgba(0, 97, 164, 0.28);
+  --font-weight-medium: 600;
+  --font-weight-normal: 400;
+
+  --state-hover:   rgba(0, 97, 164, 0.06);
+  --state-pressed: rgba(0, 97, 164, 0.12);
+  --state-focus:   rgba(0, 97, 164, 0.08);
+
+  --status-error-bg:    #FFE8E8;
+  --status-error-fg:    #B91C1C;
+  --status-warning-bg:  #FFF4E0;
+  --status-warning-fg:  #92400E;
+  --status-success-bg:  #D4F0E0;
+  --status-success-fg:  #166534;
+  --status-info-bg:     #CCF0FF;
+  --status-info-fg:     #0061A4;
+
+  --chart-1: #0061A4;
+  --chart-2: #006874;
+  --chart-3: #0097C8;
+  --chart-4: #1565C0;
+  --chart-5: #00695C;
+
+  --sidebar:                    #002F5A;
+  --sidebar-border:             rgba(255, 255, 255, 0.05);
+  --sidebar-icon:               rgba(193, 220, 255, 0.58);
+  --sidebar-active-container:   rgba(255, 255, 255, 0.18);
+  --sidebar-active-fg:          #FFFFFF;
+  --sidebar-logo-bg:            rgba(255, 255, 255, 0.14);
+  --sidebar-logo-fg:            #FFFFFF;
+  --sidebar-foreground:         #C8DCFF;
+  --sidebar-primary:            #D1E4FF;
+  --sidebar-primary-foreground: #001D36;
+  --sidebar-accent:             rgba(255, 255, 255, 0.10);
+  --sidebar-accent-foreground:  #FFFFFF;
+  --sidebar-ring:               rgba(193, 220, 255, 0.30);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WARM — MD3 Deep Orange / Terracotta
+   ═══════════════════════════════════════════════════════════════════════════ */
+[data-theme="warm"] {
+  --font-heading: 'Encode Sans Expanded', system-ui, sans-serif;
+  --font-body:    'Lato', system-ui, sans-serif;
+
+  --background:         #FFF7F2;
+  --foreground:         #241100;
+  --card:               #FFFFFF;
+  --card-foreground:    #241100;
+  --popover:            #FFFFFF;
+  --popover-foreground: #241100;
+
+  --primary:                #8B3A00;
+  --primary-foreground:     #FFFFFF;
+  --primary-container:      #FFD8C0;
+  --on-primary-container:   #2D0E00;
+
+  --secondary:              #6B5C00;
+  --secondary-foreground:   #FFFFFF;
+  --secondary-container:    #F5E080;
+  --on-secondary-container: #211B00;
+
+  --accent-brand:           #FF6900;
+  --accent-brand-container: #FFE0CC;
+
+  --muted:              #F2E8DF;
+  --muted-foreground:   #664030;
+  --accent:             #FFE8D8;
+  --accent-foreground:  #241100;
+
+  --destructive:            #BA1A1A;
+  --destructive-foreground: #FFFFFF;
+  --border:             rgba(139, 58, 0, 0.12);
+  --input:              transparent;
+  --input-background:   #FAEADF;
+  --switch-background:  #BF8070;
+  --ring:               rgba(139, 58, 0, 0.28);
+  --font-weight-medium: 600;
+  --font-weight-normal: 400;
+
+  --state-hover:   rgba(139, 58, 0, 0.06);
+  --state-pressed: rgba(139, 58, 0, 0.12);
+  --state-focus:   rgba(139, 58, 0, 0.08);
+
+  --status-error-bg:    #FFE8E8;
+  --status-error-fg:    #B91C1C;
+  --status-warning-bg:  #FFF4E0;
+  --status-warning-fg:  #5D3A00;
+  --status-success-bg:  #D4F0E0;
+  --status-success-fg:  #166534;
+  --status-info-bg:     #FFD8C0;
+  --status-info-fg:     #8B3A00;
+
+  --chart-1: #8B3A00;
+  --chart-2: #6B5C00;
+  --chart-3: #FF6900;
+  --chart-4: #B91C1C;
+  --chart-5: #E65100;
+
+  --sidebar:                    #5A1A00;
+  --sidebar-border:             rgba(255, 255, 255, 0.05);
+  --sidebar-icon:               rgba(255, 216, 192, 0.58);
+  --sidebar-active-container:   rgba(255, 255, 255, 0.18);
+  --sidebar-active-fg:          #FFFFFF;
+  --sidebar-logo-bg:            rgba(255, 255, 255, 0.14);
+  --sidebar-logo-fg:            #FFFFFF;
+  --sidebar-foreground:         #FFD8C0;
+  --sidebar-primary:            #FFD8C0;
+  --sidebar-primary-foreground: #2D0E00;
+  --sidebar-accent:             rgba(255, 255, 255, 0.10);
+  --sidebar-accent-foreground:  #FFFFFF;
+  --sidebar-ring:               rgba(255, 216, 192, 0.30);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tailwind v4 token bridge
+   ═══════════════════════════════════════════════════════════════════════════ */
+@theme inline {
+  --color-background:               var(--background);
+  --color-foreground:               var(--foreground);
+  --color-card:                     var(--card);
+  --color-card-foreground:          var(--card-foreground);
+  --color-popover:                  var(--popover);
+  --color-popover-foreground:       var(--popover-foreground);
+  --color-primary:                  var(--primary);
+  --color-primary-foreground:       var(--primary-foreground);
+  --color-primary-container:        var(--primary-container);
+  --color-on-primary-container:     var(--on-primary-container);
+  --color-secondary:                var(--secondary);
+  --color-secondary-foreground:     var(--secondary-foreground);
+  --color-secondary-container:      var(--secondary-container);
+  --color-on-secondary-container:   var(--on-secondary-container);
+  --color-muted:                    var(--muted);
+  --color-muted-foreground:         var(--muted-foreground);
+  --color-accent:                   var(--accent);
+  --color-accent-foreground:        var(--accent-foreground);
+  --color-destructive:              var(--destructive);
+  --color-destructive-foreground:   var(--destructive-foreground);
+  --color-border:                   var(--border);
+  --color-input:                    var(--input);
+  --color-input-background:         var(--input-background);
+  --color-switch-background:        var(--switch-background);
+  --color-ring:                     var(--ring);
+  --color-chart-1:                  var(--chart-1);
+  --color-chart-2:                  var(--chart-2);
+  --color-chart-3:                  var(--chart-3);
+  --color-chart-4:                  var(--chart-4);
+  --color-chart-5:                  var(--chart-5);
+  --radius-sm:  calc(var(--radius) - 4px);
+  --radius-md:  calc(var(--radius) - 2px);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) + 4px);
+  --color-sidebar:                      var(--sidebar);
+  --color-sidebar-foreground:           var(--sidebar-foreground);
+  --color-sidebar-primary:              var(--sidebar-primary);
+  --color-sidebar-primary-foreground:   var(--sidebar-primary-foreground);
+  --color-sidebar-accent:               var(--sidebar-accent);
+  --color-sidebar-accent-foreground:    var(--sidebar-accent-foreground);
+  --color-sidebar-border:               var(--sidebar-border);
+  --color-sidebar-ring:                 var(--sidebar-ring);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Base layer
+   ═══════════════════════════════════════════════════════════════════════════ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    transition: background-color 0.25s ease, color 0.15s ease;
+  }
+
+  html { font-size: var(--font-size); }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+  }
+  h1 { font-size: var(--text-2xl); font-weight: 700; line-height: 1.3; }
+  h2 { font-size: var(--text-xl);  font-weight: 600; line-height: 1.35; }
+  h3 { font-size: var(--text-lg);  font-weight: 600; line-height: 1.4; }
+  h4 { font-size: var(--text-base); font-weight: 600; line-height: 1.5; }
+
+  label  { font-size: var(--text-base); font-weight: var(--font-weight-medium); line-height: 1.5; }
+  button { font-size: var(--text-base); font-weight: var(--font-weight-medium); line-height: 1.5; font-family: var(--font-body); }
+  input  { font-size: var(--text-base); font-weight: var(--font-weight-normal);  line-height: 1.5; font-family: var(--font-body); }
+}
