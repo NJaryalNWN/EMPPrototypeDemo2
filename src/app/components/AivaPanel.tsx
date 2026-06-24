@@ -83,9 +83,9 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
           <div className="flex items-center gap-2.5">
             <div
               className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: "var(--primary)" }}
+              style={{ backgroundColor: "#00a3e0" }}
             >
-              <AutoAwesomeIcon style={{ fontSize: 16, color: "var(--primary-foreground)" }} />
+              <AutoAwesomeIcon style={{ fontSize: 16, color: "#ffffff" }} />
             </div>
             <div>
               <p className="text-foreground font-semibold" style={{ fontSize: 14, lineHeight: 1.2 }}>Aiva</p>
@@ -112,9 +112,9 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
               {msg.role === "aiva" && (
                 <div
                   className="w-6 h-6 rounded-lg flex items-center justify-center mr-2 mt-0.5 flex-shrink-0"
-                  style={{ backgroundColor: "var(--primary-container)" }}
+                  style={{ backgroundColor: "rgba(0,163,224,0.12)" }}
                 >
-                  <AutoAwesomeIcon style={{ fontSize: 12, color: "var(--primary)" }} />
+                  <AutoAwesomeIcon style={{ fontSize: 12, color: "#00a3e0" }} />
                 </div>
               )}
               <div
@@ -149,8 +149,8 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
                 className="px-3 py-1.5 rounded-full border cursor-pointer transition-colors hover:bg-muted bg-transparent"
                 style={{
                   fontSize: 11,
-                  color: "var(--primary)",
-                  borderColor: "var(--primary)",
+                  color: "#00a3e0",
+                  borderColor: "#00a3e0",
                 }}
               >
                 {s}
@@ -185,10 +185,10 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
             onClick={() => send(input)}
             disabled={!input.trim()}
             className="w-8 h-8 flex items-center justify-center rounded-full border-0 cursor-pointer transition-all flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ backgroundColor: input.trim() ? "var(--primary)" : "var(--muted)" }}
+            style={{ backgroundColor: input.trim() ? "#00a3e0" : "var(--muted)" }}
             aria-label="Send"
           >
-            <SendIcon style={{ fontSize: 15, color: input.trim() ? "var(--primary-foreground)" : "var(--muted-foreground)" }} />
+            <SendIcon style={{ fontSize: 15, color: input.trim() ? "#ffffff" : "var(--muted-foreground)" }} />
           </button>
         </div>
       </aside>
