@@ -18,39 +18,31 @@ import { useTheme, type Theme } from "../context/ThemeContext";
 import { Btn } from "./ui/Btn";
 import { NotificationDrawer } from "./NotificationDrawer";
 
-/* ── Amazon wordmark — inline SVG for reliable dark-mode control ── */
+/* ── Amazon wordmark — CSS text for crisp rendering, SVG only for swoosh ── */
 function AmazonWordmark({ dark }: { dark: boolean }) {
   const ink = dark ? "#FFFFFF" : "#0F1111";
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 218 66"
-      aria-label="Amazon"
-      style={{ height: "100%", width: "auto", display: "block" }}
-    >
-      {/* Wordmark */}
-      <text
-        x="4" y="48"
-        fontFamily='"Amazon Ember", "Arial Black", "Arial Bold", Arial, sans-serif'
-        fontSize="50"
-        fontWeight="900"
-        fill={ink}
-        letterSpacing="-2"
-      >
+    <div style={{ display: "inline-block" }} aria-label="Amazon">
+      <div style={{
+        fontFamily: '"Arial Black", "Helvetica Neue", Arial, sans-serif',
+        fontSize: 21,
+        fontWeight: 900,
+        color: ink,
+        letterSpacing: -0.5,
+        lineHeight: 1,
+        userSelect: "none",
+      }}>
         amazon
-      </text>
-      {/* Orange swoosh — from under 'a' to under 'z', with arrowhead */}
-      <path
-        d="M16 57 Q70 74 152 57"
-        stroke="#FF9900" strokeWidth="5" fill="none"
-        strokeLinecap="round"
-      />
-      <path
-        d="M146 52 L155 57 L146 62"
-        stroke="#FF9900" strokeWidth="4" fill="none"
-        strokeLinecap="round" strokeLinejoin="round"
-      />
-    </svg>
+      </div>
+      {/* Swoosh — width: 100% stretches to match the text width above */}
+      <svg viewBox="0 0 100 11" preserveAspectRatio="none"
+        style={{ display: "block", width: "100%", height: 8, marginTop: 1 }}
+        aria-hidden="true"
+      >
+        <path d="M2 7.5 Q35 12 82 6" stroke="#FF9900" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+        <path d="M78.5 3.5 L84.5 6 L78.5 8.5" stroke="#FF9900" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </div>
   );
 }
 
@@ -242,21 +234,18 @@ export function Header() {
         <div className="flex items-center gap-4 flex-shrink-0">
 
           {/* Logo zone — stacked lockup */}
-          <div className="flex flex-col" style={{ gap: 2 }}>
+          <div className="flex flex-col" style={{ gap: 3 }}>
 
-            {/* Amazon — primary brand, tall to fill header */}
-            <div style={{ height: 30 }}>
-              <AmazonWordmark dark={theme === "dark"} />
-            </div>
+            <AmazonWordmark dark={theme === "dark"} />
 
             {/* Powered by NWN — right-aligned caption row */}
-            <div className="flex items-center justify-end" style={{ gap: 5 }}>
+            <div className="flex items-center justify-end" style={{ gap: 4 }}>
               <span style={{
-                fontSize: 7.5,
+                fontSize: 7,
                 fontFamily: "var(--font-body)",
-                fontWeight: 400,
+                fontWeight: 500,
                 color: "var(--muted-foreground)",
-                letterSpacing: "0.12em",
+                letterSpacing: "0.14em",
                 textTransform: "uppercase",
                 lineHeight: 1,
               }}>
@@ -265,7 +254,7 @@ export function Header() {
               <img
                 src={theme === "dark" ? nwnLogoDark : nwnLogo}
                 alt="NWN"
-                style={{ height: 11, width: "auto", opacity: 0.80 }}
+                style={{ height: 12, width: "auto" }}
               />
             </div>
 

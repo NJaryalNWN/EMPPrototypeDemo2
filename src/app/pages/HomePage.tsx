@@ -52,6 +52,11 @@ import StorageOutlinedIcon from "@mui/icons-material/StorageOutlined";
 import ForumOutlinedIcon from "@mui/icons-material/ForumOutlined";
 import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
 import DevicesOutlinedIcon from "@mui/icons-material/DevicesOutlined";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
 
 function greeting() {
   const h = new Date().getHours();
@@ -113,38 +118,43 @@ function PortalCard({
   children,
   className = "",
   accentColor = "var(--primary)",
+  noHover = false,
 }: {
   children: React.ReactNode;
   accent?: boolean;
   className?: string;
   accentColor?: string;
+  noHover?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
   const [pressed, setPressed] = useState(false);
   const { theme } = useTheme();
   const dark = theme === "dark";
 
+  const h = noHover ? false : hovered;
+  const p = noHover ? false : pressed;
+
   return (
     <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setHovered(false); setPressed(false); }}
-      onMouseDown={() => setPressed(true)}
-      onMouseUp={() => setPressed(false)}
+      onMouseEnter={() => !noHover && setHovered(true)}
+      onMouseLeave={() => { if (!noHover) { setHovered(false); setPressed(false); } }}
+      onMouseDown={() => !noHover && setPressed(true)}
+      onMouseUp={() => !noHover && setPressed(false)}
       className={`relative flex flex-col overflow-hidden rounded-2xl bg-card transition-all duration-200 cursor-default select-none ${className}`}
       style={{
-        border: hovered ? `1px solid ${accentColor}` : "1px solid var(--border)",
-        boxShadow: pressed
+        border: h ? `1px solid ${accentColor}` : "1px solid var(--border)",
+        boxShadow: p
           ? dark ? "0 1px 4px rgba(0,0,0,0.30), 0 0 0 1px rgba(0,0,0,0.20)" : "0 1px 4px rgba(0,40,85,0.07), 0 0 0 1px rgba(0,40,85,0.05)"
-          : hovered
+          : h
           ? dark ? "0 8px 24px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.28)" : "0 8px 24px rgba(0,40,85,0.10), 0 2px 6px rgba(0,40,85,0.06)"
           : dark ? "0 2px 8px rgba(0,0,0,0.32), 0 1px 3px rgba(0,0,0,0.20)" : "0 2px 8px rgba(0,40,85,0.06), 0 1px 3px rgba(0,40,85,0.04)",
-        transform: pressed ? "scale(0.997) translateY(1px)" : hovered ? "translateY(-2px)" : "none",
+        transform: p ? "scale(0.997) translateY(1px)" : h ? "translateY(-2px)" : "none",
       }}
     >
       {/* M3 state layer */}
       <div
         className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-150"
-        style={{ backgroundColor: "var(--primary)", opacity: pressed ? 0.03 : 0 }}
+        style={{ backgroundColor: "var(--primary)", opacity: p ? 0.03 : 0 }}
       />
       {children}
     </div>
@@ -395,27 +405,26 @@ function HeroBanner() {
     >
 
       {/* Text — left */}
-      <div className="flex-shrink-0">
+      <div className="min-w-0 flex-1">
         <h1
           className="text-white"
           style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(15px, 2vw, 20px)", fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.3 }}
         >
           {greeting()}, Nitin
         </h1>
-        <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.70)", marginTop: 2, lineHeight: 1.5 }}>
+        <p style={{ fontSize: "clamp(11px, 1.2vw, 13px)", fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.70)", marginTop: 2, lineHeight: 1.5 }}>
           Welcome to the ServiceNow Portal. Access your knowledge base, request services, and manage tickets.
         </p>
       </div>
 
       {/* Search — compact pill */}
       <div
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 flex-shrink-0"
         style={{
           backgroundColor: "rgba(255,255,255,0.90)",
           borderRadius: 9999,
           padding: "7px 16px",
-          width: "100%",
-          maxWidth: 280,
+          width: "clamp(160px, 25%, 280px)",
           border: focused ? "1px solid rgba(255,255,255,1)" : "1px solid rgba(255,255,255,0.60)",
           boxShadow: focused ? "0 0 0 2px rgba(255,255,255,0.20)" : "none",
           transition: "border-color 0.2s, box-shadow 0.2s",
@@ -439,7 +448,7 @@ function HeroBanner() {
 
 /* ── Nav card data ───────────────────────────────────────── */
 type SubLink = { label: string; href: string };
-type NavLink = { label: string; href?: string; subLinks?: SubLink[] };
+type NavLink = { label: string; href?: string; subLinks?: SubLink[]; onClick?: () => void };
 
 const controlLinks: NavLink[] = [
   {
@@ -617,6 +626,8 @@ const reportLinks2: NavLink[] = [
 ];
 
 const supportLinks: NavLink[] = [
+  { label: "New Case" },
+  { label: "My Cases",                       href: "#my-cases" },
   { label: "SLA Dashboard",                  href: "#sla" },
   { label: "Cisco My Entitlements",          href: "#entitlements" },
   { label: "Security Alert Case Management", href: "#sacm" },
@@ -874,7 +885,7 @@ function DrillDownNavMenu({ links, accentColor = "var(--primary)", accentBg = "v
             <DrillParentRow key={link.label} link={link} onClick={() => setActiveIndex(i)} accentColor={accentColor} accentBg={accentBg} />
           );
         }
-        return <DrillSubLink key={link.label} label={link.label} href={link.href ?? "#"} accentColor={accentColor} accentBg={accentBg} />;
+        return <DrillSubLink key={link.label} label={link.label} href={link.href ?? "#"} onClick={link.onClick} accentColor={accentColor} accentBg={accentBg} />;
       })}
     </div>
   );
@@ -907,8 +918,29 @@ function DrillParentRow({ link, onClick, accentColor = "var(--primary)", accentB
   );
 }
 
-function DrillSubLink({ label, href, accentColor = "var(--primary)", accentBg = "var(--state-hover)" }: { label: string; href: string; accentColor?: string; accentBg?: string }) {
+function DrillSubLink({ label, href, onClick, accentColor = "var(--primary)", accentBg = "var(--state-hover)" }: { label: string; href: string; onClick?: () => void; accentColor?: string; accentBg?: string }) {
   const [hovered, setHovered] = useState(false);
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="w-full flex items-center gap-2.5 border-0 bg-transparent text-left cursor-pointer transition-colors duration-150"
+        style={{ padding: "9px 20px", backgroundColor: hovered ? accentBg : "transparent" }}
+      >
+        <span
+          className="flex-1 truncate"
+          style={{ fontSize: 12, fontFamily: "var(--font-body)", fontWeight: 400, color: hovered ? accentColor : "var(--foreground)", transition: "color 0.15s" }}
+        >
+          {label}
+        </span>
+      </button>
+    );
+  }
+
   return (
     <a
       href={href}
@@ -935,8 +967,8 @@ function DrillSubLink({ label, href, accentColor = "var(--primary)", accentBg = 
 
 /* ── Active ticket row (home card) — MD3 refresh ─────────── */
 const statusMeta: Record<TicketRow["status"], { label: string; textColor: string; bg: string }> = {
-  "In Progress": { label: "In Progress", textColor: "#92400E", bg: "#FFF4E0" },
-  "Pending":     { label: "Pending",     textColor: "#78350F", bg: "#FEF3C7" },
+  "In Progress": { label: "Active",   textColor: "#1D4ED8", bg: "#DBEAFE" },
+  "Pending":     { label: "Pending",  textColor: "#92400E", bg: "#FFF4E0" },
   "Approved":    { label: "Approved",    textColor: "#166534", bg: "#DCFCE7" },
   "Closed":      { label: "Closed",      textColor: "#374151", bg: "#F3F4F6" },
   "Resolved":    { label: "Resolved",    textColor: "#065F46", bg: "#D1FAE5" },
@@ -960,10 +992,10 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       aria-label={`${ticket.title} — ${s.label}`}
-      className="w-full flex items-center gap-3 border-0 bg-transparent text-left cursor-pointer transition-colors duration-150"
+      className="w-full flex items-center gap-3 border-0 text-left cursor-pointer transition-colors duration-150"
       style={{
         padding: "10px 16px",
-        backgroundColor: hov ? "var(--state-hover)" : "transparent",
+        backgroundColor: hov ? "color-mix(in srgb, var(--primary-container) 28%, transparent)" : "var(--card)",
         borderBottom: isLast ? "none" : "1px solid var(--border)",
       }}
     >
@@ -987,15 +1019,20 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
       </div>
 
       {/* Right side: status chip + date */}
-      <div className="flex flex-col items-end gap-1 flex-shrink-0 pr-4">
-        <span
-          style={{
-            fontSize: 10, fontWeight: 700, fontFamily: "var(--font-body)",
-            color: s.textColor, backgroundColor: s.bg,
-            borderRadius: 6, padding: "2px 8px", whiteSpace: "nowrap",
-            letterSpacing: "0.02em",
-          }}
-        >
+      <div className="flex flex-col items-end gap-1 flex-shrink-0">
+        {/* State label — outlined pill, dot as the color cue */}
+        <span style={{
+          display: "inline-flex", alignItems: "center", gap: 4,
+          fontSize: 10, fontWeight: 600, fontFamily: "var(--font-body)",
+          color: s.textColor,
+          backgroundColor: "transparent",
+          border: `1.5px solid ${s.textColor}50`,
+          borderRadius: 9999,
+          padding: "2px 8px 2px 6px",
+          whiteSpace: "nowrap",
+          letterSpacing: "0.01em",
+        }}>
+          <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: s.textColor, flexShrink: 0, display: "inline-block" }} />
           {s.label}
         </span>
         <span style={{ fontSize: 10, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>
@@ -1072,12 +1109,15 @@ export function HomePage({ onNav }: { onNav?: (p: string) => void }) {
               subtitle="Cases, entitlements, and alerts"
               onOpen={() => {}}
             />
-            <DrillDownNavMenu links={supportLinks} accentColor={supp.color} accentBg={supp.bg} />
-            {/* Contact options — bottom of card */}
-            <div className="pb-2">
-              <SupportContactRow href="mailto:itsupport@nwncarousel.com" icon={<EmailOutlinedIcon style={{ fontSize: 14, flexShrink: 0, transition: "color 0.15s" }} />} value="itsupport@nwncarousel.com" accentColor={supp.color} accentBg={supp.bg} />
-              <SupportContactRow href="tel:+18664084596" icon={<PhoneOutlinedIcon style={{ fontSize: 14, flexShrink: 0, transition: "color 0.15s" }} />} value="(866) 408-4596" accentColor={supp.color} accentBg={supp.bg} />
-            </div>
+            <DrillDownNavMenu
+              links={supportLinks.map((l) =>
+                l.label === "New Case"  ? { ...l, onClick: () => setDrawerOpen(true) } :
+                l.label === "My Cases" ? { ...l, onClick: () => onNav?.("My Cases") } :
+                l
+              )}
+              accentColor={supp.color}
+              accentBg={supp.bg}
+            />
           </PortalCard>
 
         </div>
@@ -1092,22 +1132,28 @@ export function HomePage({ onNav }: { onNav?: (p: string) => void }) {
             <PortalCard className="flex-1" accentColor="var(--primary)">
               <div className="px-5 pt-4 pb-3 flex items-center gap-3" style={{ borderBottom: "1px solid var(--border)" }}>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--primary-container)" }}>
-                  <ConfirmationNumberOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />
+                  <AssignmentTurnedInOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />
                 </div>
                 <div className="min-w-0">
                   <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.3, color: "var(--foreground)" }}>My Cases</h3>
                   <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 2 }}>Active cases requiring your attention</p>
                 </div>
-                {/* Stat chips inline */}
-                <div className="flex items-center gap-1.5 ml-auto flex-shrink-0">
+                {/* Stat chips — KPI counter style: filled pill, number is the hero */}
+                <div className="flex items-center gap-2 ml-auto flex-shrink-0">
                   {[
                     { label: "Active",   count: allTickets.filter(t => t.status === "In Progress" || t.status === "Pending" || t.status === "Approved").length, color: "#1D4ED8", bg: "#DBEAFE" },
                     { label: "Resolved", count: allTickets.filter(t => t.status === "Resolved").length,                                                          color: "#065F46", bg: "#D1FAE5" },
                     { label: "Closed",   count: allTickets.filter(t => t.status === "Closed").length,                                                            color: "#374151", bg: "#F3F4F6" },
                   ].map(({ label, count, color, bg }) => (
-                    <div key={label} className="flex items-center gap-1 rounded-md px-2 py-0.5" style={{ backgroundColor: bg }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, fontFamily: "var(--font-heading)", color, lineHeight: 1 }}>{count}</span>
-                      <span style={{ fontSize: 9, fontWeight: 600, fontFamily: "var(--font-body)", color, opacity: 0.75, textTransform: "uppercase", letterSpacing: "0.04em" }}>{label}</span>
+                    <div key={label} style={{
+                      display: "flex", alignItems: "center", gap: 5,
+                      padding: "4px 10px",
+                      borderRadius: 9999,
+                      backgroundColor: bg,
+                      border: `1px solid ${color}28`,
+                    }}>
+                      <span style={{ fontSize: 14, fontWeight: 800, fontFamily: "var(--font-heading)", color, lineHeight: 1 }}>{count}</span>
+                      <span style={{ fontSize: 9, fontWeight: 600, fontFamily: "var(--font-body)", color, opacity: 0.65, lineHeight: 1 }}>{label}</span>
                     </div>
                   ))}
                 </div>
@@ -1139,7 +1185,7 @@ export function HomePage({ onNav }: { onNav?: (p: string) => void }) {
                   ))}
               </div>
               <CardFooter
-                label="View all cases"
+                label="View All"
                 stat1={`${allTickets.length} total cases`}
                 stat2={`${allTickets.filter(t => t.status === "Resolved" || t.status === "Closed").length} completed`}
                 stat3=""
@@ -1161,12 +1207,65 @@ export function HomePage({ onNav }: { onNav?: (p: string) => void }) {
                   <RowItem key={a.title} label={a.category} title={a.title} />
                 ))}
               </div>
-              <CardFooter label="Browse all articles" stat1="12,304 articles" stat2="5,071 users" stat3="" onClick={() => onNav?.("Knowledge Base")} />
+              <CardFooter label="View All" stat1="12,304 articles" stat2="5,071 users" stat3="" onClick={() => onNav?.("Knowledge Base")} />
             </PortalCard>
           </div>
 
           {/* ── Right column — Contact Support + Action Needed stacked ── */}
           <div className="col-span-12 xl:col-span-3 flex flex-col gap-6 self-start">
+
+            {/* Contact Support */}
+            <PortalCard accentColor="var(--primary)">
+              {/* Inline header with New Case CTA right-aligned */}
+              <div className="px-5 pt-4 pb-3 flex items-center gap-3" style={{ borderBottom: "1px solid var(--border)" }}>
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--muted)" }}>
+                  <SupportAgentOutlinedIcon style={{ fontSize: 17, color: "var(--foreground)" }} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.3, color: "var(--foreground)" }}>Contact Support</h3>
+                  <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 2 }}>Get help from our team</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setDrawerOpen(true)}
+                  className="flex items-center gap-1 cursor-pointer border-0 transition-all duration-150 flex-shrink-0"
+                  style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderRadius: 9999, padding: "6px 12px", fontSize: 12, fontWeight: 600, fontFamily: "var(--font-body)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+                >
+                  <AddOutlinedIcon style={{ fontSize: 13 }} />
+                  New Case
+                </button>
+              </div>
+              <div className="flex flex-col">
+                <a
+                  href="mailto:itsupport@nwncarousel.com"
+                  className="flex items-center gap-2.5 no-underline transition-colors duration-150"
+                  style={{ padding: "7px 16px" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--state-hover)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+                >
+                  <EmailOutlinedIcon style={{ fontSize: 15, color: "var(--muted-foreground)", flexShrink: 0 }} />
+                  <div className="min-w-0">
+                    <p style={{ fontSize: 9, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--muted-foreground)", lineHeight: 1.2 }}>Email</p>
+                    <p className="truncate" style={{ fontSize: 11, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--primary)", lineHeight: 1.3 }}>itsupport@nwncarousel.com</p>
+                  </div>
+                </a>
+                <a
+                  href="tel:+18664084596"
+                  className="flex items-center gap-2.5 no-underline transition-colors duration-150"
+                  style={{ padding: "7px 16px" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--state-hover)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+                >
+                  <PhoneOutlinedIcon style={{ fontSize: 15, color: "var(--muted-foreground)", flexShrink: 0 }} />
+                  <div className="min-w-0">
+                    <p style={{ fontSize: 9, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--muted-foreground)", lineHeight: 1.2 }}>Phone</p>
+                    <p style={{ fontSize: 11, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--foreground)", lineHeight: 1.3 }}>(866) 408-4596</p>
+                  </div>
+                </a>
+              </div>
+            </PortalCard>
 
             {/* Action Needed */}
             <PortalCard accentColor="#C2410C">
@@ -1176,9 +1275,10 @@ export function HomePage({ onNav }: { onNav?: (p: string) => void }) {
                 title="Action Needed"
                 subtitle="Cases awaiting your response"
               />
-              <div className="flex items-center justify-center flex-1 px-5 py-5">
-                <p style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", lineHeight: 1.5, textAlign: "center" }}>
-                  You currently have no cases awaiting your info.
+              <div className="flex items-center gap-2 px-5 py-3">
+                <AssignmentTurnedInOutlinedIcon style={{ fontSize: 15, color: "var(--muted-foreground)", flexShrink: 0 }} />
+                <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", lineHeight: 1.4 }}>
+                  No cases awaiting your response.
                 </p>
               </div>
             </PortalCard>
@@ -1220,31 +1320,34 @@ function Breadcrumb({ items, onNav }: { items: { label: string; page?: string }[
 
 /* ── Ticket status chip ──────────────────────────────────── */
 function StatusChip({ status }: { status: TicketRow["status"] }) {
-  const map: Record<TicketRow["status"], { color: string; bg: string; border: string }> = {
-    "In Progress": { color: "#92400E", bg: "#FFF4E0", border: "#F59E0B" },
-    "Pending":     { color: "#92400E", bg: "transparent", border: "#F59E0B" },
-    "Approved":    { color: "#166534", bg: "#D4F0E0", border: "#16A34A" },
-    "Closed":      { color: "#ffffff", bg: "#166534", border: "#166534" },
-    "Resolved":    { color: "#166534", bg: "transparent", border: "#16A34A" },
+  const map: Record<TicketRow["status"], { label: string; color: string }> = {
+    "In Progress": { label: "Active",   color: "#1D4ED8" },
+    "Pending":     { label: "Pending",  color: "#92400E" },
+    "Approved":    { label: "Approved", color: "#166534" },
+    "Closed":      { label: "Closed",   color: "#374151" },
+    "Resolved":    { label: "Resolved", color: "#065F46" },
   };
   const s = map[status];
   return (
-    <span
-      style={{
-        fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)",
-        color: s.color, backgroundColor: s.bg,
-        border: `1.5px solid ${s.border}`,
-        borderRadius: 9999, padding: "2px 10px", whiteSpace: "nowrap",
-      }}
-    >
-      {status}
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 4,
+      fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)",
+      color: s.color,
+      border: `1.5px solid ${s.color}50`,
+      borderRadius: 9999,
+      padding: "3px 9px 3px 7px",
+      whiteSpace: "nowrap",
+      letterSpacing: "0.01em",
+    }}>
+      <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: s.color, flexShrink: 0 }} />
+      {s.label}
     </span>
   );
 }
 
 /* ── Reusable enterprise page header ─────────────────────── */
 function PageHeader({
-  title, tag, subtitle, breadcrumb, onNav, actions,
+  title, tag, subtitle, breadcrumb, onNav, actions, transparent = false,
 }: {
   title: string;
   tag?: string;
@@ -1252,16 +1355,17 @@ function PageHeader({
   breadcrumb?: { label: string; page?: string }[];
   onNav?: (p: string) => void;
   actions?: React.ReactNode;
+  transparent?: boolean;
 }) {
   return (
-    <div style={{ backgroundColor: "var(--card)", borderBottom: "1px solid var(--border)" }}>
+    <div style={transparent ? {} : { backgroundColor: "var(--card)", borderBottom: "1px solid var(--border)" }}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
         {breadcrumb && breadcrumb.length > 0 && (
           <div className="pt-4 pb-1">
             <Breadcrumb items={breadcrumb} onNav={onNav} />
           </div>
         )}
-        <div className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 ${breadcrumb && breadcrumb.length > 0 ? "" : "pt-4"}`}>
+        <div className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 ${breadcrumb && breadcrumb.length > 0 ? "" : "pt-3"}`}>
           <div>
             <div className="flex items-center gap-3 flex-wrap">
               <h1 style={{ fontFamily: "var(--font-heading)", fontSize: 22, fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
@@ -1282,45 +1386,229 @@ function PageHeader({
   );
 }
 
+/* ── KB + Catalog shared helpers ─────────────────────────── */
+
+type KBArticleItem = { id: string; title: string; category: string; views: number; rating: number; date: string };
+const kbArticlesDetail: KBArticleItem[] = [
+  { id: "KB0001", title: "Collector Troubleshooting",                                                          category: "Standard Operating Procedures", views: 0, rating: 4.5, date: "Aug 2, 2023"  },
+  { id: "KB0002", title: "YALE UNIVERSITY Disaster Recovery Documentation",                                    category: "Policy/Information",            views: 0, rating: 0,   date: "Jun 22, 2017" },
+  { id: "KB0003", title: "NWN – Eagle: Link to RealMed (Availit…)",                                          category: "Eagle",                         views: 0, rating: 0,   date: "Nov 27, 2025" },
+  { id: "KB0004", title: "Avaya Aura™ Communication Manager Branch and Adjunct Software Compatibility Matrix", category: "ECG",                          views: 0, rating: 0,   date: "Feb 8, 2022"  },
+  { id: "KB0005", title: "Ribbon (Sonus): Core Series: Reference: About Private Call Routing",                category: "ECG",                          views: 0, rating: 0,   date: "Oct 4, 2022"  },
+  { id: "KB0006", title: "Keolis – Overview of NetworkNow (Desktop Version)",                                 category: "KCS",                          views: 0, rating: 0,   date: "Aug 13, 2025" },
+  { id: "KB0007", title: "IDEX Moving users between the HQ locations",                                        category: "Uncategorized",                views: 0, rating: 0,   date: "Jun 5, 2025"  },
+  { id: "KB0008", title: "Crane - Proficy Historian Excel Add In Installation",                               category: "Installs",                     views: 0, rating: 0,   date: "Jul 31, 2018" },
+  { id: "KB0009", title: "Shift Handoff - 11.29.2021 - Second to Third",                                     category: "Second Shift to Third Shift",  views: 0, rating: 0,   date: "Nov 29, 2021" },
+  { id: "KB0010", title: "Shift Handoff - 05.27.2023 - Second to Third",                                     category: "Second Shift to Third Shift",  views: 0, rating: 1,   date: "May 27, 2023" },
+];
+
+type ServiceItemType = { id: string; title: string; description: string; category: string };
+const serviceItemsData: ServiceItemType[] = [
+  { id: "SI001", title: "DID Call Forward Add/Remove",                 description: "Add or Remove Call Forwarding for your DID.",                                    category: "Telephony"        },
+  { id: "SI002", title: "DID Disconnect",                             description: "Disconnect your DID.",                                                           category: "Telephony"        },
+  { id: "SI003", title: "DID Add New Number",                         description: "Request a new DID number assignment.",                                           category: "Telephony"        },
+  { id: "SI004", title: "Move, Add, Change, Delete (MACD) Request",   description: "Request MACD Services.",                                                         category: "Telephony"        },
+  { id: "SI005", title: "Contact Center Request",                     description: "Request a functional change to your NWN service.",                               category: "Contact Center"   },
+  { id: "SI006", title: "Device Request",                             description: "Request a functional change to your Service.",                                   category: "Hardware"         },
+  { id: "SI007", title: "Service Desk Functional Change",             description: "Request a functional change for Service Desk.",                                  category: "IT Support"       },
+  { id: "SI008", title: "Monitoring or Management Request",           description: "Request a functional change to your managed service.",                           category: "Managed Services" },
+  { id: "SI009", title: "On Demand Request",                         description: "Request On Demand Support.",                                                     category: "IT Support"       },
+  { id: "SI010", title: "Bulk TimeCard Import",                       description: "Upload your spreadsheet to create Time Cards for the selected project task.",    category: "Operations"       },
+  { id: "SI011", title: "License Entitlement Delivery (LED) Request", description: "The LED request aids in the Licensing of Avaya Telephony platforms.",           category: "Licensing"        },
+  { id: "SI012", title: "Project Intake Form",                        description: "Submit a Project Intake Form for new project requests.",                        category: "Projects"         },
+];
+
+const kbCategoryColors: Record<string, { color: string; bg: string }> = {
+  "Standard Operating Procedures": { color: "#1D4ED8", bg: "#DBEAFE" },
+  "Policy/Information":            { color: "#7C3AED", bg: "#EDE9FE" },
+  "Eagle":                         { color: "#0D9488", bg: "#CCFBF1" },
+  "ECG":                           { color: "#C2410C", bg: "#FFEDD5" },
+  "KCS":                           { color: "#065F46", bg: "#D1FAE5" },
+  "Installs":                      { color: "#0369A1", bg: "#CCF0FF" },
+  "Second Shift to Third Shift":   { color: "#92400E", bg: "#FFF4E0" },
+};
+function kbCatStyle(cat: string) { return kbCategoryColors[cat] ?? { color: "#374151", bg: "#F3F4F6" }; }
+
+function StarRating({ rating }: { rating: number }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 1 }}>
+      {[1,2,3,4,5].map((i) => {
+        const full = rating >= i;
+        const half = !full && rating >= i - 0.5;
+        return (
+          <span key={i} style={{ fontSize: 13, color: full || half ? "#FBBF24" : "#D1D5DB", lineHeight: 1 }}>
+            {full ? "★" : half ? "⭐" : "☆"}
+          </span>
+        );
+      })}
+      {rating > 0 && <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginLeft: 4 }}>{rating.toFixed(1)}</span>}
+    </div>
+  );
+}
+
+function DataPagination({ total, page, perPage, onPage, onPerPage, itemLabel = "items", perPageOptions = [10, 25, 50, 100] }: {
+  total: number; page: number; perPage: number;
+  onPage: (p: number) => void; onPerPage: (n: number) => void; itemLabel?: string; perPageOptions?: number[];
+}) {
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const start = (page - 1) * perPage + 1;
+  const end   = Math.min(page * perPage, total);
+
+  const nums: (number | "…")[] = [];
+  if (totalPages <= 7) { for (let i = 1; i <= totalPages; i++) nums.push(i); }
+  else {
+    nums.push(1);
+    if (page > 3) nums.push("…");
+    for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) nums.push(i);
+    if (page < totalPages - 2) nums.push("…");
+    nums.push(totalPages);
+  }
+
+  const btnBase: React.CSSProperties = {
+    width: 32, height: 32, borderRadius: 8, border: "1px solid var(--border)",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    cursor: "pointer", backgroundColor: "transparent", flexShrink: 0,
+    fontFamily: "var(--font-body)", fontSize: 12, fontWeight: 500, color: "var(--muted-foreground)",
+    transition: "all 0.15s",
+  };
+
+  return (
+    <div className="flex items-center justify-between flex-wrap gap-2 px-6 py-3" style={{ borderTop: "1px solid var(--border)" }}>
+      <div className="flex items-center gap-2">
+        <span style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>
+          Showing {start.toLocaleString()}–{end.toLocaleString()} of {total.toLocaleString()} {itemLabel}
+        </span>
+        <select value={perPage} onChange={(e) => { onPerPage(Number(e.target.value)); onPage(1); }}
+          style={{ border: "1px solid var(--border)", borderRadius: 8, padding: "3px 8px", fontSize: 12, fontFamily: "var(--font-body)", color: "var(--foreground)", backgroundColor: "var(--card)", cursor: "pointer" }}>
+          {perPageOptions.map((n) => <option key={n} value={n}>{n}</option>)}
+        </select>
+        <span style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>per page</span>
+      </div>
+      <div className="flex items-center gap-1">
+        <button type="button" onClick={() => onPage(1)} disabled={page === 1} style={{ ...btnBase, opacity: page === 1 ? 0.35 : 1 }}>
+          <span style={{ fontSize: 9, letterSpacing: -1 }}>|◀</span>
+        </button>
+        <button type="button" onClick={() => onPage(page - 1)} disabled={page === 1} style={{ ...btnBase, opacity: page === 1 ? 0.35 : 1 }}>
+          <span style={{ fontSize: 9 }}>◀</span>
+        </button>
+        {nums.map((n, i) => n === "…"
+          ? <span key={`el${i}`} style={{ width: 32, textAlign: "center", fontSize: 12, color: "var(--muted-foreground)" }}>…</span>
+          : <button key={n} type="button" onClick={() => onPage(n as number)} style={{ ...btnBase, backgroundColor: page === n ? "var(--primary)" : "transparent", color: page === n ? "#fff" : "var(--foreground)", border: page === n ? "1px solid var(--primary)" : "1px solid var(--border)", fontWeight: page === n ? 700 : 500 }}>{n}</button>
+        )}
+        <button type="button" onClick={() => onPage(page + 1)} disabled={page === totalPages} style={{ ...btnBase, opacity: page === totalPages ? 0.35 : 1 }}>
+          <span style={{ fontSize: 9 }}>▶</span>
+        </button>
+        <button type="button" onClick={() => onPage(totalPages)} disabled={page === totalPages} style={{ ...btnBase, opacity: page === totalPages ? 0.35 : 1 }}>
+          <span style={{ fontSize: 9, letterSpacing: -1 }}>▶|</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function KBArticleRow({ article, isLast }: { article: KBArticleItem; isLast: boolean }) {
+  const [hov, setHov] = useState(false);
+  const cat = kbCatStyle(article.category);
+  return (
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      className="flex items-center gap-4 px-6 py-2.5 cursor-pointer transition-colors duration-150"
+      style={{ borderBottom: isLast ? "none" : "1px solid var(--border)", backgroundColor: hov ? "var(--state-hover)" : "transparent" }}>
+      <div className="flex items-center justify-center flex-shrink-0 rounded-xl transition-colors duration-150"
+        style={{ width: 34, height: 34, backgroundColor: hov ? "var(--primary-container)" : "var(--muted)" }}>
+        <MenuBookOutlinedIcon style={{ fontSize: 18, color: hov ? "var(--primary)" : "var(--muted-foreground)" }} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p style={{ fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)", color: hov ? "var(--primary)" : "var(--foreground)", lineHeight: 1.4, transition: "color 0.15s" }}>
+          {article.title}
+        </p>
+        <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+          <span style={{ fontSize: 10, fontWeight: 600, fontFamily: "var(--font-body)", color: cat.color, backgroundColor: cat.bg, borderRadius: 9999, padding: "2px 8px", whiteSpace: "nowrap" }}>
+            {article.category}
+          </span>
+          <span className="flex items-center gap-1">
+            <VisibilityOutlinedIcon style={{ fontSize: 12, color: "var(--muted-foreground)" }} />
+            <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{article.views}</span>
+          </span>
+          <StarRating rating={article.rating} />
+          <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{article.date}</span>
+        </div>
+      </div>
+      <ChevronRightIcon style={{ fontSize: 16, color: "var(--primary)", flexShrink: 0, opacity: hov ? 1 : 0, transition: "opacity 0.15s" }} />
+    </div>
+  );
+}
+
 /* ── Knowledge Base page ─────────────────────────────────── */
 export function KnowledgeBasePage({ onNav }: { onNav?: (p: string) => void }) {
+  const [kbSearch,  setKbSearch]  = useState("");
+  const [kbPage,    setKbPage]    = useState(1);
+  const [kbPerPage, setKbPerPage] = useState(5);
+  const totalArticles = 13108;
+
+  const visible = kbArticlesDetail.filter((a) =>
+    !kbSearch || a.title.toLowerCase().includes(kbSearch.toLowerCase()) || a.category.toLowerCase().includes(kbSearch.toLowerCase())
+  );
+  const paged = visible.slice((kbPage - 1) * kbPerPage, kbPage * kbPerPage);
+
+  const filterGroups = [
+    { label: "All Knowledge Bases", opts: ["All Knowledge Bases"] },
+    { label: "All Categories", opts: ["All Categories", "Standard Operating Procedures", "Policy/Information", "ECG", "KCS", "Eagle", "Installs", "Uncategorized"] },
+    { label: "All Authors",    opts: ["All Authors"] },
+    { label: "Most Viewed",    opts: ["Most Viewed", "Least Viewed", "Newest", "Oldest"] },
+    { label: "All Time",       opts: ["All Time", "Last 7 days", "Last 30 days", "Last Year"] },
+    { label: "All Ratings",    opts: ["All Ratings", "4+ Stars", "3+ Stars"] },
+    { label: "All Views",      opts: ["All Views", "0 views", "1–10 views", "10+ views"] },
+  ];
+
   return (
-    <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
+    <div className="flex-1 overflow-hidden bg-background transition-colors duration-200">
       <PageHeader
         title="Knowledge Base"
-        subtitle="Search articles, SOPs, and technical documentation."
+        subtitle="Search articles and documentation to find the answers you need."
         onNav={onNav}
+        transparent
       />
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 xl:col-span-8">
-            <PortalCard>
-              <CardHeader icon={<MenuBookOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />} title="Recent Articles" subtitle="Browse the latest knowledge articles" onOpen={() => {}} />
-              <div className="flex flex-col py-1">
-                {kbArticles.map((a) => <RowItem key={a.title} label={a.category} title={a.title} />)}
-              </div>
-              <CardFooter label="Browse all" stat1="📄 12,304 articles" stat2="👥 5,071 users" stat3="👁 0 today" />
-            </PortalCard>
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
+
+        {/* Articles card — search + filters folded into header */}
+        <div className="rounded-2xl bg-card overflow-hidden" style={{ border: "1px solid var(--border)" }}>
+          {/* Header row: title left · search right */}
+          <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <TrendingUpIcon style={{ fontSize: 16, color: "var(--primary)" }} />
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "var(--foreground)" }}>
+                Articles ({totalArticles.toLocaleString()})
+              </span>
+            </div>
+            <div className="flex items-center gap-2"
+              style={{ backgroundColor: "var(--background)", border: "1px solid var(--border)", borderRadius: 9999, padding: "5px 14px", width: 260 }}>
+              <SearchOutlinedIcon style={{ fontSize: 14, color: "var(--muted-foreground)", flexShrink: 0 }} />
+              <input type="text" value={kbSearch} placeholder="Search articles…"
+                onChange={(e) => { setKbSearch(e.target.value); setKbPage(1); }}
+                className="flex-1 bg-transparent border-0 outline-none"
+                style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--foreground)" }} />
+            </div>
           </div>
-          <div className="col-span-12 xl:col-span-4">
-            <PortalCard>
-              <CardHeader icon={<MenuBookOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />} title="Stats" subtitle="Knowledge base at a glance" />
-              <div className="grid grid-cols-2 gap-3 px-5 py-4">
-                {([
-                  { label: "Articles",    value: "12,304", color: "var(--status-info-fg)",    bg: "var(--status-info-bg)" },
-                  { label: "Users",       value: "5,071",  color: "var(--status-success-fg)", bg: "var(--status-success-bg)" },
-                  { label: "Categories",  value: "84",     color: "var(--secondary)",          bg: "var(--secondary-container)" },
-                  { label: "Views today", value: "0",      color: "var(--muted-foreground)",   bg: "var(--muted)" },
-                ] as const).map(({ label, value, color, bg }) => (
-                  <div key={label} className="rounded-xl p-3.5 flex flex-col gap-2" style={{ backgroundColor: bg }}>
-                    <p style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-heading)", color, lineHeight: 1 }}>{value}</p>
-                    <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{label}</p>
-                  </div>
-                ))}
+          {/* Filter strip */}
+          <div className="flex items-center gap-2 px-6 py-2 flex-wrap" style={{ borderBottom: "1px solid var(--border)", backgroundColor: "var(--muted)" }}>
+            {filterGroups.map(({ label, opts }) => (
+              <div key={label} style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+                <select style={{ appearance: "none", WebkitAppearance: "none", border: "1px solid var(--border)", borderRadius: 9999, padding: "3px 24px 3px 10px", fontSize: 11, fontFamily: "var(--font-body)", color: "var(--foreground)", backgroundColor: "var(--card)", cursor: "pointer", outline: "none" }}>
+                  {opts.map((o) => <option key={o} value={o}>{o}</option>)}
+                </select>
+                <ExpandMoreIcon style={{ position: "absolute", right: 6, fontSize: 12, color: "var(--muted-foreground)", pointerEvents: "none" }} />
               </div>
-            </PortalCard>
+            ))}
           </div>
+          <div className="flex flex-col">
+            {paged.map((a, i) => <KBArticleRow key={a.id} article={a} isLast={i === paged.length - 1} />)}
+            {paged.length === 0 && (
+              <p className="px-6 py-6 text-center" style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>No articles found.</p>
+            )}
+          </div>
+          <DataPagination total={totalArticles} page={kbPage} perPage={kbPerPage} onPage={setKbPage} onPerPage={setKbPerPage} itemLabel="articles" perPageOptions={[5, 10, 25, 50]} />
         </div>
+
       </div>
     </div>
   );
@@ -1360,92 +1648,157 @@ function CatalogCategoryCard({ cat }: { cat: CatalogCategory }) {
         backgroundColor: "var(--card)",
         boxShadow: hov ? "0 8px 24px rgba(0,40,85,0.10)" : "0 2px 8px rgba(0,40,85,0.06)",
         transform: hov ? "translateY(-2px)" : "none",
-        padding: "20px",
+        padding: "14px",
       }}
     >
-      <div className="flex items-start gap-4">
-        <div className="rounded-full flex items-center justify-center flex-shrink-0" style={{ width: 44, height: 44, backgroundColor: iconBg }}>
-          <Icon style={{ fontSize: 22, color: iconColor }} />
+      <div className="flex items-center gap-3">
+        <div className="rounded-full flex items-center justify-center flex-shrink-0" style={{ width: 38, height: 38, backgroundColor: iconBg }}>
+          <Icon style={{ fontSize: 18, color: iconColor }} />
         </div>
         <div className="min-w-0 flex-1">
-          <p style={{ fontSize: 14, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--foreground)", lineHeight: 1.3 }}>{label}</p>
-          <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 3, lineHeight: 1.5 }}>{description}</p>
-          <span
-            className="inline-block mt-3"
-            style={{ fontSize: 11, fontWeight: 500, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", backgroundColor: "var(--muted)", borderRadius: 9999, padding: "2px 10px", border: "1px solid var(--border)" }}
-          >
-            {items} items
-          </span>
+          <div className="flex items-center justify-between gap-2">
+            <p style={{ fontSize: 13, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--foreground)", lineHeight: 1.3 }}>{label}</p>
+            <span style={{ fontSize: 10, fontWeight: 500, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", backgroundColor: "var(--muted)", borderRadius: 9999, padding: "2px 8px", border: "1px solid var(--border)", whiteSpace: "nowrap", flexShrink: 0 }}>
+              {items} items
+            </span>
+          </div>
+          <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 2, lineHeight: 1.4 }}>{description}</p>
         </div>
       </div>
     </div>
   );
 }
 
-export function ServiceCatalogPage({ onNav }: { onNav?: (p: string) => void }) {
+function ServiceItemCard({ item }: { item: ServiceItemType }) {
+  const [hov, setHov] = useState(false);
   return (
-    <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      className="flex flex-col rounded-2xl transition-all duration-200"
+      style={{ backgroundColor: "var(--card)", border: hov ? "1px solid var(--primary)" : "1px solid var(--border)", boxShadow: hov ? "0 4px 16px rgba(0,40,85,0.10)" : "0 1px 4px rgba(0,40,85,0.05)", padding: 14, transform: hov ? "translateY(-2px)" : "none" }}>
+      <div className="flex items-start gap-3 mb-2">
+        <div className="rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-150"
+          style={{ width: 38, height: 38, backgroundColor: hov ? "var(--primary-container)" : "var(--muted)" }}>
+          <DescriptionOutlinedIcon style={{ fontSize: 18, color: hov ? "var(--primary)" : "var(--muted-foreground)" }} />
+        </div>
+        <p style={{ fontSize: 13, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--foreground)", lineHeight: 1.3, paddingTop: 2 }}>{item.title}</p>
+      </div>
+      <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", lineHeight: 1.5, flex: 1 }}>{item.description}</p>
+      <button type="button" className="mt-3 w-full cursor-pointer border rounded-xl transition-all duration-150"
+        style={{ padding: "6px 14px", fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)", color: hov ? "#fff" : "var(--primary)", backgroundColor: hov ? "var(--primary)" : "transparent", borderColor: "var(--primary)" }}>
+        View Details
+      </button>
+    </div>
+  );
+}
+
+function ServiceItemRow({ item, isLast }: { item: ServiceItemType; isLast: boolean }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
+      className="flex items-center gap-4 px-6 py-3.5 transition-colors duration-150 cursor-pointer"
+      style={{ borderBottom: isLast ? "none" : "1px solid var(--border)", backgroundColor: hov ? "var(--state-hover)" : "transparent" }}>
+      <div className="rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-150"
+        style={{ width: 38, height: 38, backgroundColor: hov ? "var(--primary-container)" : "var(--muted)" }}>
+        <DescriptionOutlinedIcon style={{ fontSize: 18, color: hov ? "var(--primary)" : "var(--muted-foreground)" }} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p style={{ fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)", color: hov ? "var(--primary)" : "var(--foreground)", transition: "color 0.15s" }}>{item.title}</p>
+        <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 2 }}>{item.description}</p>
+      </div>
+      <span style={{ fontSize: 10, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--muted-foreground)", backgroundColor: "var(--muted)", border: "1px solid var(--border)", borderRadius: 9999, padding: "2px 10px", whiteSpace: "nowrap", flexShrink: 0 }}>{item.category}</span>
+      <button type="button" className="cursor-pointer border rounded-xl flex-shrink-0 transition-all duration-150"
+        style={{ padding: "5px 14px", fontSize: 12, fontWeight: 600, fontFamily: "var(--font-body)", color: "var(--primary)", backgroundColor: "transparent", borderColor: "var(--primary)" }}
+        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--primary)"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--primary)"; }}>
+        View Details
+      </button>
+    </div>
+  );
+}
+
+export function ServiceCatalogPage({ onNav }: { onNav?: (p: string) => void }) {
+  const [scSearch,  setScSearch]  = useState("");
+  const [scCat,     setScCat]     = useState("All");
+  const [scView,    setScView]    = useState<"grid" | "list">("grid");
+  const [scPage,    setScPage]    = useState(1);
+  const [scPerPage, setScPerPage] = useState(8);
+
+  const catOptions = ["All", ...Array.from(new Set(serviceItemsData.map((i) => i.category)))];
+  const filtered = serviceItemsData.filter((item) => {
+    const ms = !scSearch || item.title.toLowerCase().includes(scSearch.toLowerCase()) || item.description.toLowerCase().includes(scSearch.toLowerCase());
+    const mc = scCat === "All" || item.category === scCat;
+    return ms && mc;
+  });
+  const paged = filtered.slice((scPage - 1) * scPerPage, scPage * scPerPage);
+
+  return (
+    <div className="flex-1 overflow-hidden bg-background transition-colors duration-200">
       <PageHeader
         title="Service Catalog"
-        subtitle="Request services, products, and changes."
+        subtitle="Browse and request services from our service catalog."
         onNav={onNav}
+        transparent
       />
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
 
-        {/* All Categories header */}
-        <div className="flex items-center gap-2 mb-4">
-          <span style={{ fontFamily: "var(--font-heading)", fontSize: 16, fontWeight: 700, color: "var(--foreground)" }}>All Categories</span>
-          <span
-            className="flex items-center justify-center rounded-full"
-            style={{ width: 24, height: 24, fontSize: 12, fontWeight: 700, fontFamily: "var(--font-body)", backgroundColor: "var(--muted)", color: "var(--muted-foreground)" }}
-          >
+        {/* Service items card — search + category + toggle folded into header */}
+        <div className="rounded-2xl bg-card overflow-hidden mb-4" style={{ border: "1px solid var(--border)" }}>
+          <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
+            {/* Left: title + category */}
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <TrendingUpIcon style={{ fontSize: 16, color: "var(--primary)" }} />
+              <span style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "var(--foreground)" }}>Service Items ({filtered.length})</span>
+              <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
+                <select value={scCat} onChange={(e) => { setScCat(e.target.value); setScPage(1); }}
+                  style={{ appearance: "none", WebkitAppearance: "none", border: "1px solid var(--border)", borderRadius: 9999, padding: "5px 28px 5px 11px", fontSize: 12, fontFamily: "var(--font-body)", color: "var(--foreground)", backgroundColor: "var(--muted)", cursor: "pointer", outline: "none" }}>
+                  {catOptions.map((c) => <option key={c} value={c}>{c === "All" ? "All Categories" : c}</option>)}
+                </select>
+                <ExpandMoreIcon style={{ position: "absolute", right: 7, fontSize: 13, color: "var(--muted-foreground)", pointerEvents: "none" }} />
+              </div>
+            </div>
+            {/* Right: search + toggle */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2"
+                style={{ backgroundColor: "var(--background)", border: "1px solid var(--border)", borderRadius: 9999, padding: "6px 14px", width: 240 }}>
+                <SearchOutlinedIcon style={{ fontSize: 14, color: "var(--muted-foreground)", flexShrink: 0 }} />
+                <input type="text" value={scSearch} placeholder="Search services…"
+                  onChange={(e) => { setScSearch(e.target.value); setScPage(1); }}
+                  className="flex-1 bg-transparent border-0 outline-none"
+                  style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--foreground)" }} />
+              </div>
+              <div className="flex items-center rounded-lg overflow-hidden" style={{ border: "1px solid var(--border)" }}>
+                {(["grid", "list"] as const).map((v) => (
+                  <button key={v} type="button" onClick={() => setScView(v)}
+                    className="flex items-center justify-center cursor-pointer border-0 transition-all duration-150"
+                    style={{ width: 34, height: 34, backgroundColor: scView === v ? "var(--primary)" : "transparent", color: scView === v ? "#fff" : "var(--muted-foreground)" }}>
+                    {v === "grid" ? <AppsOutlinedIcon style={{ fontSize: 16 }} /> : <ViewListOutlinedIcon style={{ fontSize: 16 }} />}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {scView === "grid"
+            ? <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 p-4">{paged.map((item) => <ServiceItemCard key={item.id} item={item} />)}</div>
+            : <div className="flex flex-col">{paged.map((item, i) => <ServiceItemRow key={item.id} item={item} isLast={i === paged.length - 1} />)}</div>
+          }
+          {paged.length === 0 && <p className="px-6 py-6 text-center" style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>No services found.</p>}
+
+          <DataPagination total={filtered.length} page={scPage} perPage={scPerPage} onPage={setScPage} onPerPage={setScPerPage} itemLabel="services" perPageOptions={[4, 8, 12, 25]} />
+        </div>
+
+        {/* Browse by category — existing view preserved */}
+        <div className="flex items-center gap-2 mt-6 mb-3">
+          <span style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "var(--foreground)" }}>Browse by Category</span>
+          <span className="flex items-center justify-center rounded-full"
+            style={{ width: 20, height: 20, fontSize: 10, fontWeight: 700, fontFamily: "var(--font-body)", backgroundColor: "var(--muted)", color: "var(--muted-foreground)" }}>
             {catalogCategories.length}
           </span>
         </div>
-
-        {/* Category grid — MD3 filled cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-          {catalogCategories.map((cat) => (
-            <CatalogCategoryCard key={cat.label} cat={cat} />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+          {catalogCategories.map((cat) => <CatalogCategoryCard key={cat.label} cat={cat} />)}
         </div>
 
-        {/* Bottom row — Popular Items + My Wishlist */}
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-12 xl:col-span-5">
-            <PortalCard>
-              <div className="px-5 pt-4 pb-3 flex items-center gap-2" style={{ borderBottom: "1px solid var(--border)" }}>
-                <FavoriteBorderOutlinedIcon style={{ fontSize: 17, color: "#E11D48" }} />
-                <span style={{ fontSize: 14, fontWeight: 600, fontFamily: "var(--font-heading)", color: "var(--foreground)" }}>Popular Items</span>
-              </div>
-              <div className="flex flex-col py-1">
-                {popularItems.map((item) => (
-                  <RowItem key={item} label="" title={item} />
-                ))}
-              </div>
-            </PortalCard>
-          </div>
-
-          <div className="col-span-12 xl:col-span-4">
-            <PortalCard>
-              <div className="px-5 pt-4 pb-3" style={{ borderBottom: "1px solid var(--border)" }}>
-                <p style={{ fontSize: 14, fontWeight: 600, fontFamily: "var(--font-heading)", color: "var(--foreground)" }}>My Wishlist</p>
-                <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 3 }}>Save items for later or share with your manager.</p>
-              </div>
-              <div className="px-5 py-4">
-                <button
-                  type="button"
-                  className="w-full rounded-xl border cursor-pointer transition-all duration-150"
-                  style={{ padding: "10px", fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)", color: "var(--primary)", backgroundColor: "transparent", borderColor: "var(--primary)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--primary-container)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
-                >
-                  View Wishlist
-                </button>
-              </div>
-            </PortalCard>
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -1514,6 +1867,7 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
       "&.Mui-focused": { color: "var(--primary)" },
       "&.Mui-disabled": { color: "var(--muted-foreground)" },
     },
+    "& .MuiFormLabel-asterisk": { color: "#C2410C" },
     "& .MuiInputBase-input": {
       color: "var(--foreground)",
       "&.Mui-disabled": { WebkitTextFillColor: "var(--muted-foreground)" },
@@ -1772,6 +2126,80 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
   );
 }
 
+/* ── Row actions kebab menu ──────────────────────────────── */
+function RowActionsMenu() {
+  const [open, setOpen] = useState(false);
+  const [pos,  setPos]  = useState({ top: 0, right: 0 });
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const toggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, right: window.innerWidth - r.right });
+    }
+    setOpen((o) => !o);
+  };
+
+  return (
+    <>
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={toggle}
+        aria-label="Row actions"
+        className="border-0 bg-transparent cursor-pointer rounded-lg transition-all duration-150 flex items-center justify-center"
+        style={{ width: 28, height: 28, color: "var(--muted-foreground)" }}
+        onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--state-hover)"; e.currentTarget.style.color = "var(--foreground)"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--muted-foreground)"; }}
+      >
+        <MoreVertIcon style={{ fontSize: 18 }} />
+      </button>
+
+      {open && createPortal(
+        <>
+          <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={() => setOpen(false)} />
+          <div style={{
+            position: "fixed", zIndex: 9999,
+            top: pos.top, right: pos.right,
+            minWidth: 156,
+            backgroundColor: "var(--card)",
+            borderRadius: 12,
+            boxShadow: "0 8px 24px rgba(0,40,85,0.14), 0 2px 8px rgba(0,40,85,0.08)",
+            border: "1px solid var(--border)",
+            padding: "4px 0",
+            overflow: "hidden",
+          }}>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="w-full flex items-center gap-2.5 border-0 bg-transparent cursor-pointer text-left transition-colors duration-150"
+              style={{ padding: "10px 16px" }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--state-hover)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+            >
+              <EditOutlinedIcon style={{ fontSize: 16, color: "var(--muted-foreground)" }} />
+              <span style={{ fontSize: 13, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--foreground)" }}>Edit</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="w-full flex items-center gap-2.5 border-0 bg-transparent cursor-pointer text-left transition-colors duration-150"
+              style={{ padding: "10px 16px" }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#FFF1F2"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+            >
+              <DeleteOutlineIcon style={{ fontSize: 16, color: "#DC2626" }} />
+              <span style={{ fontSize: 13, fontFamily: "var(--font-body)", fontWeight: 500, color: "#DC2626" }}>Delete</span>
+            </button>
+          </div>
+        </>,
+        document.body
+      )}
+    </>
+  );
+}
+
 /* ── My Tickets page ─────────────────────────────────────── */
 export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
   const [tab, setTab] = useState<"ALL" | "OPEN" | "CLOSED">("ALL");
@@ -1786,19 +2214,20 @@ export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
   );
 
   const tabs = [
-    { key: "ALL",    label: `ALL (${allTickets.length})` },
-    { key: "OPEN",   label: `OPEN (${open.length})` },
-    { key: "CLOSED", label: `CLOSED (${closed.length})` },
-  ] as const;
+    { key: "ALL"    as const, label: "All",    count: allTickets.length },
+    { key: "OPEN"   as const, label: "Open",   count: open.length },
+    { key: "CLOSED" as const, label: "Closed", count: closed.length },
+  ];
 
   const thStyle: React.CSSProperties = {
-    fontSize: 12, fontWeight: 700, fontFamily: "var(--font-heading)",
-    color: "var(--foreground)", padding: "10px 16px", textAlign: "left",
-    borderBottom: "2px solid var(--border)", whiteSpace: "nowrap",
+    fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)",
+    color: "var(--muted-foreground)", padding: "11px 16px", textAlign: "left",
+    borderBottom: "1px solid var(--border)", whiteSpace: "nowrap",
+    letterSpacing: "0.03em",
   };
   const tdStyle: React.CSSProperties = {
-    fontSize: 12, fontFamily: "var(--font-body)",
-    color: "var(--foreground)", padding: "12px 16px",
+    fontSize: 13, fontFamily: "var(--font-body)",
+    color: "var(--foreground)", padding: "13px 16px",
     borderBottom: "1px solid var(--border)", verticalAlign: "middle",
   };
 
@@ -1807,8 +2236,8 @@ export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
 
       <NewTicketDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
-      {/* ── Enterprise page header — card surface, full-width ── */}
-      <div style={{ backgroundColor: "var(--card)", borderBottom: "1px solid var(--border)" }}>
+      {/* ── Enterprise page header — transparent, blends with background ── */}
+      <div>
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Breadcrumb row */}
@@ -1820,14 +2249,9 @@ export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4">
             {/* Left */}
             <div>
-              <div className="flex items-center gap-3 flex-wrap">
-                <h1 style={{ fontFamily: "var(--font-heading)", fontSize: 22, fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-                  My Cases
-                </h1>
-                <span style={{ fontSize: 11, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--muted-foreground)", backgroundColor: "var(--muted)", border: "1px solid var(--border)", borderRadius: 9999, padding: "2px 10px" }}>
-                  my_cases
-                </span>
-              </div>
+              <h1 style={{ fontFamily: "var(--font-heading)", fontSize: 22, fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+                My Cases
+              </h1>
               <p style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 3 }}>
                 Track your open and closed service requests and incidents.
               </p>
@@ -1884,28 +2308,35 @@ export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5">
 
         {/* MD3 card — tabs flush top, table inside */}
-        <PortalCard>
+        <PortalCard noHover>
           {/* MD3 Tab bar */}
           <div className="flex items-end px-2 gap-0" style={{ borderBottom: "1px solid var(--border)" }}>
-            {tabs.map(({ key, label }) => {
+            {tabs.map(({ key, label, count }) => {
               const active = tab === key;
               return (
                 <button
                   key={key}
                   type="button"
                   onClick={() => setTab(key)}
-                  className="border-0 bg-transparent cursor-pointer transition-all duration-150"
+                  className="flex items-center gap-2 border-0 bg-transparent cursor-pointer transition-all duration-150"
                   style={{
-                    padding: "14px 20px 12px",
+                    padding: "13px 18px 11px",
                     fontSize: 13, fontWeight: active ? 700 : 500,
                     fontFamily: "var(--font-body)",
                     color: active ? "var(--primary)" : "var(--muted-foreground)",
                     borderBottom: active ? "2px solid var(--primary)" : "2px solid transparent",
                     marginBottom: -1,
-                    letterSpacing: "0.02em",
                   }}
                 >
                   {label}
+                  <span style={{
+                    fontSize: 10, fontWeight: 700, fontFamily: "var(--font-heading)",
+                    color: active ? "var(--primary)" : "var(--muted-foreground)",
+                    backgroundColor: active ? "var(--primary-container)" : "var(--muted)",
+                    borderRadius: 9999, padding: "1px 7px", lineHeight: 1.6,
+                  }}>
+                    {count}
+                  </span>
                 </button>
               );
             })}
@@ -1915,7 +2346,7 @@ export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
           <div className="overflow-x-auto">
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr style={{ backgroundColor: "var(--muted)" }}>
+                <tr>
                   <th style={thStyle}>Request #</th>
                   <th style={thStyle}>Title</th>
                   <th style={thStyle}>Category</th>
@@ -1944,15 +2375,7 @@ export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
                     <td style={{ ...tdStyle, color: "var(--muted-foreground)" }}>{row.created}</td>
                     <td style={{ ...tdStyle, color: "var(--muted-foreground)" }}>{row.updated}</td>
                     <td style={{ ...tdStyle, textAlign: "center" }}>
-                      <button
-                        type="button"
-                        className="border-0 bg-transparent cursor-pointer rounded-lg transition-colors duration-150"
-                        style={{ padding: "4px", color: "var(--muted-foreground)" }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = "var(--primary)"; e.currentTarget.style.backgroundColor = "var(--state-hover)"; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = "var(--muted-foreground)"; e.currentTarget.style.backgroundColor = "transparent"; }}
-                      >
-                        <OpenInNewIcon style={{ fontSize: 14, display: "block" }} />
-                      </button>
+                      <RowActionsMenu />
                     </td>
                   </tr>
                 ))}

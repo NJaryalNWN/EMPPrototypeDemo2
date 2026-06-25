@@ -93,7 +93,7 @@
   --sidebar-accent:             rgba(255, 255, 255, 0.12);  /* inactive icon container */
   --sidebar-accent-foreground:  #FFFFFF;
   --sidebar-ring:               rgba(214, 228, 255, 0.25);
-  --banner-gradient:            radial-gradient(ellipse at 85% 40%, rgba(255,105,0,0.18) 0%, transparent 55%), radial-gradient(ellipse at 15% 80%, rgba(0,163,224,0.12) 0%, transparent 50%), linear-gradient(135deg, #002855 0%, #004494 55%, #0055b8 100%);
+  --banner-gradient:            radial-gradient(ellipse at 85% 40%, rgba(255,105,0,0.18) 0%, transparent 55%), radial-gradient(ellipse at 15% 80%, rgba(0,163,224,0.12) 0%, transparent 50%), linear-gradient(135deg, #003A6E 0%, #0055A0 55%, #006ACC 100%);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -163,8 +163,8 @@
   --sidebar-submenu:            #141C30;   /* MD3 elevation-2 surface tint on dark */
   --sidebar-border:             rgba(168, 200, 255, 0.08);
   --sidebar-icon:               rgba(168, 200, 255, 0.50);
-  --sidebar-active-container:   #003470;
-  --sidebar-active-fg:          #A8C8FF;
+  --sidebar-active-container:   rgba(255, 105, 0, 0.22);
+  --sidebar-active-fg:          #FF8C3E;
   --sidebar-logo-bg:            #003470;
   --sidebar-logo-fg:            #A8C8FF;
   --sidebar-foreground:         #DCE8FF;
@@ -174,8 +174,8 @@
   --sidebar-accent-foreground:  #DCE8FF;
   --sidebar-ring:               rgba(168, 200, 255, 0.25);
   --sidebar-hover:              rgba(168, 200, 255, 0.10);
-  --sidebar-hover-fg:           #A8C8FF;
-  --banner-gradient:            radial-gradient(ellipse at 85% 40%, rgba(255,105,0,0.14) 0%, transparent 55%), radial-gradient(ellipse at 15% 80%, rgba(77,200,245,0.12) 0%, transparent 50%), linear-gradient(135deg, #080E1C 0%, #0D1A3A 55%, #0F2050 100%);
+  --sidebar-hover-fg:           rgba(168, 200, 255, 0.90);
+  --banner-gradient:            radial-gradient(ellipse at 85% 40%, rgba(255,105,0,0.14) 0%, transparent 55%), radial-gradient(ellipse at 15% 80%, rgba(77,200,245,0.12) 0%, transparent 50%), linear-gradient(135deg, #131E38 0%, #1A2B50 55%, #1E3268 100%);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

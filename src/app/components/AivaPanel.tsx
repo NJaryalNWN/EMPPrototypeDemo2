@@ -11,10 +11,10 @@ interface Message {
 }
 
 const SUGGESTIONS = [
-  "Summarize today's tickets",
-  "Show high-risk anomalies",
-  "What's my meeting room usage?",
-  "Top 3 insights this week",
+  "Show me my open cases",
+  "Create a new support case",
+  "Search the knowledge base",
+  "Check on pending approvals",
 ];
 
 let msgId = 0;
@@ -29,7 +29,7 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
     {
       id: ++msgId,
       role: "aiva",
-      text: "Hi! I'm Aiva, your AI assistant. Ask me anything about your workspace, tickets, or reports.",
+      text: "Hi! Looks like you might be thinking about EMP Cases & Support. Feel free to ask me any question about this, or any other topic that's on your mind.",
     },
   ]);
   const [input, setInput] = useState("");
@@ -88,8 +88,8 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
               <AutoAwesomeIcon style={{ fontSize: 16, color: "#ffffff" }} />
             </div>
             <div>
-              <p className="text-foreground font-semibold" style={{ fontSize: 14, lineHeight: 1.2 }}>Aiva</p>
-              <p className="text-muted-foreground" style={{ fontSize: 11 }}>AI Support Assistant</p>
+              <p className="text-foreground font-semibold" style={{ fontSize: 14, lineHeight: 1.2 }}>AiVA Assistant</p>
+              <p className="text-muted-foreground" style={{ fontSize: 11 }}>EMP Cases & Support</p>
             </div>
           </div>
           <button
@@ -173,7 +173,7 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
           </button>
           <input
             type="text"
-            placeholder="Ask Aiva anything…"
+            placeholder="Ask AiVA anything..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && send(input)}

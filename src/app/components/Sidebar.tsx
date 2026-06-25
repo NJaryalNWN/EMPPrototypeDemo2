@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
-import Tooltip from "@mui/material/Tooltip";
 
 /* ── MUI icons ───────────────────────────────────────────── */
 import HomeOutlinedIcon      from "@mui/icons-material/HomeOutlined";
@@ -19,10 +18,8 @@ import BusinessCenterOutlinedIcon from "@mui/icons-material/BusinessCenterOutlin
 import BusinessCenterIcon    from "@mui/icons-material/BusinessCenter";
 import DevicesOutlinedIcon   from "@mui/icons-material/DevicesOutlined";
 import DevicesIcon           from "@mui/icons-material/Devices";
-import SettingsOutlinedIcon  from "@mui/icons-material/SettingsOutlined";
-import SettingsIcon          from "@mui/icons-material/Settings";
-import AssessmentOutlinedIcon      from "@mui/icons-material/AssessmentOutlined";
-import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
+import AssessmentOutlinedIcon           from "@mui/icons-material/AssessmentOutlined";
+import AssignmentTurnedInOutlinedIcon   from "@mui/icons-material/AssignmentTurnedIn";
 /* sub-link icons */
 import VideoCallOutlinedIcon    from "@mui/icons-material/VideoCallOutlined";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
@@ -60,7 +57,7 @@ interface NavItem {
 /* ── Home contextual sub-menu items ─────────────────────── */
 const homeSubMenuItems = [
   { label: "Home",    navTarget: "Home",     description: "Dashboard & overview",    icon: HomeOutlinedIcon },
-  { label: "Tickets", navTarget: "My Cases", description: "View & manage your cases", icon: ConfirmationNumberOutlinedIcon },
+  { label: "Cases",   navTarget: "My Cases", description: "View & manage your cases", icon: AssignmentTurnedInOutlinedIcon },
   { label: "Reports", navTarget: "Reports",  description: "Analytics & insights",     icon: AssessmentOutlinedIcon },
 ];
 
@@ -149,7 +146,7 @@ const navItems: NavItem[] = [
     ],
   },
   { icon: BusinessCenterOutlinedIcon, activeIcon: BusinessCenterIcon, label: "Intelligent Workplace", shortLabel: "Workplace" },
-  { icon: DevicesOutlinedIcon,        activeIcon: DevicesIcon,        label: "Managed Devices",      shortLabel: "Devices" },
+  { icon: DevicesOutlinedIcon,        activeIcon: DevicesIcon,        label: "Managed Devices",      shortLabel: "Managed Devices" },
 ];
 
 /* ── Home contextual sub-menu row ────────────────────────── */
@@ -394,72 +391,51 @@ export function Sidebar({ activePage, onNav }: SidebarProps) {
     const DisplayIcon = isActive ? ActiveIcon : Icon;
 
     return (
-      <Tooltip
+      <button
         key={label}
-        title={label}
-        placement="right"
-        arrow
-        disableHoverListener={!!subSections}
-        slotProps={{
-          tooltip: {
-            style: {
-              backgroundColor: "#001f45",
-              color: "rgba(255,255,255,0.92)",
-              fontFamily: "var(--font-body)",
-              fontSize: 12, fontWeight: 600,
-              padding: "5px 10px", borderRadius: 8,
-              boxShadow: "0 4px 16px rgba(0,0,0,0.40)",
-              border: "1px solid rgba(255,255,255,0.10)",
-            },
-          },
-          arrow: { style: { color: "#001f45" } },
+        type="button"
+        aria-label={label}
+        aria-current={isActive ? "page" : undefined}
+        className="w-full flex flex-col items-center gap-1 pt-2 pb-1.5 px-0 cursor-pointer border-0 bg-transparent focus-visible:outline-none"
+        onClick={() => onNav(label)}
+        onMouseEnter={(e) => {
+          setHovered(label);
+          if (subSections) openSub(label, e.currentTarget);
+        }}
+        onMouseLeave={() => {
+          setHovered(null);
+          if (subSections) scheduleCloseSub();
         }}
       >
-        <button
-          type="button"
-          aria-label={label}
-          aria-current={isActive ? "page" : undefined}
-          className="w-full flex flex-col items-center gap-1 pt-2 pb-1.5 px-0 cursor-pointer border-0 bg-transparent focus-visible:outline-none"
-          onClick={() => onNav(label)}
-          onMouseEnter={(e) => {
-            setHovered(label);
-            if (subSections) openSub(label, e.currentTarget);
-          }}
-          onMouseLeave={() => {
-            setHovered(null);
-            if (subSections) scheduleCloseSub();
+        <div
+          style={{
+            width: 56, height: 32, borderRadius: 16,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            backgroundColor: isActive
+              ? "var(--sidebar-active-container)"
+              : isHovered
+              ? "var(--sidebar-hover)"
+              : "transparent",
+            transition: "background-color 0.2s",
           }}
         >
-          <div
-            style={{
-              width: 56, height: 32, borderRadius: 16,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              backgroundColor: isActive
-                ? "var(--sidebar-active-container)"
-                : isHovered
-                ? "var(--sidebar-hover)"
-                : "transparent",
-              transition: "background-color 0.2s",
-            }}
-          >
-            <DisplayIcon style={{
-              fontSize: 24,
-              color: isActive ? "var(--sidebar-active-fg)" : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-              transition: "color 0.15s ease",
-            }} />
-          </div>
-          <span style={{
-            fontSize: 11, fontFamily: "var(--font-body)",
-            fontWeight: isActive ? 700 : isHovered ? 600 : 500,
+          <DisplayIcon style={{
+            fontSize: 24,
             color: isActive ? "var(--sidebar-active-fg)" : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-            letterSpacing: "0.01em", lineHeight: 1.3,
-            transition: "color 0.15s ease", textAlign: "center",
-            maxWidth: 72, whiteSpace: "normal", wordBreak: "break-word",
-          }}>
-            {shortLabel ?? label}
-          </span>
-        </button>
-      </Tooltip>
+            transition: "color 0.15s ease",
+          }} />
+        </div>
+        <span style={{
+          fontSize: 11, fontFamily: "var(--font-body)",
+          fontWeight: isActive ? 700 : isHovered ? 600 : 500,
+          color: isActive ? "var(--sidebar-active-fg)" : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
+          letterSpacing: "0.01em", lineHeight: 1.3,
+          transition: "color 0.15s ease", textAlign: "center",
+          maxWidth: 72, whiteSpace: "normal", wordBreak: "break-word",
+        }}>
+          {shortLabel ?? label}
+        </span>
+      </button>
     );
   };
 
@@ -516,39 +492,6 @@ export function Sidebar({ activePage, onNav }: SidebarProps) {
           {navItems.slice(1).map(renderNavItem)}
         </nav>
 
-        {/* Settings */}
-        <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: 12 }}>
-          <div style={{ width: 40, height: 1, backgroundColor: "var(--sidebar-border)", margin: "0 auto 4px" }} />
-          <button
-            type="button"
-            aria-label="Settings"
-            aria-current={activePage === "Settings" ? "page" : undefined}
-            className="w-full flex flex-col items-center gap-1 pt-2 pb-1.5 cursor-pointer border-0 bg-transparent focus-visible:outline-none"
-            onClick={() => onNav("Settings")}
-            onMouseEnter={() => setHovered("Settings")}
-            onMouseLeave={() => setHovered(null)}
-          >
-            <div style={{
-              width: 56, height: 32, borderRadius: 16,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              backgroundColor: activePage === "Settings" ? "var(--sidebar-active-container)" : hovered === "Settings" ? "var(--sidebar-hover)" : "transparent",
-              transition: "background-color 0.2s",
-            }}>
-              {activePage === "Settings"
-                ? <SettingsIcon style={{ fontSize: 24, color: "var(--sidebar-active-fg)" }} />
-                : <SettingsOutlinedIcon style={{ fontSize: 24, color: hovered === "Settings" ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)" }} />
-              }
-            </div>
-            <span style={{
-              fontSize: 11, fontFamily: "var(--font-body)",
-              fontWeight: activePage === "Settings" ? 700 : hovered === "Settings" ? 600 : 500,
-              color: activePage === "Settings" ? "var(--sidebar-active-fg)" : hovered === "Settings" ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-              letterSpacing: "0.01em", lineHeight: 1.3, transition: "color 0.15s",
-            }}>
-              Settings
-            </span>
-          </button>
-        </div>
       </aside>
 
       {/* Home floating contextual sheet */}

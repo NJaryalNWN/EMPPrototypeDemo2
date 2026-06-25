@@ -64,7 +64,7 @@ export default function App() {
       {/* Aiva FAB — fixed bottom-right */}
       <button
         type="button"
-        aria-label="Open Aiva AI assistant"
+        aria-label="Open AiVA Assistant"
         onClick={() => setAivaOpen(true)}
         className="fixed bottom-6 right-6 z-40 flex items-center justify-center w-14 h-14 rounded-2xl border-0 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 focus-visible:outline-none"
         style={{ backgroundColor: "#00a3e0" }}
