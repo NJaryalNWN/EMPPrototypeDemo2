@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { ThemeProvider } from "./context/ThemeContext";
 import { Sidebar } from "./components/Sidebar";
 import { Header } from "./components/Header";
 import { AivaPanel } from "./components/AivaPanel";
-import { HomePage, KnowledgeBasePage, ServiceCatalogPage, MyTicketsPage } from "./pages/HomePage";
+import { HomePage, KnowledgeBasePage, ServiceCatalogPage, MyTicketsPage, ReportsPage } from "./pages/HomePage";
 
 function PageContent({ page, onNav }: { page: string; onNav: (p: string) => void }) {
   switch (page) {
@@ -16,6 +15,8 @@ function PageContent({ page, onNav }: { page: string; onNav: (p: string) => void
       return <ServiceCatalogPage onNav={onNav} />;
     case "My Cases":
       return <MyTicketsPage onNav={onNav} />;
+    case "Reports":
+      return <ReportsPage onNav={onNav} />;
     default:
       return (
         <div className="flex-1 flex items-center justify-center bg-background transition-colors duration-200">
@@ -51,27 +52,14 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <div className="w-full h-screen flex flex-col overflow-hidden bg-background transition-colors duration-200">
-        <Header />
-        <div className="flex flex-1 min-h-0 overflow-hidden">
-          <Sidebar
-            activePage={activePage}
-            onNav={navigate}
-          />
+      <div className="w-full h-screen flex overflow-hidden bg-background transition-colors duration-200">
+        {/* Sidebar spans full viewport height */}
+        <Sidebar activePage={activePage} onNav={navigate} onAiva={() => setAivaOpen(true)} />
+        <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+          <Header />
           <PageContent page={activePage} onNav={navigate} />
         </div>
       </div>
-      {/* Aiva FAB — fixed bottom-right */}
-      <button
-        type="button"
-        aria-label="Open AiVA Assistant"
-        onClick={() => setAivaOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center justify-center w-14 h-14 rounded-2xl border-0 cursor-pointer transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 focus-visible:outline-none"
-        style={{ backgroundColor: "#00a3e0" }}
-      >
-        <AutoAwesomeIcon style={{ fontSize: 24, color: "#ffffff" }} />
-      </button>
-
       <AivaPanel open={aivaOpen} onClose={() => setAivaOpen(false)} />
     </ThemeProvider>
   );

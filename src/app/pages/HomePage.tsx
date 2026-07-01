@@ -10,6 +10,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import NorthEastIcon from "@mui/icons-material/NorthEast";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
@@ -26,6 +27,10 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
+import AddIcCallOutlinedIcon from "@mui/icons-material/AddIcCallOutlined";
+import CallEndOutlinedIcon from "@mui/icons-material/CallEndOutlined";
+import SwapCallsOutlinedIcon from "@mui/icons-material/SwapCallsOutlined";
+import SyncAltOutlinedIcon from "@mui/icons-material/SyncAlt";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
@@ -57,6 +62,8 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import ViewListOutlinedIcon from "@mui/icons-material/ViewListOutlined";
+import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 
 function greeting() {
   const h = new Date().getHours();
@@ -107,10 +114,10 @@ const allTickets: TicketRow[] = [
 ];
 
 const reportLinks = [
-  { icon: EmojiEventsOutlinedIcon, label: "Customer Success", color: "var(--status-success-fg)", bg: "var(--status-success-bg)" },
-  { icon: SecurityOutlinedIcon,    label: "Security Ops",     color: "var(--status-error-fg)",   bg: "var(--status-error-bg)" },
-  { icon: SpeedOutlinedIcon,       label: "SLA Dashboard",   color: "var(--status-info-fg)",    bg: "var(--status-info-bg)" },
-  { icon: InventoryOutlinedIcon,   label: "DID Inventory",   color: "var(--secondary)",         bg: "var(--secondary-container)" },
+  { icon: EmojiEventsOutlinedIcon, label: "Customer Success", color: "#15803D", bg: "#DCFCE7" },
+  { icon: SecurityOutlinedIcon,    label: "Security Ops",     color: "#B91C1C", bg: "#FEE2E2" },
+  { icon: SpeedOutlinedIcon,       label: "SLA Dashboard",    color: "#0369A1", bg: "#DBEAFE" },
+  { icon: InventoryOutlinedIcon,   label: "DID Inventory",    color: "#C2410C", bg: "#FFEDD5" },
 ];
 
 /* ── Shared card shell — elevation only, no border ──────── */
@@ -184,13 +191,10 @@ function CardHeader({
           {icon}
         </div>
         <div>
-          <h3
-            className="text-foreground"
-            style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.3 }}
-          >
+          <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">
             {title}
           </h3>
-          <p className="text-muted-foreground mt-0.5" style={{ fontSize: 11, fontFamily: "var(--font-body)" }}>
+          <p className="text-muted-foreground mt-0.5 text-[11px] leading-snug">
             {subtitle}
           </p>
         </div>
@@ -219,40 +223,29 @@ function RowItem({
       onMouseLeave={() => setHovered(false)}
       className="w-full flex items-start gap-2.5 px-5 py-2 border-0 bg-transparent text-left cursor-pointer transition-colors duration-150 group"
       style={{
-        backgroundColor: hovered ? "var(--state-hover)" : "transparent",
+        backgroundColor: hovered ? "rgba(0,0,0,0.04)" : "transparent",
       }}
     >
       <DescriptionOutlinedIcon
         style={{
           fontSize: 14,
-          color: hovered ? "var(--primary)" : "var(--muted-foreground)",
+          color: "var(--muted-foreground)",
           marginTop: 2,
           flexShrink: 0,
-          transition: "color 0.15s",
         }}
       />
       <div className="min-w-0 flex-1">
-        <p className="text-muted-foreground" style={{ fontSize: 10, fontFamily: "var(--font-body)", lineHeight: 1.4 }}>
+        <p className="text-muted-foreground text-[10px] leading-snug">
           {label}
         </p>
-        <p
-          className="text-foreground truncate mt-px"
-          style={{
-            fontSize: 12,
-            fontWeight: 500,
-            fontFamily: "var(--font-body)",
-            lineHeight: 1.5,
-            color: hovered ? "var(--primary)" : undefined,
-            transition: "color 0.15s",
-          }}
-        >
+        <p className="text-foreground truncate mt-px text-xs font-normal leading-normal">
           {title}
         </p>
       </div>
       <ChevronRightIcon
         style={{
           fontSize: 14,
-          color: "var(--primary)",
+          color: "var(--muted-foreground)",
           flexShrink: 0,
           marginTop: 3,
           opacity: hovered ? 1 : 0,
@@ -361,10 +354,10 @@ function CardFooter({ label, stat1, stat2, stat3, onClick }: { label: string; st
 
   return (
     <div
-      className="px-5 py-2.5 flex items-center justify-between gap-2"
+      className="mt-auto px-5 py-2.5 flex items-center justify-between gap-2"
       style={{ borderTop: "1px solid var(--border)" }}
     >
-      <div className="flex items-center gap-2 min-w-0 overflow-hidden" style={{ fontSize: 11, color: "var(--muted-foreground)", fontFamily: "var(--font-body)" }}>
+      <div className="flex items-center gap-2 min-w-0 overflow-hidden text-[11px] text-muted-foreground">
         <span className="truncate">{stat1}</span>
         {stat2 && <><span className="w-px h-3 bg-border flex-shrink-0 hidden sm:block" /><span className="truncate hidden sm:block">{stat2}</span></>}
         {stat3 && <><span className="w-px h-3 bg-border flex-shrink-0 hidden lg:block" /><span className="truncate hidden lg:block">{stat3}</span></>}
@@ -375,15 +368,10 @@ function CardFooter({ label, stat1, stat2, stat3, onClick }: { label: string; st
         onClick={onClick}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="flex items-center gap-1 border-0 cursor-pointer transition-all duration-150 flex-shrink-0 rounded-lg"
+        className="flex items-center gap-1 border-0 cursor-pointer transition-all duration-150 flex-shrink-0 rounded-lg text-xs font-semibold text-primary"
         style={{
-          fontSize: 12,
-          fontWeight: 600,
-          fontFamily: "var(--font-body)",
-          color: "var(--primary)",
           backgroundColor: hovered ? "var(--primary-container)" : "transparent",
           padding: "4px 8px",
-          letterSpacing: "0.01em",
         }}
       >
         {label}
@@ -394,54 +382,321 @@ function CardFooter({ label, stat1, stat2, stat3, onClick }: { label: string; st
 }
 
 /* ── Hero banner — compact two-column strip ──────────────── */
-function HeroBanner() {
-  const [focused, setFocused] = useState(false);
-  const [value, setValue] = useState("");
+/* ── NWN Brand tokens — sourced from official Style Guide ── */
+const NWN_NAVY   = "#002855";   // Pantone 295 C  — primary navy
+const NWN_ORANGE = "#FF6900";   // Pantone 1505 C — Blaze Orange
+const NWN_CYAN   = "#00A3E0";   // Pantone 299 C  — NWN Offering/Connected Experience
+const NWN_DKGRAY = "#333F48";   // Pantone 432 C  — dark warm gray
+
+function ContactTooltip({ icon: Icon, label, value, onHover, hovered, darkBg }: {
+  icon: React.ComponentType<{ style?: React.CSSProperties }>;
+  label: string; value: string;
+  onHover: (v: boolean) => void;
+  hovered: boolean;
+  darkBg?: boolean;
+}) {
+  const iconAlpha = NWN_ORANGE;
+  const ringColor = darkBg ? "rgba(255,105,0,0.30)" : "rgba(255,105,0,0.22)";
+  const hoverBg   = darkBg ? "rgba(255,105,0,0.20)" : "rgba(255,105,0,0.10)";
+  const restBg    = darkBg ? "rgba(255,105,0,0.12)" : "rgba(255,105,0,0.06)";
+  return (
+    <div style={{ position: "relative" }}>
+      <a href={label === "email" ? `mailto:${value}` : `tel:+17814346800`}
+        style={{
+          width: 28, height: 28, borderRadius: "50%",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          textDecoration: "none",
+          backgroundColor: hovered ? hoverBg : restBg,
+          border: `1px solid ${ringColor}`,
+          transition: "background-color 0.15s, transform 0.15s",
+          transform: hovered ? "scale(1.08)" : "scale(1)",
+        }}
+        onMouseEnter={() => onHover(true)}
+        onMouseLeave={() => onHover(false)}
+      >
+        <Icon style={{ fontSize: 13, color: iconAlpha }} />
+      </a>
+      {hovered && (
+        <div style={{
+          position: "absolute", top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
+          backgroundColor: "#FFFFFF", color: NWN_NAVY,
+          borderRadius: 8, padding: "6px 10px",
+          fontSize: 11, fontWeight: 600, whiteSpace: "nowrap",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.16)", pointerEvents: "none", zIndex: 9999,
+        }}>
+          <div style={{ position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)",
+            width: 0, height: 0,
+            borderLeft: "5px solid transparent", borderRight: "5px solid transparent",
+            borderBottom: "5px solid #FFFFFF" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+            <Icon style={{ fontSize: 12, color: NWN_ORANGE }} />
+            {value}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HeroBanner({ onNewCase }: { onNewCase: () => void }) {
+  const [emailTip, setEmailTip] = useState(false);
+  const [phoneTip, setPhoneTip] = useState(false);
+  const [variant, setVariant] = useState<1|2|3|4|5>(1);
+
+  const activeCount  = allTickets.filter(t => t.status === "In Progress").length;
+  const pendingCount = allTickets.filter(t => t.status === "Pending" || t.status === "Approved").length;
+
+  /* ── Shared CTAs ─────────────────────────────────────── */
+  const OrangeCTA = ({ label = "New Case" }: { label?: string }) => (
+    <button type="button" onClick={onNewCase}
+      className="flex items-center gap-1.5 rounded-full border-0 cursor-pointer flex-shrink-0 transition-all duration-150"
+      style={{
+        backgroundColor: "#2563EB", color: "#FFFFFF",
+        padding: "7px 18px", fontSize: 12, fontWeight: 700,
+        boxShadow: "0 2px 12px rgba(37,99,235,0.35)", whiteSpace: "nowrap",
+      }}
+      onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; e.currentTarget.style.transform = "scale(1.02)"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}
+    >
+      <AddOutlinedIcon style={{ fontSize: 14 }} />{label}
+    </button>
+  );
+
+  /* ── Contact icons ───────────────────────────────────── */
+  const DarkContactIcons = () => (
+    <div className="flex items-center gap-1.5">
+      <ContactTooltip icon={EmailOutlinedIcon} label="email" value="itsupport@nwncarousel.com" hovered={emailTip} onHover={setEmailTip} darkBg />
+      <ContactTooltip icon={PhoneOutlinedIcon} label="phone" value="(781) 434-6800"             hovered={phoneTip} onHover={setPhoneTip} darkBg />
+    </div>
+  );
+
+  const LightContactIcons = () => (
+    <div className="flex items-center gap-1.5">
+      <ContactTooltip icon={EmailOutlinedIcon} label="email" value="itsupport@nwncarousel.com" hovered={emailTip} onHover={setEmailTip} darkBg={false} />
+      <ContactTooltip icon={PhoneOutlinedIcon} label="phone" value="(781) 434-6800"             hovered={phoneTip} onHover={setPhoneTip} darkBg={false} />
+    </div>
+  );
+
+  /* ── Variant selector ──────────────────────────────────── */
+  const VARIANTS: { id: 1|2|3|4|5; name: string }[] = [
+    { id: 1, name: "NWN Navy"      },
+    { id: 2, name: "Blaze Orange"  },
+    { id: 3, name: "White Surface" },
+    { id: 4, name: "Connected"     },
+    { id: 5, name: "Split Brand"   },
+  ];
 
   return (
-    <div
-      className="relative overflow-hidden rounded-2xl mb-6 flex items-center justify-between gap-6 px-8 py-4"
-      style={{ background: "var(--banner-gradient)" }}
-    >
-
-      {/* Text — left */}
-      <div className="min-w-0 flex-1">
-        <h1
-          className="text-white"
-          style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(15px, 2vw, 20px)", fontWeight: 700, letterSpacing: "-0.02em", lineHeight: 1.3 }}
-        >
-          {greeting()}, Nitin
-        </h1>
-        <p style={{ fontSize: "clamp(11px, 1.2vw, 13px)", fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.70)", marginTop: 2, lineHeight: 1.5 }}>
-          Welcome to the ServiceNow Portal. Access your knowledge base, request services, and manage tickets.
-        </p>
+    <div className="mb-6">
+      {/* ── Dev variant switcher — remove before ship ── */}
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Banner:</span>
+        {VARIANTS.map(v => (
+          <button key={v.id} type="button" onClick={() => setVariant(v.id)}
+            className="border-0 cursor-pointer rounded-full transition-all duration-150"
+            style={{
+              fontSize: 10, fontWeight: 600, padding: "3px 10px",
+              backgroundColor: variant === v.id ? "#2563EB" : "transparent",
+              color: variant === v.id ? "#FFFFFF" : "var(--muted-foreground)",
+              outline: variant === v.id ? "none" : `1px solid var(--border)`,
+            }}
+          >{v.name}</button>
+        ))}
       </div>
 
-      {/* Search — compact pill */}
-      <div
-        className="flex items-center gap-2 flex-shrink-0"
-        style={{
-          backgroundColor: "rgba(255,255,255,0.90)",
-          borderRadius: 9999,
-          padding: "7px 16px",
-          width: "clamp(160px, 25%, 280px)",
-          border: focused ? "1px solid rgba(255,255,255,1)" : "1px solid rgba(255,255,255,0.60)",
-          boxShadow: focused ? "0 0 0 2px rgba(255,255,255,0.20)" : "none",
-          transition: "border-color 0.2s, box-shadow 0.2s",
-        }}
-      >
-        <SearchOutlinedIcon style={{ fontSize: 16, color: "#64748b", flexShrink: 0 }} />
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Search the portal…"
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          className="flex-1 bg-transparent border-0 outline-none min-w-0"
-          style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "#0A1628" }}
-        />
-      </div>
+      {/* ══════════════════════════════════════════════════════
+          V1 — NWN Navy
+          Brand Guide Pairing 3: White + Orange on Navy
+          Best for: standard dashboards, universal theming
+         ══════════════════════════════════════════════════════ */}
+      {variant === 1 && (
+        <div className="relative rounded-2xl flex items-center justify-between gap-4 px-8 py-4"
+          style={{ backgroundColor: NWN_NAVY, minHeight: 76, boxShadow: `inset 4px 0 0 ${NWN_ORANGE}` }}>
+          {/* Top-right orange radial glow */}
+          <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
+            background: `radial-gradient(ellipse 200px 140px at 96% -20%, ${NWN_ORANGE}2A 0%, transparent 65%)`,
+          }} />
+          <div className="min-w-0 flex-1 pl-3">
+            <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_ORANGE }}>
+              Innovation Delivered
+            </p>
+            <h1 className="text-white font-bold tracking-tight leading-tight" style={{ fontSize: 22 }}>
+              {greeting()}, Nitin
+            </h1>
+            <p className="text-[11px] leading-relaxed mt-0.5" style={{ color: "rgba(255,255,255,0.50)" }}>
+              Access your knowledge base, request services, and manage support tickets.
+            </p>
+          </div>
+          <div className="flex items-center gap-2.5 flex-shrink-0">
+            <DarkContactIcons />
+            <div className="w-px h-5" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
+            <OrangeCTA />
+          </div>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════
+          V2 — Blaze Orange (Subtle)
+          Card white · orange left rail + glow · navy text
+          Best for: readable, brand-present, airy feel
+         ══════════════════════════════════════════════════════ */}
+      {variant === 2 && (
+        <div className="relative rounded-2xl flex items-center justify-between gap-4 px-8 py-4"
+          style={{
+            backgroundColor: "var(--card)",
+            boxShadow: `inset 4px 0 0 ${NWN_ORANGE}, 0 2px 8px rgba(0,40,85,0.06)`,
+            minHeight: 76,
+          }}>
+          {/* Soft orange radial wash — top right */}
+          <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
+            background: "radial-gradient(ellipse 220px 110px at 100% 0%, rgba(255,105,0,0.07) 0%, transparent 70%)",
+          }} />
+          <div className="min-w-0 flex-1 pl-3">
+            <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_ORANGE }}>
+              Innovation Delivered
+            </p>
+            <h1 className="text-foreground font-bold tracking-tight leading-tight" style={{ fontSize: 22 }}>
+              {greeting()}, Nitin
+            </h1>
+            <p className="text-[11px] leading-relaxed mt-0.5 text-foreground/60">
+              Access your knowledge base, request services, and manage support tickets.
+            </p>
+          </div>
+          <div className="flex items-center gap-2.5 flex-shrink-0">
+            <LightContactIcons />
+            <div className="w-px h-5 bg-border" />
+            <OrangeCTA />
+          </div>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════
+          V3 — White Surface
+          Brand Guide Pairing 1: Navy + Orange on White
+          Best for: light theme, editorial / minimal feel
+         ══════════════════════════════════════════════════════ */}
+      {variant === 3 && (
+        <div className="relative rounded-2xl flex items-center justify-between gap-4 px-8 py-4"
+          style={{
+            backgroundColor: "var(--card)",
+            border: "1px solid var(--border)",
+            borderTop: `3px solid ${NWN_NAVY}`,
+            boxShadow: "0 2px 10px rgba(0,40,85,0.07)",
+            minHeight: 76,
+          }}>
+          {/* Orange corner flag */}
+          <div className="absolute top-0 right-0 w-0 h-0 pointer-events-none" style={{
+            borderTop: `36px solid ${NWN_ORANGE}`,
+            borderLeft: "36px solid transparent",
+            borderRadius: "0 14px 0 0",
+          }} />
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_ORANGE }}>
+              Innovation Delivered
+            </p>
+            <h1 className="text-foreground font-bold tracking-tight leading-tight" style={{ fontSize: 22 }}>
+              {greeting()}, Nitin
+            </h1>
+            <p className="text-[11px] leading-relaxed mt-0.5 text-foreground/60">
+              Access your knowledge base, request services, and manage support tickets.
+            </p>
+          </div>
+          <div className="flex items-center gap-2.5 flex-shrink-0">
+            <LightContactIcons />
+            <div className="w-px h-5 bg-border" />
+            <OrangeCTA />
+          </div>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════
+          V4 — Connected Experience
+          NWN Offering Cyan · data-rich · KPI strip on Navy
+          Best for: power users, operations dashboards
+         ══════════════════════════════════════════════════════ */}
+      {variant === 4 && (
+        <div className="relative rounded-2xl px-8 py-4"
+          style={{ backgroundColor: NWN_NAVY, minHeight: 76, boxShadow: `inset 4px 0 0 ${NWN_CYAN}` }}>
+          {/* Cyan glow — bottom right */}
+          <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
+            background: `radial-gradient(ellipse 180px 130px at 100% 130%, ${NWN_CYAN}22 0%, transparent 65%)`,
+          }} />
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0 flex-1 pl-3">
+              <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_CYAN }}>
+                Connected Experience
+              </p>
+              <h1 className="text-white font-bold tracking-tight leading-tight" style={{ fontSize: 22 }}>
+                {greeting()}, Nitin
+              </h1>
+              <div className="flex items-center gap-5 mt-1.5">
+                {[
+                  { label: "Active",      value: activeCount,  color: NWN_CYAN   },
+                  { label: "Pending",     value: pendingCount, color: NWN_ORANGE },
+                  { label: "KB Articles", value: "13.5K",      color: "#6EE7B7"  },
+                ].map(({ label, value, color }) => (
+                  <div key={label} className="flex items-baseline gap-1.5">
+                    <span className="font-bold leading-none" style={{ fontSize: 15, color }}>{value}</span>
+                    <span className="font-medium leading-none" style={{ fontSize: 10, color: "rgba(255,255,255,0.40)" }}>{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex items-center gap-2.5 flex-shrink-0">
+              <DarkContactIcons />
+              <div className="w-px h-5" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
+              <OrangeCTA />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════
+          V5 — Split Brand Editorial
+          Navy left / Orange right · brand duality
+          Best for: welcome screens, brand-forward moments
+         ══════════════════════════════════════════════════════ */}
+      {variant === 5 && (
+        <div className="relative rounded-2xl overflow-hidden flex" style={{ minHeight: 88 }}>
+          {/* Left: NWN Navy */}
+          <div className="flex-1 flex items-center px-8 py-5" style={{ backgroundColor: NWN_NAVY }}>
+            <div className="min-w-0">
+              <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_ORANGE }}>
+                Innovation Delivered
+              </p>
+              <h1 className="text-white font-bold tracking-tight leading-tight" style={{ fontSize: "clamp(18px, 2.2vw, 26px)" }}>
+                {greeting()}, Nitin
+              </h1>
+              <p className="text-[11px] leading-relaxed mt-0.5" style={{ color: "rgba(255,255,255,0.45)", maxWidth: 320 }}>
+                Your experience management portal — powered by NWN.
+              </p>
+            </div>
+          </div>
+          {/* Angled transition — navy-to-orange */}
+          <div className="absolute top-0 bottom-0 pointer-events-none" style={{
+            left: "58%", width: 48,
+            background: `linear-gradient(to right, ${NWN_NAVY} 0%, ${NWN_ORANGE} 100%)`,
+            clipPath: "polygon(0 0, 100% 0, 60% 100%, 0% 100%)",
+          }} />
+          {/* Right: Blaze Orange */}
+          <div className="flex flex-col items-center justify-center gap-3 px-8 py-5 flex-shrink-0"
+            style={{ backgroundColor: NWN_ORANGE, minWidth: 190 }}>
+            <DarkContactIcons />
+            <button type="button" onClick={onNewCase}
+              className="flex items-center gap-1.5 rounded-full border-0 cursor-pointer transition-all duration-150 flex-shrink-0"
+              style={{
+                backgroundColor: "#2563EB", color: "#FFFFFF",
+                padding: "7px 18px", fontSize: 12, fontWeight: 800,
+                boxShadow: "0 2px 12px rgba(37,99,235,0.35)", whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.opacity = "0.90"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.opacity = "1"; }}
+            >
+              <AddOutlinedIcon style={{ fontSize: 14 }} />New Case
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -995,7 +1250,7 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
       className="w-full flex items-center gap-3 border-0 text-left cursor-pointer transition-colors duration-150"
       style={{
         padding: "10px 16px",
-        backgroundColor: hov ? "color-mix(in srgb, var(--primary-container) 28%, transparent)" : "var(--card)",
+        backgroundColor: hov ? "rgba(0,0,0,0.04)" : "var(--card)",
         borderBottom: isLast ? "none" : "1px solid var(--border)",
       }}
     >
@@ -1012,7 +1267,7 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
         </div>
         <p
           className="truncate"
-          style={{ fontSize: 13, fontWeight: 500, fontFamily: "var(--font-body)", color: hov ? "var(--primary)" : "var(--foreground)", lineHeight: 1.4, transition: "color 0.15s" }}
+          style={{ fontSize: 13, fontWeight: 500, fontFamily: "var(--font-body)", color: "var(--foreground)", lineHeight: 1.4 }}
         >
           {ticket.title}
         </p>
@@ -1059,230 +1314,150 @@ export function HomePage({ onNav }: { onNav?: (p: string) => void }) {
     <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        <HeroBanner />
+        <HeroBanner onNewCase={() => setDrawerOpen(true)} />
 
-        {/* Nav cards: Control, Monitor, Report, Support */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6">
-
-          {/* ── Control ──────────────────────────────────── */}
-          <PortalCard accentColor={ctrl.color}>
-            <CardHeader
-              icon={<SettingsOutlinedIcon style={{ fontSize: 17, color: ctrl.iconColor }} />}
-              iconBg={ctrl.iconBg}
-              title="Control"
-              subtitle="Manage infrastructure and services"
-              onOpen={() => {}}
-            />
-            <DrillDownNavMenu links={controlLinks} accentColor={ctrl.color} accentBg={ctrl.bg} />
-          </PortalCard>
-
-          {/* ── Monitor ──────────────────────────────────── */}
-          <PortalCard accentColor={monitor.color}>
-            <CardHeader
-              icon={<VisibilityOutlinedIcon style={{ fontSize: 17, color: monitor.iconColor }} />}
-              iconBg={monitor.iconBg}
-              title="Monitor"
-              subtitle="Track performance and health"
-              onOpen={() => {}}
-            />
-            <DrillDownNavMenu links={monitorLinks} accentColor={monitor.color} accentBg={monitor.bg} />
-          </PortalCard>
-
-          {/* ── Report ───────────────────────────────────── */}
-          <PortalCard accentColor={rpt.color}>
-            <CardHeader
-              icon={<AssessmentOutlinedIcon style={{ fontSize: 17, color: rpt.iconColor }} />}
-              iconBg={rpt.iconBg}
-              title="Report"
-              subtitle="View analytics and service reports"
-              onOpen={() => {}}
-            />
-            <DrillDownNavMenu links={reportLinks2} accentColor={rpt.color} accentBg={rpt.bg} />
-          </PortalCard>
-
-          {/* ── Support ──────────────────────────────────── */}
-          <PortalCard accentColor={supp.color}>
-            <CardHeader
-              icon={<HelpOutlineOutlinedIcon style={{ fontSize: 17, color: supp.iconColor }} />}
-              iconBg={supp.iconBg}
-              title="Support"
-              subtitle="Cases, entitlements, and alerts"
-              onOpen={() => {}}
-            />
-            <DrillDownNavMenu
-              links={supportLinks.map((l) =>
-                l.label === "New Case"  ? { ...l, onClick: () => setDrawerOpen(true) } :
-                l.label === "My Cases" ? { ...l, onClick: () => onNav?.("My Cases") } :
-                l
-              )}
-              accentColor={supp.color}
-              accentBg={supp.bg}
-            />
-          </PortalCard>
-
-        </div>
 
         <NewTicketDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
         {/* Portal grid — 12-col base, My Tickets leads at col-span-6 */}
         <div className="grid grid-cols-12 gap-6">
 
-          {/* ── My Tickets — col-span-6, first ────────────── */}
-          <div className="col-span-12 xl:col-span-6 flex">
+          {/* ── My Cases — col-span-3 ────────────────────────── */}
+          <div className="col-span-12 xl:col-span-3 flex">
             <PortalCard className="flex-1" accentColor="var(--primary)">
               <div className="px-5 pt-4 pb-3 flex items-center gap-3" style={{ borderBottom: "1px solid var(--border)" }}>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--primary-container)" }}>
                   <AssignmentTurnedInOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />
                 </div>
-                <div className="min-w-0">
-                  <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.3, color: "var(--foreground)" }}>My Cases</h3>
-                  <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 2 }}>Active cases requiring your attention</p>
-                </div>
-                {/* Stat chips — KPI counter style: filled pill, number is the hero */}
-                <div className="flex items-center gap-2 ml-auto flex-shrink-0">
-                  {[
-                    { label: "Active",   count: allTickets.filter(t => t.status === "In Progress" || t.status === "Pending" || t.status === "Approved").length, color: "#1D4ED8", bg: "#DBEAFE" },
-                    { label: "Resolved", count: allTickets.filter(t => t.status === "Resolved").length,                                                          color: "#065F46", bg: "#D1FAE5" },
-                    { label: "Closed",   count: allTickets.filter(t => t.status === "Closed").length,                                                            color: "#374151", bg: "#F3F4F6" },
-                  ].map(({ label, count, color, bg }) => (
-                    <div key={label} style={{
-                      display: "flex", alignItems: "center", gap: 5,
-                      padding: "4px 10px",
-                      borderRadius: 9999,
-                      backgroundColor: bg,
-                      border: `1px solid ${color}28`,
-                    }}>
-                      <span style={{ fontSize: 14, fontWeight: 800, fontFamily: "var(--font-heading)", color, lineHeight: 1 }}>{count}</span>
-                      <span style={{ fontSize: 9, fontWeight: 600, fontFamily: "var(--font-body)", color, opacity: 0.65, lineHeight: 1 }}>{label}</span>
-                    </div>
-                  ))}
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">My Cases</h3>
+                  <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">Active cases</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setDrawerOpen(true)}
                   aria-label="Create new case"
                   className="flex items-center gap-1 cursor-pointer border-0 transition-all duration-150 flex-shrink-0"
-                  style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderRadius: 9999, padding: "6px 12px", fontSize: 12, fontWeight: 600, fontFamily: "var(--font-body)" }}
+                  style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderRadius: 9999, padding: "5px 10px", fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)" }}
                   onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
                 >
-                  <AddOutlinedIcon style={{ fontSize: 13 }} />
+                  <AddOutlinedIcon style={{ fontSize: 12 }} />
                   New Case
                 </button>
               </div>
-
-              {/* Active ticket rows */}
-              <div className="flex flex-col overflow-y-auto" style={{ maxHeight: 228 }}>
+              <div className="flex flex-col flex-1 overflow-y-auto" style={{ maxHeight: 260 }}>
+                {/* Active group */}
                 {allTickets
-                  .filter((t) => t.status === "In Progress" || t.status === "Pending" || t.status === "Approved")
+                  .filter(t => t.status === "In Progress" || t.status === "Pending" || t.status === "Approved")
                   .map((ticket, i, arr) => (
-                    <ActiveTicketRow
-                      key={ticket.id}
-                      ticket={ticket}
-                      isLast={i === arr.length - 1}
-                      onClick={() => onNav?.("My Cases")}
-                    />
+                    <ActiveTicketRow key={ticket.id} ticket={ticket} isLast={i === arr.length - 1} onClick={() => onNav?.("My Cases")} />
                   ))}
               </div>
               <CardFooter
                 label="View All"
-                stat1={`${allTickets.length} total cases`}
-                stat2={`${allTickets.filter(t => t.status === "Resolved" || t.status === "Closed").length} completed`}
+                stat1={`${allTickets.length} cases`}
+                stat2={`${allTickets.filter(t => t.status === "Resolved" || t.status === "Closed").length} closed`}
                 stat3=""
                 onClick={() => onNav?.("My Cases")}
               />
             </PortalCard>
           </div>
 
-          {/* ── Knowledge Base — col-span-3 (matches Report card width) ── */}
+          {/* ── Knowledge Base — col-span-3 ──────────────────── */}
           <div className="col-span-12 xl:col-span-3 flex">
-            <PortalCard className="flex-1" accentColor="var(--primary)">
+            <PortalCard className="flex-1" accentColor="#16A34A">
               <CardHeader
-                icon={<MenuBookOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />}
+                icon={<MenuBookOutlinedIcon style={{ fontSize: 17, color: "#16A34A" }} />}
+                iconBg="#DCFCE7"
                 title="Knowledge Base"
-                subtitle="Browse articles and documentation"
+                subtitle="Browse articles and docs"
               />
               <div className="flex flex-col flex-1">
                 {kbArticles.slice(0, 3).map((a) => (
-                  <RowItem key={a.title} label={a.category} title={a.title} />
+                  <RowItem key={a.title} label={a.category} title={a.title} onClick={() => onNav?.("Knowledge Base")} />
                 ))}
               </div>
               <CardFooter label="View All" stat1="12,304 articles" stat2="5,071 users" stat3="" onClick={() => onNav?.("Knowledge Base")} />
             </PortalCard>
           </div>
 
-          {/* ── Right column — Contact Support + Action Needed stacked ── */}
-          <div className="col-span-12 xl:col-span-3 flex flex-col gap-6 self-start">
-
-            {/* Contact Support */}
-            <PortalCard accentColor="var(--primary)">
-              {/* Inline header with New Case CTA right-aligned */}
+          {/* ── Service Catalog — col-span-3 ─────────────────── */}
+          <div className="col-span-12 xl:col-span-3 flex">
+            <PortalCard className="flex-1" accentColor="#EA580C">
               <div className="px-5 pt-4 pb-3 flex items-center gap-3" style={{ borderBottom: "1px solid var(--border)" }}>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--muted)" }}>
-                  <SupportAgentOutlinedIcon style={{ fontSize: 17, color: "var(--foreground)" }} />
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "#FFEDD5" }}>
+                  <ShoppingCartOutlinedIcon style={{ fontSize: 17, color: "#EA580C" }} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em", lineHeight: 1.3, color: "var(--foreground)" }}>Contact Support</h3>
-                  <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 2 }}>Get help from our team</p>
+                  <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">Service Catalog</h3>
+                  <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">Request services</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setDrawerOpen(true)}
-                  className="flex items-center gap-1 cursor-pointer border-0 transition-all duration-150 flex-shrink-0"
-                  style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderRadius: 9999, padding: "6px 12px", fontSize: 12, fontWeight: 600, fontFamily: "var(--font-body)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-                >
-                  <AddOutlinedIcon style={{ fontSize: 13 }} />
-                  New Case
+                <button type="button" onClick={() => onNav?.("Service Catalog")}
+                  className="flex-shrink-0 border-0 bg-transparent cursor-pointer p-1 rounded"
+                  style={{ color: "var(--muted-foreground)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--foreground)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--muted-foreground)"; }}
+                  aria-label="Open Service Catalog">
+                  <NorthEastIcon style={{ fontSize: 16 }} />
                 </button>
               </div>
-              <div className="flex flex-col">
-                <a
-                  href="mailto:itsupport@nwncarousel.com"
-                  className="flex items-center gap-2.5 no-underline transition-colors duration-150"
-                  style={{ padding: "7px 16px" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--state-hover)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
-                >
-                  <EmailOutlinedIcon style={{ fontSize: 15, color: "var(--muted-foreground)", flexShrink: 0 }} />
-                  <div className="min-w-0">
-                    <p style={{ fontSize: 9, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--muted-foreground)", lineHeight: 1.2 }}>Email</p>
-                    <p className="truncate" style={{ fontSize: 11, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--primary)", lineHeight: 1.3 }}>itsupport@nwncarousel.com</p>
-                  </div>
-                </a>
-                <a
-                  href="tel:+18664084596"
-                  className="flex items-center gap-2.5 no-underline transition-colors duration-150"
-                  style={{ padding: "7px 16px" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--state-hover)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
-                >
-                  <PhoneOutlinedIcon style={{ fontSize: 15, color: "var(--muted-foreground)", flexShrink: 0 }} />
-                  <div className="min-w-0">
-                    <p style={{ fontSize: 9, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--muted-foreground)", lineHeight: 1.2 }}>Phone</p>
-                    <p style={{ fontSize: 11, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--foreground)", lineHeight: 1.3 }}>(866) 408-4596</p>
-                  </div>
-                </a>
+              <div className="flex flex-col flex-1">
+                {catalogItems.map((item, i, arr) => (
+                  <button key={item.rank} type="button" onClick={() => onNav?.("Service Catalog")}
+                    className="flex items-center gap-3 w-full border-0 bg-transparent cursor-pointer text-left transition-colors duration-150"
+                    style={{ padding: "11px 20px" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.04)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+                  >
+                    <InventoryOutlinedIcon className="flex-shrink-0" style={{ fontSize: 15, color: "var(--muted-foreground)", marginTop: 2 }} />
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-semibold text-muted-foreground leading-tight">Most popular #{item.rank}</p>
+                      <p className="truncate text-[13px] font-normal text-foreground leading-snug">{item.title}</p>
+                    </div>
+                  </button>
+                ))}
               </div>
+              <CardFooter label="View All" stat1="169 services" stat2="169 categories" stat3="" onClick={() => onNav?.("Service Catalog")} />
             </PortalCard>
+          </div>
 
-            {/* Action Needed */}
-            <PortalCard accentColor="#C2410C">
-              <CardHeader
-                icon={<AssignmentTurnedInOutlinedIcon style={{ fontSize: 17, color: "#C2410C" }} />}
-                iconBg="#FFEDD5"
-                title="Action Needed"
-                subtitle="Cases awaiting your response"
-              />
-              <div className="flex items-center gap-2 px-5 py-3">
-                <AssignmentTurnedInOutlinedIcon style={{ fontSize: 15, color: "var(--muted-foreground)", flexShrink: 0 }} />
-                <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", lineHeight: 1.4 }}>
-                  No cases awaiting your response.
-                </p>
+          {/* ── Reports — col-span-3 ─────────────────────────── */}
+          <div className="col-span-12 xl:col-span-3 flex">
+            <PortalCard className="flex-1" accentColor="var(--primary)">
+              <div className="px-5 pt-4 pb-3 flex items-center gap-3" style={{ borderBottom: "1px solid var(--border)" }}>
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--primary-container)" }}>
+                  <BarChartOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">Reports</h3>
+                  <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">View and analyze reports</p>
+                </div>
+                <button type="button" onClick={() => onNav?.("Reports")}
+                  className="flex-shrink-0 border-0 bg-transparent cursor-pointer p-1 rounded"
+                  style={{ color: "var(--muted-foreground)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--foreground)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--muted-foreground)"; }}
+                  aria-label="Open Reports">
+                  <NorthEastIcon style={{ fontSize: 16 }} />
+                </button>
               </div>
+              <div className="flex flex-col flex-1">
+                {reportLinks.map(({ icon: Icon, label, color, bg }, i) => (
+                  <button key={label} type="button" onClick={() => onNav?.("Reports")}
+                    className="w-full flex items-center gap-3 border-0 bg-transparent text-left cursor-pointer transition-colors duration-150"
+                    style={{ padding: "11px 20px" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.04)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+                  >
+                    <Icon style={{ fontSize: 18, color, flexShrink: 0 }} />
+                    <span className="flex-1 text-[13px] font-normal text-foreground">{label}</span>
+                    <ChevronRightIcon style={{ fontSize: 16, color: "var(--muted-foreground)", flexShrink: 0 }} />
+                  </button>
+                ))}
+              </div>
+              <CardFooter label="View All" stat1="4 report types" stat2="Updated daily" stat3="" onClick={() => onNav?.("Reports")} />
             </PortalCard>
-
           </div>
 
         </div>
@@ -1390,16 +1565,16 @@ function PageHeader({
 
 type KBArticleItem = { id: string; title: string; category: string; views: number; rating: number; date: string };
 const kbArticlesDetail: KBArticleItem[] = [
-  { id: "KB0001", title: "Collector Troubleshooting",                                                          category: "Standard Operating Procedures", views: 0, rating: 4.5, date: "Aug 2, 2023"  },
-  { id: "KB0002", title: "YALE UNIVERSITY Disaster Recovery Documentation",                                    category: "Policy/Information",            views: 0, rating: 0,   date: "Jun 22, 2017" },
-  { id: "KB0003", title: "NWN – Eagle: Link to RealMed (Availit…)",                                          category: "Eagle",                         views: 0, rating: 0,   date: "Nov 27, 2025" },
-  { id: "KB0004", title: "Avaya Aura™ Communication Manager Branch and Adjunct Software Compatibility Matrix", category: "ECG",                          views: 0, rating: 0,   date: "Feb 8, 2022"  },
-  { id: "KB0005", title: "Ribbon (Sonus): Core Series: Reference: About Private Call Routing",                category: "ECG",                          views: 0, rating: 0,   date: "Oct 4, 2022"  },
-  { id: "KB0006", title: "Keolis – Overview of NetworkNow (Desktop Version)",                                 category: "KCS",                          views: 0, rating: 0,   date: "Aug 13, 2025" },
-  { id: "KB0007", title: "IDEX Moving users between the HQ locations",                                        category: "Uncategorized",                views: 0, rating: 0,   date: "Jun 5, 2025"  },
-  { id: "KB0008", title: "Crane - Proficy Historian Excel Add In Installation",                               category: "Installs",                     views: 0, rating: 0,   date: "Jul 31, 2018" },
-  { id: "KB0009", title: "Shift Handoff - 11.29.2021 - Second to Third",                                     category: "Second Shift to Third Shift",  views: 0, rating: 0,   date: "Nov 29, 2021" },
-  { id: "KB0010", title: "Shift Handoff - 05.27.2023 - Second to Third",                                     category: "Second Shift to Third Shift",  views: 0, rating: 1,   date: "May 27, 2023" },
+  { id: "KB0001", title: "Avaya: Octel: Reference: Avaya Aura Messaging Features (Marketing Note)", category: "ECG",                        views: 996, rating: 0,   date: "July 11, 2022"   },
+  { id: "KB0002", title: "NWN – Customer Email Signature Template",                                 category: "Setup",                      views: 280, rating: 5.0, date: "March 26, 2026"  },
+  { id: "KB0003", title: "Shift Handoff - 06.09.2026 - First to Second",                           category: "First Shift to Second Shift", views: 277, rating: 0,   date: "June 9, 2026"    },
+  { id: "KB0004", title: "Shift Handoff - 06.11.2026 - First to Second",                           category: "First Shift to Second Shift", views: 249, rating: 0,   date: "June 11, 2026"   },
+  { id: "KB0005", title: "Shift Handoff - 06.10.2026 - First to Second",                           category: "First Shift to Second Shift", views: 232, rating: 0,   date: "June 10, 2026"   },
+  { id: "KB0006", title: "Platform Analytics and Data Visualization - How to",                      category: "Core Functionality",         views: 153, rating: 0,   date: "June 17, 2026"   },
+  { id: "KB0007", title: "Bioventus – PoC for Applications and Vendors",                            category: "Line of Business Apps",      views: 127, rating: 5.0, date: "June 12, 2026"   },
+  { id: "KB0008", title: "NWN – Eagle: Link to RealMed (Availit…)",                                category: "Eagle",                      views: 114, rating: 0,   date: "Nov 27, 2025"    },
+  { id: "KB0009", title: "Avaya Aura™ Communication Manager Compatibility Matrix",                  category: "ECG",                        views:  98, rating: 0,   date: "Feb 8, 2022"     },
+  { id: "KB0010", title: "Collector Troubleshooting",                                               category: "Standard Operating Procedures", views: 87, rating: 4.5, date: "Aug 2, 2023" },
 ];
 
 type ServiceItemType = { id: string; title: string; description: string; category: string };
@@ -1426,6 +1601,10 @@ const kbCategoryColors: Record<string, { color: string; bg: string }> = {
   "KCS":                           { color: "#065F46", bg: "#D1FAE5" },
   "Installs":                      { color: "#0369A1", bg: "#CCF0FF" },
   "Second Shift to Third Shift":   { color: "#92400E", bg: "#FFF4E0" },
+  "Setup":                         { color: "#1D4ED8", bg: "#DBEAFE" },
+  "First Shift to Second Shift":   { color: "#D97706", bg: "#FEF3C7" },
+  "Core Functionality":            { color: "#7C3AED", bg: "#EDE9FE" },
+  "Line of Business Apps":         { color: "#0D9488", bg: "#CCFBF1" },
 };
 function kbCatStyle(cat: string) { return kbCategoryColors[cat] ?? { color: "#374151", bg: "#F3F4F6" }; }
 
@@ -1506,28 +1685,35 @@ function DataPagination({ total, page, perPage, onPage, onPerPage, itemLabel = "
   );
 }
 
-function KBArticleRow({ article, isLast }: { article: KBArticleItem; isLast: boolean }) {
+function KBArticleRow({ article, isLast, onClick }: { article: KBArticleItem; isLast: boolean; onClick: () => void }) {
   const [hov, setHov] = useState(false);
   const cat = kbCatStyle(article.category);
   return (
-    <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      className="flex items-center gap-4 px-6 py-2.5 cursor-pointer transition-colors duration-150"
-      style={{ borderBottom: isLast ? "none" : "1px solid var(--border)", backgroundColor: hov ? "var(--state-hover)" : "transparent" }}>
-      <div className="flex items-center justify-center flex-shrink-0 rounded-xl transition-colors duration-150"
-        style={{ width: 34, height: 34, backgroundColor: hov ? "var(--primary-container)" : "var(--muted)" }}>
-        <MenuBookOutlinedIcon style={{ fontSize: 18, color: hov ? "var(--primary)" : "var(--muted-foreground)" }} />
+    <div
+      role="button"
+      tabIndex={0}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      onClick={onClick}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onClick(); }}
+      className="flex items-center gap-4 px-6 py-4 cursor-pointer transition-colors duration-150"
+      style={{ borderBottom: isLast ? "none" : "1px solid var(--border)", backgroundColor: hov ? "var(--state-hover, rgba(0,40,85,0.03))" : "transparent" }}
+    >
+      <div className="flex items-center justify-center flex-shrink-0 rounded-xl"
+        style={{ width: 40, height: 40, backgroundColor: "var(--primary)", transition: "opacity 0.15s", opacity: hov ? 0.85 : 1 }}>
+        <DescriptionOutlinedIcon style={{ fontSize: 20, color: "#ffffff" }} />
       </div>
       <div className="flex-1 min-w-0">
-        <p style={{ fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)", color: hov ? "var(--primary)" : "var(--foreground)", lineHeight: 1.4, transition: "color 0.15s" }}>
+        <p style={{ fontSize: 13, fontWeight: 700, fontFamily: "var(--font-body)", color: hov ? "var(--primary)" : "var(--foreground)", lineHeight: 1.4, transition: "color 0.15s", marginBottom: 6 }}>
           {article.title}
         </p>
-        <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+        <div className="flex items-center gap-3 flex-wrap">
           <span style={{ fontSize: 10, fontWeight: 600, fontFamily: "var(--font-body)", color: cat.color, backgroundColor: cat.bg, borderRadius: 9999, padding: "2px 8px", whiteSpace: "nowrap" }}>
             {article.category}
           </span>
           <span className="flex items-center gap-1">
-            <VisibilityOutlinedIcon style={{ fontSize: 12, color: "var(--muted-foreground)" }} />
-            <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{article.views}</span>
+            <VisibilityOutlinedIcon style={{ fontSize: 11, color: "var(--muted-foreground)" }} />
+            <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{article.views.toLocaleString()}</span>
           </span>
           <StarRating rating={article.rating} />
           <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{article.date}</span>
@@ -1538,72 +1724,182 @@ function KBArticleRow({ article, isLast }: { article: KBArticleItem; isLast: boo
   );
 }
 
+function KBArticleDetailView({ article, onBack, onNav }: { article: KBArticleItem; onBack: () => void; onNav?: (p: string) => void }) {
+  const cat = kbCatStyle(article.category);
+  return (
+    <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
+      <PageHeader
+        title={article.title}
+        subtitle=""
+        breadcrumb={[
+          { label: "Home", page: "Home" },
+          { label: "Knowledge Base", page: "Knowledge Base" },
+          { label: article.title.length > 48 ? article.title.slice(0, 48) + "…" : article.title },
+        ]}
+        onNav={(p) => { if (p === "Knowledge Base") { onBack(); } else { onNav?.(p); } }}
+        transparent
+      />
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-10" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+
+        {/* Meta card */}
+        <div className="rounded-2xl bg-card" style={{ border: "1px solid var(--border)", padding: "20px 24px" }}>
+          <div className="flex items-center gap-3 flex-wrap">
+            <span style={{ fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)", color: cat.color, backgroundColor: cat.bg, borderRadius: 9999, padding: "3px 10px" }}>
+              {article.category}
+            </span>
+            <span className="flex items-center gap-1">
+              <VisibilityOutlinedIcon style={{ fontSize: 12, color: "var(--muted-foreground)" }} />
+              <span style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{article.views.toLocaleString()} views</span>
+            </span>
+            <StarRating rating={article.rating} />
+            <span style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{article.date}</span>
+          </div>
+        </div>
+
+        {/* Article body */}
+        <div className="rounded-2xl bg-card" style={{ border: "1px solid var(--border)", padding: "28px 32px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 800 }}>
+            <div style={{ height: 1, backgroundColor: "var(--border)", marginBottom: 4 }} />
+            {[
+              "This article provides reference documentation related to the topic above. It covers configuration steps, known issues, and best practices applicable to this area of the platform.",
+              "Before proceeding, ensure you have the appropriate administrator access and that all dependent services are in an active state. Review the prerequisites section carefully.",
+              "For additional support or to report an issue with this article, use the feedback panel below or open a new support case from the Help menu.",
+            ].map((para, i) => (
+              <p key={i} style={{ fontSize: 14, fontFamily: "var(--font-body)", color: "var(--foreground)", lineHeight: 1.75, margin: 0 }}>
+                {para}
+              </p>
+            ))}
+            <div style={{ height: 1, backgroundColor: "var(--border)", marginTop: 8 }} />
+            <div className="flex items-center gap-3">
+              <span style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>Was this article helpful?</span>
+              {["👍 Yes", "👎 No"].map((label) => (
+                <button key={label} type="button" style={{
+                  padding: "5px 14px", borderRadius: 9999, border: "1px solid var(--border)",
+                  backgroundColor: "transparent", cursor: "pointer",
+                  fontSize: 12, fontFamily: "var(--font-body)", color: "var(--foreground)",
+                }}>
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Back link */}
+        <button type="button" onClick={onBack}
+          className="flex items-center gap-2 self-start"
+          style={{ border: 0, background: "none", cursor: "pointer", padding: 0,
+            fontSize: 13, fontFamily: "var(--font-body)", color: "var(--primary)", fontWeight: 600 }}>
+          <ArrowBackIcon style={{ fontSize: 16 }} />
+          Back to Knowledge Base
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /* ── Knowledge Base page ─────────────────────────────────── */
+const kbFilterGroups: { label: string; icon: React.ComponentType<{ style?: React.CSSProperties }> }[] = [
+  { label: "All Knowledge Bases", icon: MenuBookOutlinedIcon  },
+  { label: "All Categories",      icon: AppsOutlinedIcon      },
+  { label: "All Authors",         icon: PersonOutlinedIcon    },
+  { label: "Most Viewed",         icon: FilterListOutlinedIcon},
+  { label: "All Time",            icon: CalendarTodayOutlinedIcon },
+  { label: "All Ratings",         icon: StarBorderOutlinedIcon},
+  { label: "All Views",           icon: VisibilityOutlinedIcon},
+];
+
 export function KnowledgeBasePage({ onNav }: { onNav?: (p: string) => void }) {
-  const [kbSearch,  setKbSearch]  = useState("");
-  const [kbPage,    setKbPage]    = useState(1);
-  const [kbPerPage, setKbPerPage] = useState(5);
-  const totalArticles = 13108;
+  const [kbSearch,       setKbSearch]       = useState("");
+  const [kbPage,         setKbPage]         = useState(1);
+  const [kbPerPage,      setKbPerPage]      = useState(10);
+  const [selectedArticle, setSelectedArticle] = useState<KBArticleItem | null>(null);
+  const totalArticles = 13580;
 
   const visible = kbArticlesDetail.filter((a) =>
     !kbSearch || a.title.toLowerCase().includes(kbSearch.toLowerCase()) || a.category.toLowerCase().includes(kbSearch.toLowerCase())
   );
   const paged = visible.slice((kbPage - 1) * kbPerPage, kbPage * kbPerPage);
 
-  const filterGroups = [
-    { label: "All Knowledge Bases", opts: ["All Knowledge Bases"] },
-    { label: "All Categories", opts: ["All Categories", "Standard Operating Procedures", "Policy/Information", "ECG", "KCS", "Eagle", "Installs", "Uncategorized"] },
-    { label: "All Authors",    opts: ["All Authors"] },
-    { label: "Most Viewed",    opts: ["Most Viewed", "Least Viewed", "Newest", "Oldest"] },
-    { label: "All Time",       opts: ["All Time", "Last 7 days", "Last 30 days", "Last Year"] },
-    { label: "All Ratings",    opts: ["All Ratings", "4+ Stars", "3+ Stars"] },
-    { label: "All Views",      opts: ["All Views", "0 views", "1–10 views", "10+ views"] },
-  ];
+  if (selectedArticle) {
+    return (
+      <KBArticleDetailView
+        article={selectedArticle}
+        onBack={() => setSelectedArticle(null)}
+        onNav={onNav}
+      />
+    );
+  }
 
   return (
-    <div className="flex-1 overflow-hidden bg-background transition-colors duration-200">
+    <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
       <PageHeader
         title="Knowledge Base"
         subtitle="Search articles and documentation to find the answers you need."
+        breadcrumb={[{ label: "Home", page: "Home" }, { label: "Knowledge Base" }]}
         onNav={onNav}
         transparent
       />
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-8" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-        {/* Articles card — search + filters folded into header */}
-        <div className="rounded-2xl bg-card overflow-hidden" style={{ border: "1px solid var(--border)" }}>
-          {/* Header row: title left · search right */}
-          <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <TrendingUpIcon style={{ fontSize: 16, color: "var(--primary)" }} />
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "var(--foreground)" }}>
-                Articles ({totalArticles.toLocaleString()})
-              </span>
-            </div>
-            <div className="flex items-center gap-2"
-              style={{ backgroundColor: "var(--background)", border: "1px solid var(--border)", borderRadius: 9999, padding: "5px 14px", width: 260 }}>
-              <SearchOutlinedIcon style={{ fontSize: 14, color: "var(--muted-foreground)", flexShrink: 0 }} />
-              <input type="text" value={kbSearch} placeholder="Search articles…"
-                onChange={(e) => { setKbSearch(e.target.value); setKbPage(1); }}
-                className="flex-1 bg-transparent border-0 outline-none"
-                style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--foreground)" }} />
-            </div>
+        {/* Search card */}
+        <div className="rounded-2xl bg-card" style={{ border: "1px solid var(--border)", padding: "20px 24px 18px" }}>
+          <div className="flex items-center gap-2 mb-4">
+            <SearchOutlinedIcon style={{ fontSize: 18, color: "var(--primary)" }} />
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 15, fontWeight: 700, color: "var(--foreground)" }}>
+              Search Knowledge Base
+            </span>
           </div>
-          {/* Filter strip */}
-          <div className="flex items-center gap-2 px-6 py-2 flex-wrap" style={{ borderBottom: "1px solid var(--border)", backgroundColor: "var(--muted)" }}>
-            {filterGroups.map(({ label, opts }) => (
-              <div key={label} style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
-                <select style={{ appearance: "none", WebkitAppearance: "none", border: "1px solid var(--border)", borderRadius: 9999, padding: "3px 24px 3px 10px", fontSize: 11, fontFamily: "var(--font-body)", color: "var(--foreground)", backgroundColor: "var(--card)", cursor: "pointer", outline: "none" }}>
-                  {opts.map((o) => <option key={o} value={o}>{o}</option>)}
-                </select>
-                <ExpandMoreIcon style={{ position: "absolute", right: 6, fontSize: 12, color: "var(--muted-foreground)", pointerEvents: "none" }} />
-              </div>
+          {/* Large search input */}
+          <div className="flex items-center gap-3" style={{ backgroundColor: "var(--background)", border: "1.5px solid var(--border)", borderRadius: 12, padding: "11px 16px", marginBottom: 14 }}>
+            <SearchOutlinedIcon style={{ fontSize: 18, color: "var(--muted-foreground)", flexShrink: 0 }} />
+            <input
+              type="text"
+              value={kbSearch}
+              placeholder="Search by article title, number, or category..."
+              onChange={(e) => { setKbSearch(e.target.value); setKbPage(1); }}
+              className="flex-1 bg-transparent border-0 outline-none"
+              style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--foreground)" }}
+            />
+          </div>
+          {/* Filter pills */}
+          <div className="flex items-center gap-2 flex-wrap">
+            {kbFilterGroups.map(({ label, icon: Icon }) => (
+              <button key={label} type="button" style={{
+                display: "inline-flex", alignItems: "center", gap: 5,
+                border: "1px solid var(--border)", borderRadius: 9999,
+                padding: "5px 12px 5px 10px",
+                backgroundColor: "var(--card)", cursor: "pointer",
+                fontSize: 11, fontFamily: "var(--font-body)", color: "var(--foreground)",
+                fontWeight: 500,
+              }}>
+                <Icon style={{ fontSize: 12, color: "var(--muted-foreground)" }} />
+                {label}
+                <ExpandMoreIcon style={{ fontSize: 12, color: "var(--muted-foreground)", marginLeft: 2 }} />
+              </button>
             ))}
           </div>
+        </div>
+
+        {/* Articles card */}
+        <div className="rounded-2xl bg-card overflow-hidden" style={{ border: "1px solid var(--border)" }}>
+          <div className="flex items-center gap-2 px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
+            <TrendingUpIcon style={{ fontSize: 16, color: "var(--primary)" }} />
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "var(--foreground)" }}>
+              Articles ({totalArticles.toLocaleString()})
+            </span>
+          </div>
           <div className="flex flex-col">
-            {paged.map((a, i) => <KBArticleRow key={a.id} article={a} isLast={i === paged.length - 1} />)}
+            {paged.map((a, i) => (
+              <KBArticleRow
+                key={a.id}
+                article={a}
+                isLast={i === paged.length - 1}
+                onClick={() => setSelectedArticle(a)}
+              />
+            ))}
             {paged.length === 0 && (
-              <p className="px-6 py-6 text-center" style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>No articles found.</p>
+              <p className="px-6 py-8 text-center" style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>No articles found.</p>
             )}
           </div>
           <DataPagination total={totalArticles} page={kbPage} perPage={kbPerPage} onPage={setKbPage} onPerPage={setKbPerPage} itemLabel="articles" perPageOptions={[5, 10, 25, 50]} />
@@ -1673,18 +1969,39 @@ function ServiceItemCard({ item }: { item: ServiceItemType }) {
   const [hov, setHov] = useState(false);
   return (
     <div onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
-      className="flex flex-col rounded-2xl transition-all duration-200"
-      style={{ backgroundColor: "var(--card)", border: hov ? "1px solid var(--primary)" : "1px solid var(--border)", boxShadow: hov ? "0 4px 16px rgba(0,40,85,0.10)" : "0 1px 4px rgba(0,40,85,0.05)", padding: 14, transform: hov ? "translateY(-2px)" : "none" }}>
-      <div className="flex items-start gap-3 mb-2">
-        <div className="rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-150"
-          style={{ width: 38, height: 38, backgroundColor: hov ? "var(--primary-container)" : "var(--muted)" }}>
-          <DescriptionOutlinedIcon style={{ fontSize: 18, color: hov ? "var(--primary)" : "var(--muted-foreground)" }} />
+      className="flex flex-col transition-all duration-200"
+      style={{
+        backgroundColor: "var(--card)",
+        border: "1.5px solid var(--border)",
+        borderRadius: 16,
+        boxShadow: hov ? "0 6px 20px rgba(0,40,85,0.10)" : "0 1px 4px rgba(0,40,85,0.04)",
+        padding: "18px 16px 16px",
+        transform: hov ? "translateY(-2px)" : "none",
+      }}>
+      {/* Icon + title row */}
+      <div className="flex items-start gap-3 mb-3">
+        <div className="flex-shrink-0 flex items-center justify-center"
+          style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: "var(--muted)" }}>
+          <DescriptionOutlinedIcon style={{ fontSize: 17, color: "var(--muted-foreground)" }} />
         </div>
-        <p style={{ fontSize: 13, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--foreground)", lineHeight: 1.3, paddingTop: 2 }}>{item.title}</p>
+        <p style={{ fontSize: 14, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--foreground)", lineHeight: 1.35, paddingTop: 2 }}>
+          {item.title}
+        </p>
       </div>
-      <p style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", lineHeight: 1.5, flex: 1 }}>{item.description}</p>
-      <button type="button" className="mt-3 w-full cursor-pointer border rounded-xl transition-all duration-150"
-        style={{ padding: "6px 14px", fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)", color: hov ? "#fff" : "var(--primary)", backgroundColor: hov ? "var(--primary)" : "transparent", borderColor: "var(--primary)" }}>
+      {/* Description */}
+      <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", lineHeight: 1.55, flex: 1, marginBottom: 14 }}>
+        {item.description}
+      </p>
+      {/* View Details — pill, outlined */}
+      <button type="button"
+        className="w-full cursor-pointer transition-all duration-150"
+        style={{
+          padding: "8px 14px", borderRadius: 9999,
+          fontSize: 12, fontWeight: 600, fontFamily: "var(--font-body)",
+          color: hov ? "#fff" : "var(--foreground)",
+          backgroundColor: hov ? "var(--primary)" : "transparent",
+          border: `1.5px solid ${hov ? "var(--primary)" : "var(--foreground)"}`,
+        }}>
         View Details
       </button>
     </div>
@@ -1736,6 +2053,7 @@ export function ServiceCatalogPage({ onNav }: { onNav?: (p: string) => void }) {
       <PageHeader
         title="Service Catalog"
         subtitle="Browse and request services from our service catalog."
+        breadcrumb={[{ label: "Home", page: "Home" }, { label: "Service Catalog" }]}
         onNav={onNav}
         transparent
       />
@@ -1878,10 +2196,18 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
     },
   };
 
-  const SectionHeader = ({ icon, title }: { icon: React.ReactNode; title: string }) => (
-    <div className="flex items-center gap-2" style={{ marginTop: 28, marginBottom: 12 }}>
-      <span style={{ color: "var(--primary)", display: "flex" }}>{icon}</span>
-      <span style={{ fontFamily: "var(--font-heading)", fontSize: 12, fontWeight: 700, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.07em" }}>{title}</span>
+  /* Section label + divider — no icons */
+  const SectionHeader = ({ title, first }: { title: string; first?: boolean }) => (
+    <div style={{ marginTop: first ? 20 : 0 }}>
+      {!first && <div style={{ height: 1, backgroundColor: "var(--border)", margin: "24px 0" }} />}
+      <span style={{
+        display: "block",
+        fontFamily: "var(--font-heading)", fontSize: 11, fontWeight: 700,
+        color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em",
+        marginBottom: 12,
+      }}>
+        {title}
+      </span>
     </div>
   );
 
@@ -1935,12 +2261,12 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
         </div>
 
         {/* Scrollable form body */}
-        <div className="flex-1 overflow-y-auto px-6 py-2">
+        <div className="flex-1 overflow-y-auto px-6 pb-6">
 
           {/* ── Contact Information ───────────────────────── */}
-          <SectionHeader icon={<PersonOutlinedIcon style={{ fontSize: 17 }} />} title="Contact Information" />
-          <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-2 gap-4">
+          <SectionHeader title="Contact Information" first />
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div className="grid grid-cols-2" style={{ gap: 12 }}>
               <TextField label="Contact" value="Nitin Jaryal" disabled size="small" fullWidth sx={fieldSx} />
               <TextField
                 label="Callback #" required size="small" fullWidth
@@ -1948,7 +2274,7 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
                 placeholder="Enter phone number" sx={fieldSx}
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2" style={{ gap: 12 }}>
               <FormControl required size="small" fullWidth sx={fieldSx}>
                 <InputLabel>My Purchased Service</InputLabel>
                 <Select value={purchasedService} onChange={(e) => setPurchasedService(e.target.value as string)} label="My Purchased Service" MenuProps={menuProps}>
@@ -1966,9 +2292,9 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
           </div>
 
           {/* ── Priority & Classification ─────────────────── */}
-          <SectionHeader icon={<FilterListOutlinedIcon style={{ fontSize: 17 }} />} title="Priority & Classification" />
-          <div className="flex flex-col gap-4">
-            <div className="grid grid-cols-2 gap-4">
+          <SectionHeader title="Priority & Classification" />
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div className="grid grid-cols-2" style={{ gap: 12 }}>
               <FormControl required size="small" fullWidth sx={fieldSx}>
                 <InputLabel>Case Type</InputLabel>
                 <Select value={caseType} onChange={(e) => setCaseType(e.target.value as string)} label="Case Type" MenuProps={menuProps}>
@@ -1983,7 +2309,7 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
                 </Select>
               </FormControl>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2" style={{ gap: 12 }}>
               <FormControl size="small" fullWidth sx={fieldSx}>
                 <InputLabel>Affected Location</InputLabel>
                 <Select value={affectedLocation} onChange={(e) => setAffectedLocation(e.target.value as string)} label="Affected Location" MenuProps={menuProps}>
@@ -2000,31 +2326,26 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
           </div>
 
           {/* ── Case Details ──────────────────────────────── */}
-          <SectionHeader icon={<DescriptionOutlinedIcon style={{ fontSize: 17 }} />} title="Case Details" />
-          <div className="flex flex-col gap-4">
+          <SectionHeader title="Case Details" />
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <TextField
               label="Subject" required fullWidth size="small"
               value={subject} onChange={(e) => setSubject(e.target.value.slice(0, 80))}
               placeholder="Brief summary of your issue"
-              helperText={`Brief summary of your issue (${subject.length}/80 characters)`}
+              helperText={`${subject.length}/80 characters`}
               sx={fieldSx}
             />
             <TextField
               label="Description" required fullWidth multiline rows={4}
               value={description} onChange={(e) => setDescription(e.target.value)}
               placeholder="Please provide as much detail as possible"
-              helperText="Please provide as much detail as possible"
               sx={fieldSx}
             />
             {/* Upload */}
-            <div className="mt-4">
-              <div className="flex items-center gap-2 mb-1.5">
-                <CloudUploadOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />
-                <span style={{ fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)", color: "var(--foreground)" }}>Upload Attachments</span>
-              </div>
-              <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginBottom: 10 }}>
-                Drag and drop files or click to select files to attach to this case.
-              </p>
+            <div>
+              <span style={{ display: "block", fontSize: 12, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--foreground)", marginBottom: 8 }}>
+                Attachments
+              </span>
               <input ref={fileRef} type="file" multiple className="hidden" accept=".pdf,.png,.jpg,.doc,.docx,.xls,.xlsx"
                 onChange={(e) => { if (e.target.files) setFiles(Array.from(e.target.files)); }} />
               <div
@@ -2035,63 +2356,59 @@ function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void
                 className="flex flex-col items-center justify-center cursor-pointer transition-all duration-150"
                 style={{
                   border: `1.5px dashed ${dragOver ? "var(--primary)" : "var(--border)"}`,
-                  borderRadius: 10, padding: "28px 20px",
+                  borderRadius: 10, padding: "24px 20px",
                   backgroundColor: dragOver ? "var(--primary-container)" : "var(--muted)",
                 }}
               >
-                <AddOutlinedIcon style={{ fontSize: 22, color: "var(--muted-foreground)", marginBottom: 6 }} />
                 <span style={{ fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)", color: "var(--foreground)" }}>
                   {files.length > 0 ? files.map((f) => f.name).join(", ") : "Click or drag files here"}
                 </span>
                 <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 4 }}>
-                  PDF, PNG, JPG, DOC, XLS up to 50MB each
+                  PDF, PNG, JPG, DOC, XLS — up to 50 MB each
                 </span>
               </div>
             </div>
           </div>
 
           {/* ── Watchlist ─────────────────────────────────── */}
-          <SectionHeader icon={<PeopleOutlinedIcon style={{ fontSize: 17 }} />} title="Watchlist" />
-          <div className="flex flex-col gap-4">
-            <Autocomplete
-              multiple
-              freeSolo
-              options={[]}
-              value={watchlistEmails}
-              onChange={(_, newValue) => setWatchlistEmails(newValue as string[])}
-              renderTags={(value, getTagProps) =>
-                value.map((email, index) => (
-                  <Chip
-                    key={email}
-                    label={email}
-                    size="small"
-                    {...getTagProps({ index })}
-                    sx={{
-                      backgroundColor: "var(--primary-container)",
-                      color: "var(--primary)",
-                      fontFamily: "var(--font-body)",
-                      fontSize: 12,
-                      fontWeight: 500,
-                      borderRadius: "6px",
-                      "& .MuiChip-deleteIcon": { color: "var(--primary)", opacity: 0.7, "&:hover": { opacity: 1 } },
-                    }}
-                  />
-                ))
-              }
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Add Email Addresses"
-                  placeholder={watchlistEmails.length === 0 ? "Type an email and press Enter" : ""}
-                  helperText="Type an email address and press Enter to add"
+          <SectionHeader title="Watchlist" />
+          <Autocomplete
+            multiple
+            freeSolo
+            options={[]}
+            value={watchlistEmails}
+            onChange={(_, newValue) => setWatchlistEmails(newValue as string[])}
+            renderTags={(value, getTagProps) =>
+              value.map((email, index) => (
+                <Chip
+                  key={email}
+                  label={email}
                   size="small"
-                  sx={fieldSx}
+                  {...getTagProps({ index })}
+                  sx={{
+                    backgroundColor: "var(--primary-container)",
+                    color: "var(--primary)",
+                    fontFamily: "var(--font-body)",
+                    fontSize: 12,
+                    fontWeight: 500,
+                    borderRadius: "6px",
+                    "& .MuiChip-deleteIcon": { color: "var(--primary)", opacity: 0.7, "&:hover": { opacity: 1 } },
+                  }}
                 />
-              )}
-            />
-          </div>
+              ))
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Add Email Addresses"
+                placeholder={watchlistEmails.length === 0 ? "Type an email and press Enter" : ""}
+                helperText="Type an email address and press Enter to add"
+                size="small"
+                sx={fieldSx}
+              />
+            )}
+          />
 
-          <div style={{ height: 24 }} />
         </div>
 
         {/* Footer */}
@@ -2390,6 +2707,243 @@ export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
             </table>
           </div>
         </PortalCard>
+      </div>
+    </div>
+  );
+}
+
+/* ── Reports page ────────────────────────────────────────── */
+type ReportType = { icon: React.ComponentType<{ style?: React.CSSProperties }>; label: string; color: string; bg: string };
+
+type ReportKpi = { label: string; value: string; delta: string; up: boolean };
+const reportKpis: Record<string, ReportKpi[]> = {
+  "Customer Success": [
+    { label: "CSAT Score",         value: "94.2%",  delta: "+1.8%",  up: true  },
+    { label: "NPS",                value: "67",      delta: "+4",     up: true  },
+    { label: "Open Escalations",   value: "3",       delta: "-2",     up: true  },
+    { label: "Renewal Rate",       value: "98.1%",   delta: "+0.3%",  up: true  },
+  ],
+  "Security Ops": [
+    { label: "Open Incidents",     value: "7",       delta: "-3",     up: true  },
+    { label: "Mean Time to Resolve", value: "2.4 hrs", delta: "-0.6 hrs", up: true },
+    { label: "Threat Alerts",      value: "142",     delta: "+12",    up: false },
+    { label: "Patch Compliance",   value: "97.3%",   delta: "+1.1%",  up: true  },
+  ],
+  "SLA Dashboard": [
+    { label: "SLA Compliance",     value: "99.1%",   delta: "+0.4%",  up: true  },
+    { label: "P1 Breaches",        value: "0",       delta: "0",      up: true  },
+    { label: "Avg Response Time",  value: "18 min",  delta: "-4 min", up: true  },
+    { label: "Tickets In SLA",     value: "1,204",   delta: "+87",    up: true  },
+  ],
+  "DID Inventory": [
+    { label: "Total DIDs",         value: "4,812",   delta: "+24",    up: true  },
+    { label: "Unassigned",         value: "318",     delta: "-12",    up: true  },
+    { label: "Porting In Progress", value: "9",      delta: "+2",     up: false },
+    { label: "Utilization",        value: "93.4%",   delta: "+0.7%",  up: true  },
+  ],
+};
+
+const reportTableRows: Record<string, { col1: string; col2: string; col3: string; col4: string }[]> = {
+  "Customer Success": [
+    { col1: "Acme Corp",           col2: "Enterprise", col3: "97%",   col4: "Active"  },
+    { col1: "Globex Inc",          col2: "Business",   col3: "91%",   col4: "Active"  },
+    { col1: "Initech",             col2: "Business",   col3: "88%",   col4: "At Risk" },
+    { col1: "Umbrella Ltd",        col2: "Enterprise", col3: "99%",   col4: "Active"  },
+    { col1: "Soylent Corp",        col2: "Starter",    col3: "82%",   col4: "At Risk" },
+  ],
+  "Security Ops": [
+    { col1: "INC-0041",  col2: "Malware Alert",        col3: "High",     col4: "Open"     },
+    { col1: "INC-0039",  col2: "Unauthorized Access",  col3: "Critical", col4: "Open"     },
+    { col1: "INC-0038",  col2: "Phishing Attempt",     col3: "Medium",   col4: "Resolved" },
+    { col1: "INC-0036",  col2: "DLP Violation",        col3: "Low",      col4: "Resolved" },
+    { col1: "INC-0034",  col2: "Vulnerability Scan",   col3: "Medium",   col4: "Closed"   },
+  ],
+  "SLA Dashboard": [
+    { col1: "Network",              col2: "P1",  col3: "15 min",  col4: "Met"     },
+    { col1: "Contact Center",       col2: "P2",  col3: "42 min",  col4: "Met"     },
+    { col1: "Managed Security",     col2: "P1",  col3: "18 min",  col4: "Met"     },
+    { col1: "Unified Comms",        col2: "P3",  col3: "2.1 hrs", col4: "Met"     },
+    { col1: "Service Desk",         col2: "P2",  col3: "1.4 hrs", col4: "Breached"},
+  ],
+  "DID Inventory": [
+    { col1: "+1 781-434-6800", col2: "HQ Reception",     col3: "Active",     col4: "Inbound" },
+    { col1: "+1 781-434-6801", col2: "Support Queue",    col3: "Active",     col4: "Inbound" },
+    { col1: "+1 781-434-6810", col2: "Sales",            col3: "Active",     col4: "Inbound" },
+    { col1: "+1 781-434-6820", col2: "Unassigned",       col3: "Available",  col4: "—"       },
+    { col1: "+1 617-555-0142", col2: "Porting In",       col3: "In Progress", col4: "—"      },
+  ],
+};
+
+const reportTableHeaders: Record<string, [string, string, string, string]> = {
+  "Customer Success": ["Account",    "Tier",       "CSAT",    "Status"  ],
+  "Security Ops":     ["Incident",   "Type",       "Severity","Status"  ],
+  "SLA Dashboard":    ["Service",    "Priority",   "Response","Result"  ],
+  "DID Inventory":    ["DID",        "Assignment", "Status",  "Type"    ],
+};
+
+function ReportDetailView({ report, onBack, onNav }: { report: ReportType; onBack: () => void; onNav?: (p: string) => void }) {
+  const kpis    = reportKpis[report.label]    ?? [];
+  const rows    = reportTableRows[report.label] ?? [];
+  const headers = reportTableHeaders[report.label] ?? ["Col 1","Col 2","Col 3","Col 4"];
+
+  return (
+    <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
+      <PageHeader
+        title={report.label}
+        subtitle="Live data updated daily from your managed services."
+        breadcrumb={[
+          { label: "Home", page: "Home" },
+          { label: "Reports", page: "Reports" },
+          { label: report.label },
+        ]}
+        onNav={(p) => { if (p === "Reports") onBack(); else onNav?.(p); }}
+        transparent
+      />
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-10" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+
+        {/* KPI row */}
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+          {kpis.map((k) => (
+            <div key={k.label} className="rounded-2xl bg-card flex flex-col gap-1 px-5 py-4" style={{ border: "1px solid var(--border)" }}>
+              <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", fontWeight: 500 }}>{k.label}</span>
+              <span style={{ fontSize: 26, fontFamily: "var(--font-heading)", fontWeight: 800, color: "var(--foreground)", lineHeight: 1.1 }}>{k.value}</span>
+              <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: k.up ? "#16A34A" : "#DC2626", fontWeight: 600 }}>
+                {k.delta} vs last period
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Chart placeholder */}
+        <div className="rounded-2xl bg-card" style={{ border: "1px solid var(--border)", padding: "20px 24px" }}>
+          <div className="flex items-center gap-2 mb-5">
+            <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: report.color }} />
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "var(--foreground)" }}>
+              30-Day Trend
+            </span>
+            <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginLeft: "auto" }}>Jun 1 – Jun 30, 2026</span>
+          </div>
+          {/* Bar chart simulation */}
+          <div className="flex items-end gap-1.5" style={{ height: 120 }}>
+            {Array.from({ length: 30 }, (_, i) => {
+              const h = 30 + Math.round(Math.sin(i / 4) * 25 + Math.random() * 30);
+              return (
+                <div key={i} style={{
+                  flex: 1, height: `${h}%`, borderRadius: "3px 3px 0 0",
+                  backgroundColor: report.bg,
+                  outline: `1.5px solid ${report.color}40`,
+                }} />
+              );
+            })}
+          </div>
+          <div className="flex justify-between mt-2">
+            <span style={{ fontSize: 10, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>Jun 1</span>
+            <span style={{ fontSize: 10, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>Jun 15</span>
+            <span style={{ fontSize: 10, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>Jun 30</span>
+          </div>
+        </div>
+
+        {/* Data table */}
+        <div className="rounded-2xl bg-card overflow-hidden" style={{ border: "1px solid var(--border)" }}>
+          <div className="flex items-center gap-2 px-6 py-4" style={{ borderBottom: "1px solid var(--border)" }}>
+            <report.icon style={{ fontSize: 16, color: report.color }} />
+            <span style={{ fontFamily: "var(--font-heading)", fontSize: 14, fontWeight: 700, color: "var(--foreground)" }}>
+              {report.label} — Recent Records
+            </span>
+          </div>
+          <div className="overflow-x-auto">
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ backgroundColor: "var(--muted)" }}>
+                  {headers.map((h) => (
+                    <th key={h} style={{ padding: "10px 20px", fontSize: 11, fontFamily: "var(--font-heading)", fontWeight: 700, color: "var(--muted-foreground)", textAlign: "left", textTransform: "uppercase", letterSpacing: "0.06em", whiteSpace: "nowrap" }}>
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, i) => (
+                  <tr key={i} style={{ borderTop: "1px solid var(--border)" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.03)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}>
+                    {[row.col1, row.col2, row.col3, row.col4].map((cell, j) => (
+                      <td key={j} style={{ padding: "12px 20px", fontSize: 13, fontFamily: "var(--font-body)", color: j === 0 ? "var(--foreground)" : "var(--muted-foreground)", fontWeight: j === 0 ? 600 : 400 }}>
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Back */}
+        <button type="button" onClick={onBack}
+          className="flex items-center gap-2 self-start"
+          style={{ border: 0, background: "none", cursor: "pointer", padding: 0, fontSize: 13, fontFamily: "var(--font-body)", color: "var(--primary)", fontWeight: 600 }}>
+          <ArrowBackIcon style={{ fontSize: 16 }} />
+          Back to Reports
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function ReportsPage({ onNav }: { onNav?: (p: string) => void }) {
+  const [selected, setSelected] = useState<ReportType | null>(null);
+
+  if (selected) {
+    return <ReportDetailView report={selected} onBack={() => setSelected(null)} onNav={onNav} />;
+  }
+
+  return (
+    <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
+      <PageHeader
+        title="Reports"
+        subtitle="View and analyze service reports across your managed environment."
+        breadcrumb={[{ label: "Home", page: "Home" }, { label: "Reports" }]}
+        onNav={onNav}
+        transparent
+      />
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+          {reportLinks.map((report) => {
+            const { icon: Icon, label, color, bg } = report;
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => setSelected(report)}
+                className="flex flex-col items-center justify-center gap-4 border-0 cursor-pointer rounded-2xl bg-card transition-all duration-200 text-center"
+                style={{ padding: "32px 20px 28px", border: "1px solid var(--border)", boxShadow: "0 2px 8px rgba(0,40,85,0.06)" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = color;
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,40,85,0.10)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.transform = "none";
+                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,40,85,0.06)";
+                }}
+              >
+                <div style={{ width: 72, height: 72, borderRadius: "50%", backgroundColor: bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Icon style={{ fontSize: 36, color }} />
+                </div>
+                <div>
+                  <p style={{ fontSize: 16, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--foreground)", lineHeight: 1.3 }}>
+                    {label}
+                  </p>
+                  <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 4 }}>
+                    View report →
+                  </p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

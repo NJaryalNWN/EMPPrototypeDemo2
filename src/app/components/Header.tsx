@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
@@ -17,6 +20,7 @@ import nwnLogoDark from "../../imports/nwn-logo-dark.png";
 import { useTheme, type Theme } from "../context/ThemeContext";
 import { Btn } from "./ui/Btn";
 import { NotificationDrawer } from "./NotificationDrawer";
+import { NewCaseDrawer } from "./NewCaseDrawer";
 
 /* ── Amazon wordmark — CSS text for crisp rendering, SVG only for swoosh ── */
 function AmazonWordmark({ dark }: { dark: boolean }) {
@@ -25,7 +29,7 @@ function AmazonWordmark({ dark }: { dark: boolean }) {
     <div style={{ display: "inline-block" }} aria-label="Amazon">
       <div style={{
         fontFamily: '"Arial Black", "Helvetica Neue", Arial, sans-serif',
-        fontSize: 21,
+        fontSize: 17,
         fontWeight: 900,
         color: ink,
         letterSpacing: -0.5,
@@ -36,7 +40,7 @@ function AmazonWordmark({ dark }: { dark: boolean }) {
       </div>
       {/* Swoosh — width: 100% stretches to match the text width above */}
       <svg viewBox="0 0 100 11" preserveAspectRatio="none"
-        style={{ display: "block", width: "100%", height: 8, marginTop: 1 }}
+        style={{ display: "block", width: "100%", height: 6, marginTop: 1 }}
         aria-hidden="true"
       >
         <path d="M2 7.5 Q35 12 82 6" stroke="#FF9900" strokeWidth="2.5" fill="none" strokeLinecap="round" />
@@ -214,67 +218,123 @@ function UserMenu({ anchorEl, open, onClose }: {
   );
 }
 
+/* ── Help popover ────────────────────────────────────────── */
+function HelpPopover({ anchorEl, open, onClose, onNewCase }: {
+  anchorEl: HTMLElement | null; open: boolean; onClose: () => void; onNewCase: () => void;
+}) {
+  const [pos, setPos] = useState({ top: 0, right: 0 });
+
+  useEffect(() => {
+    if (anchorEl && open) {
+      const r = anchorEl.getBoundingClientRect();
+      setPos({ top: r.bottom + 8, right: window.innerWidth - r.right });
+    }
+  }, [anchorEl, open]);
+
+  if (!open) return null;
+
+  return createPortal(
+    <>
+      <div style={{ position: "fixed", inset: 0, zIndex: 9998 }} onClick={onClose} />
+      <div style={{
+        position: "fixed", zIndex: 9999,
+        top: pos.top, right: pos.right,
+        width: 320,
+        backgroundColor: "var(--card)",
+        borderRadius: 16,
+        boxShadow: "0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08)",
+        border: "1px solid var(--border)",
+        overflow: "hidden",
+      }}>
+        {/* Title */}
+        <div style={{ padding: "20px 20px 16px" }}>
+          <p style={{ fontSize: 18, fontFamily: "var(--font-heading)", fontWeight: 700, color: "var(--foreground)", margin: 0 }}>
+            Need Help?
+          </p>
+        </div>
+
+        <div style={{ height: 1, backgroundColor: "var(--border)" }} />
+
+        {/* Open a New Case CTA */}
+        <div style={{ padding: "16px 20px" }}>
+          <button
+            type="button"
+            onClick={() => { onClose(); onNewCase(); }}
+            style={{
+              width: "100%", padding: "14px 20px",
+              backgroundColor: "#002855", color: "#FFFFFF",
+              borderRadius: 9999, border: 0, cursor: "pointer",
+              fontSize: 15, fontFamily: "var(--font-body)", fontWeight: 700,
+              transition: "opacity 0.15s",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+          >
+            Open a New Case
+          </button>
+        </div>
+
+        <div style={{ height: 1, backgroundColor: "var(--border)" }} />
+
+        {/* Contact details */}
+        <div style={{ padding: "8px 0 8px" }}>
+          <a
+            href="mailto:itsupport@nwncarousel.com"
+            style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 20px", textDecoration: "none", transition: "background-color 0.12s" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--accent)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
+          >
+            <EmailOutlinedIcon style={{ fontSize: 20, color: "var(--foreground)", flexShrink: 0 }} />
+            <span style={{ fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--foreground)" }}>
+              itsupport@nwncarousel.com
+            </span>
+          </a>
+          <a
+            href="tel:+17814346800"
+            style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 20px", textDecoration: "none", transition: "background-color 0.12s" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--accent)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
+          >
+            <PhoneOutlinedIcon style={{ fontSize: 20, color: "var(--foreground)", flexShrink: 0 }} />
+            <span style={{ fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--foreground)" }}>
+              (781) 434-6800
+            </span>
+          </a>
+        </div>
+      </div>
+    </>,
+    document.body
+  );
+}
+
 /* ── Header ──────────────────────────────────────────────── */
 export function Header() {
   const { theme } = useTheme();
   const [pickerOpen,   setPickerOpen]   = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notifOpen,    setNotifOpen]    = useState(false);
+  const [helpOpen,     setHelpOpen]     = useState(false);
+  const [newCaseOpen,  setNewCaseOpen]  = useState(false);
 
   const pickerBtnRef  = useRef<HTMLButtonElement>(null);
   const userBtnRef    = useRef<HTMLButtonElement>(null);
+  const helpBtnRef    = useRef<HTMLButtonElement>(null);
 
   return (
     <>
-      <header className="h-14 bg-card border-b border-border flex items-center justify-between px-6 flex-shrink-0 transition-colors duration-200">
-        {/* ── Enterprise brand lockup ───────────────────────────
-             Primary: Amazon wordmark fills the logo zone
-             Secondary: "Powered by NWN" — right-aligned below,
-             following the ServiceNow / Salesforce partner pattern  */}
-        <div className="flex items-center gap-4 flex-shrink-0">
+      <header className="h-16 bg-card border-b border-border flex items-center px-6 flex-shrink-0 transition-colors duration-200" style={{ position: "relative" }}>
 
-          {/* Logo zone — stacked lockup */}
-          <div className="flex flex-col" style={{ gap: 3 }}>
-
-            <AmazonWordmark dark={theme === "dark"} />
-
-            {/* Powered by NWN — right-aligned caption row */}
-            <div className="flex items-center justify-end" style={{ gap: 4 }}>
-              <span style={{
-                fontSize: 7,
-                fontFamily: "var(--font-body)",
-                fontWeight: 500,
-                color: "var(--muted-foreground)",
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                lineHeight: 1,
-              }}>
-                Powered by
-              </span>
-              <img
-                src={theme === "dark" ? nwnLogoDark : nwnLogo}
-                alt="NWN"
-                style={{ height: 12, width: "auto" }}
-              />
-            </div>
-
-          </div>
-
-          {/* Divider + portal identity */}
-          <div className="hidden sm:flex items-center gap-3">
-            <span className="w-px h-6 bg-border" />
-            <div className="flex flex-col" style={{ lineHeight: 1.25 }}>
-              <span className="text-foreground font-semibold tracking-tight" style={{ fontSize: 14, fontFamily: "var(--font-heading)" }}>EMP</span>
-              <span className="text-muted-foreground" style={{ fontSize: 9.5, letterSpacing: "0.04em", fontFamily: "var(--font-body)" }}>
-                Monitoring &amp; Reporting
-              </span>
-            </div>
-          </div>
-
+        {/* ── Centered NWN logo ─────────────────────────────── */}
+        <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+          <img
+            src={theme === "dark" ? nwnLogoDark : nwnLogo}
+            alt="NWN"
+            style={{ height: 30, width: "auto", display: "block" }}
+          />
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 ml-auto">
           {/* Theme picker */}
           <Btn ref={pickerBtnRef} variant="icon" size="md" title="Switch theme"
             onClick={() => { setPickerOpen((o) => !o); setUserMenuOpen(false); }}
@@ -284,10 +344,18 @@ export function Header() {
 
           {/* Notification bell */}
           <Btn variant="icon" size="md" className="relative" title="Notifications"
-            onClick={() => { setNotifOpen(true); setPickerOpen(false); setUserMenuOpen(false); }}
+            onClick={() => { setNotifOpen(true); setPickerOpen(false); setUserMenuOpen(false); setHelpOpen(false); }}
           >
             <NotificationsNoneOutlinedIcon style={{ fontSize: 20 }} />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 pointer-events-none" />
+          </Btn>
+
+          {/* Help icon */}
+          <Btn ref={helpBtnRef} variant="icon" size="md" title="Help & Support"
+            onClick={() => { setHelpOpen((o) => !o); setPickerOpen(false); setUserMenuOpen(false); setNotifOpen(false); }}
+            style={{ border: helpOpen ? "1.5px solid var(--border)" : "1.5px solid transparent", borderRadius: "50%" }}
+          >
+            <HelpOutlineIcon style={{ fontSize: 20 }} />
           </Btn>
 
           {/* User chip */}
@@ -300,7 +368,7 @@ export function Header() {
             </div>
             <div className="hidden sm:flex flex-col text-left" style={{ lineHeight: 1.3 }}>
               <span className="text-foreground" style={{ fontSize: 13, fontWeight: 500 }}>Nitin Jaryal</span>
-              <span className="text-muted-foreground" style={{ fontSize: 11 }}>Administrator</span>
+              <span className="text-muted-foreground" style={{ fontSize: 11 }}>End User</span>
             </div>
             {userMenuOpen
               ? <KeyboardArrowUpIcon style={{ fontSize: 16 }} className="text-muted-foreground hidden sm:block" />
@@ -310,9 +378,11 @@ export function Header() {
         </div>
       </header>
 
-      <ThemePicker anchorEl={pickerBtnRef.current} open={pickerOpen} onClose={() => setPickerOpen(false)} />
+      <ThemePicker anchorEl={pickerBtnRef.current} open={pickerOpen}   onClose={() => setPickerOpen(false)} />
       <UserMenu    anchorEl={userBtnRef.current}   open={userMenuOpen} onClose={() => setUserMenuOpen(false)} />
+      <HelpPopover anchorEl={helpBtnRef.current}   open={helpOpen}     onClose={() => setHelpOpen(false)} onNewCase={() => setNewCaseOpen(true)} />
       <NotificationDrawer open={notifOpen} onClose={() => setNotifOpen(false)} />
+      <NewCaseDrawer open={newCaseOpen} onClose={() => setNewCaseOpen(false)} />
     </>
   );
 }

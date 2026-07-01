@@ -83,7 +83,7 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
           <div className="flex items-center gap-2.5">
             <div
               className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: "#00a3e0" }}
+              style={{ backgroundColor: "var(--primary)" }}
             >
               <AutoAwesomeIcon style={{ fontSize: 16, color: "#ffffff" }} />
             </div>
@@ -112,9 +112,9 @@ export function AivaPanel({ open, onClose }: AivaPanelProps) {
               {msg.role === "aiva" && (
                 <div
                   className="w-6 h-6 rounded-lg flex items-center justify-center mr-2 mt-0.5 flex-shrink-0"
-                  style={{ backgroundColor: "rgba(0,163,224,0.12)" }}
+                  style={{ backgroundColor: "var(--primary-container, rgba(0,40,85,0.10))" }}
                 >
-                  <AutoAwesomeIcon style={{ fontSize: 12, color: "#00a3e0" }} />
+                  <AutoAwesomeIcon style={{ fontSize: 12, color: "var(--primary)" }} />
                 </div>
               )}
               <div

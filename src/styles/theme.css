@@ -4,14 +4,14 @@
    LIGHT — NWN Brand (Material Design 3 · 2026)
    Primary Navy: #002855  |  Secondary Orange: #FF6900  |  Accent: #00A3E0
    Neutrals harmonised toward navy seed (MD3 tonal surface containers)
-   Typefaces: Encode Sans Expanded (headlines) · Lato (body/UI)
+   Typefaces: Inter (all text — system-aligned, variable font)
    ═══════════════════════════════════════════════════════════════════════════ */
 :root,
 [data-theme="light"] {
   --font-size: 16px;
   --radius: 0.75rem;
-  --font-heading: 'Encode Sans Expanded', system-ui, sans-serif;
-  --font-body:    'Lato', system-ui, sans-serif;
+  --font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* Surfaces — navy-tinted harmonised neutrals (MD3 2026 tonal containers) */
   --background:         #F4F7FC;   /* surface-dim: barely blue-white, not neutral gray */
@@ -76,23 +76,23 @@
   --chart-4: #485CC7;
   --chart-5: #166534;
 
-  /* Sidebar — NWN Navy rail, more refined MD3 state opacities */
-  --sidebar:                    #002855;
-  --sidebar-submenu:            #003375;   /* MD3 elevation-2 surface above rail */
-  --sidebar-border:             rgba(255, 255, 255, 0.06);
-  --sidebar-icon:               rgba(255, 255, 255, 0.65);
-  --sidebar-active-container:   rgba(255, 105, 0, 0.32);    /* rail active pill */
-  --sidebar-active-fg:          #FF6900;                    /* rail active icon/label */
-  --sidebar-hover:              rgba(255, 255, 255, 0.08);
-  --sidebar-hover-fg:           rgba(255, 255, 255, 0.92);
-  --sidebar-logo-bg:            rgba(255, 255, 255, 0.10);
-  --sidebar-logo-fg:            #FFFFFF;
-  --sidebar-foreground:         #C4D4F0;
-  --sidebar-primary:            #D6E5FF;
-  --sidebar-primary-foreground: #001A3D;
-  --sidebar-accent:             rgba(255, 255, 255, 0.12);  /* inactive icon container */
-  --sidebar-accent-foreground:  #FFFFFF;
-  --sidebar-ring:               rgba(214, 228, 255, 0.25);
+  /* Sidebar — MD3 Navigation Rail */
+  --sidebar:                    #FFFFFF;
+  --sidebar-submenu:            #FFFFFF;
+  --sidebar-border:             rgba(0, 40, 85, 0.10);
+  --sidebar-icon:               #49546B;                    /* onSurfaceVariant */
+  --sidebar-active-container:   #D6E5FF;                    /* primaryContainer */
+  --sidebar-active-fg:          #001A3D;                    /* onPrimaryContainer */
+  --sidebar-hover:              rgba(0, 40, 85, 0.07);
+  --sidebar-hover-fg:           #002855;
+  --sidebar-logo-bg:            rgba(0, 40, 85, 0.06);
+  --sidebar-logo-fg:            #002855;
+  --sidebar-foreground:         #0A1628;
+  --sidebar-primary:            #002855;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent:             rgba(0, 40, 85, 0.06);
+  --sidebar-accent-foreground:  #002855;
+  --sidebar-ring:               rgba(0, 40, 85, 0.12);
   --banner-gradient:            radial-gradient(ellipse at 85% 40%, rgba(255,105,0,0.18) 0%, transparent 55%), radial-gradient(ellipse at 15% 80%, rgba(0,163,224,0.12) 0%, transparent 50%), linear-gradient(135deg, #003A6E 0%, #0055A0 55%, #006ACC 100%);
 }
 
@@ -101,8 +101,8 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 .dark,
 [data-theme="dark"] {
-  --font-heading: 'Encode Sans Expanded', system-ui, sans-serif;
-  --font-body:    'Lato', system-ui, sans-serif;
+  --font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* MD3 dark — surface tone-6, card tone-10 */
   --background:         #0F1420;
@@ -182,8 +182,8 @@
    OCEAN — MD3 Blue (seed #0061A4, accent teal)
    ═══════════════════════════════════════════════════════════════════════════ */
 [data-theme="ocean"] {
-  --font-heading: 'Encode Sans Expanded', system-ui, sans-serif;
-  --font-body:    'Lato', system-ui, sans-serif;
+  --font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* MD3 tone-99 neutral-variant for ocean */
   --background:         #F4F7FC;
@@ -261,8 +261,8 @@
    Tailwind: amber-50/100/200/300/600/700/800 + orange-100/600/700
    ═══════════════════════════════════════════════════════════════════════════ */
 [data-theme="warm"] {
-  --font-heading: 'Encode Sans Expanded', system-ui, sans-serif;
-  --font-body:    'Lato', system-ui, sans-serif;
+  --font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* Surfaces — amber-50 background, white card */
   --background:         #FFFBF5;
@@ -438,7 +438,7 @@
   font-family: var(--font-body) !important;
 }
 
-/* MUI heading/title roles → Encode Sans Expanded */
+/* MUI heading/title roles → Inter */
 .MuiDialogTitle-root,
 .MuiCardHeader-title,
 .MuiTypography-h1,

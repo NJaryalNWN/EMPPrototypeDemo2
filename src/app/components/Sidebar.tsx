@@ -1,552 +1,407 @@
 import { useState, useRef } from "react";
 import { createPortal } from "react-dom";
+import AutoAwesomeIcon            from "@mui/icons-material/AutoAwesome";
+import HomeOutlinedIcon           from "@mui/icons-material/HomeOutlined";
+import HomeIcon                   from "@mui/icons-material/Home";
+import StorageOutlinedIcon        from "@mui/icons-material/StorageOutlined";
+import StorageIcon                from "@mui/icons-material/Storage";
+import HeadsetMicOutlinedIcon     from "@mui/icons-material/HeadsetMicOutlined";
+import HeadsetMicIcon             from "@mui/icons-material/HeadsetMic";
+import GppGoodOutlinedIcon        from "@mui/icons-material/GppGoodOutlined";
+import GppGoodIcon                from "@mui/icons-material/GppGood";
+import VideocamOutlinedIcon       from "@mui/icons-material/VideocamOutlined";
+import VideocamIcon               from "@mui/icons-material/Videocam";
+import GroupsOutlinedIcon         from "@mui/icons-material/GroupsOutlined";
+import GroupsIcon                 from "@mui/icons-material/Groups";
+import DevicesOutlinedIcon        from "@mui/icons-material/DevicesOutlined";
+import DevicesIcon                from "@mui/icons-material/Devices";
+import SettingsOutlinedIcon       from "@mui/icons-material/SettingsOutlined";
+import SettingsIcon               from "@mui/icons-material/Settings";
 
-/* ── MUI icons ───────────────────────────────────────────── */
-import HomeOutlinedIcon      from "@mui/icons-material/HomeOutlined";
-import HomeIcon              from "@mui/icons-material/Home";
-import MenuBookOutlinedIcon  from "@mui/icons-material/MenuBookOutlined";
-import MenuBookIcon          from "@mui/icons-material/MenuBook";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import ShoppingCartIcon      from "@mui/icons-material/ShoppingCart";
-import HeadsetMicOutlinedIcon from "@mui/icons-material/HeadsetMicOutlined";
-import HeadsetMicIcon        from "@mui/icons-material/HeadsetMic";
-import GppGoodOutlinedIcon   from "@mui/icons-material/GppGoodOutlined";
-import GppGoodIcon           from "@mui/icons-material/GppGood";
-import GroupsOutlinedIcon    from "@mui/icons-material/GroupsOutlined";
-import GroupsIcon            from "@mui/icons-material/Groups";
-import BusinessCenterOutlinedIcon from "@mui/icons-material/BusinessCenterOutlined";
-import BusinessCenterIcon    from "@mui/icons-material/BusinessCenter";
-import DevicesOutlinedIcon   from "@mui/icons-material/DevicesOutlined";
-import DevicesIcon           from "@mui/icons-material/Devices";
-import AssessmentOutlinedIcon           from "@mui/icons-material/AssessmentOutlined";
-import AssignmentTurnedInOutlinedIcon   from "@mui/icons-material/AssignmentTurnedIn";
-/* sub-link icons */
-import VideoCallOutlinedIcon    from "@mui/icons-material/VideoCallOutlined";
-import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
-import PhoneOutlinedIcon        from "@mui/icons-material/PhoneOutlined";
-import SpeedOutlinedIcon        from "@mui/icons-material/SpeedOutlined";
-import RouterOutlinedIcon       from "@mui/icons-material/RouterOutlined";
-import SecurityOutlinedIcon     from "@mui/icons-material/SecurityOutlined";
-import ManageSearchOutlinedIcon from "@mui/icons-material/ManageSearchOutlined";
-import UpdateOutlinedIcon       from "@mui/icons-material/UpdateOutlined";
-import PolicyOutlinedIcon       from "@mui/icons-material/PolicyOutlined";
-import InsightsOutlinedIcon     from "@mui/icons-material/InsightsOutlined";
-import DesktopWindowsOutlinedIcon from "@mui/icons-material/DesktopWindowsOutlined";
-import CloudOutlinedIcon        from "@mui/icons-material/CloudOutlined";
-import PrintOutlinedIcon        from "@mui/icons-material/PrintOutlined";
-import HeadsetOutlinedIcon      from "@mui/icons-material/HeadsetOutlined";
+type IconComp = React.ComponentType<{ style?: React.CSSProperties }>;
 
-/* ── Types ───────────────────────────────────────────────── */
-type IconComponent = React.ComponentType<{ style?: React.CSSProperties }>;
-
-interface SubLink {
+interface SubItem  { label: string; navTarget: string; }
+interface Section  { heading?: string; items: SubItem[]; }
+interface NavConfig {
   label: string;
-  description?: string;
-  icon?: IconComponent;
-  href?: string;
-}
-interface SubSection { heading: string; links: SubLink[]; }
-interface NavItem {
-  icon: IconComponent;
-  activeIcon: IconComponent;
-  label: string;
-  shortLabel?: string;
-  subSections?: SubSection[];
+  icon: IconComp;
+  activeIcon: IconComp;
+  navTarget?: string;
+  sectionTitle?: string;
+  sections?: Section[];
 }
 
-/* ── Home contextual sub-menu items ─────────────────────── */
-const homeSubMenuItems = [
-  { label: "Home",    navTarget: "Home",     description: "Dashboard & overview",    icon: HomeOutlinedIcon },
-  { label: "Cases",   navTarget: "My Cases", description: "View & manage your cases", icon: AssignmentTurnedInOutlinedIcon },
-  { label: "Reports", navTarget: "Reports",  description: "Analytics & insights",     icon: AssessmentOutlinedIcon },
+/* ── Primary nav ─────────────────────────────────────────── */
+const navConfig: NavConfig[] = [
+  {
+    label: "Home", icon: HomeOutlinedIcon, activeIcon: HomeIcon,
+    sectionTitle: "HOME",
+    sections: [{ items: [
+      { label: "Home Overview", navTarget: "Home" },
+      { label: "My Cases",      navTarget: "My Cases" },
+      { label: "Reports",       navTarget: "Reports" },
+    ]}],
+  },
+  {
+    label: "Intelligent Infrastructure",
+    icon: StorageOutlinedIcon, activeIcon: StorageIcon,
+    sectionTitle: "INTELLIGENT INFRASTRUCTURE",
+    sections: [
+      { heading: "ADMIN", items: [
+        { label: "Meraki | Admin",        navTarget: "Intelligent Workplace" },
+        { label: "DNA Center Cloud",      navTarget: "Intelligent Workplace" },
+        { label: "Aruba | Admin",         navTarget: "Intelligent Workplace" },
+        { label: "Intersight | Admin",    navTarget: "Intelligent Workplace" },
+        { label: "HPE Infosight | Admin", navTarget: "Intelligent Workplace" },
+      ]},
+      { heading: "MONITOR", items: [
+        { label: "Contrivian | Northstar",  navTarget: "Intelligent Workplace" },
+        { label: "Speedcast | Compass",     navTarget: "Intelligent Workplace" },
+        { label: "Performance Monitoring",  navTarget: "Intelligent Workplace" },
+        { label: "Performance Monitoring",  navTarget: "Intelligent Workplace" },
+      ]},
+      { heading: "REPORT", items: [
+        { label: "Contrivian | Northstar", navTarget: "Intelligent Workplace" },
+        { label: "Speedcast | Compass",    navTarget: "Intelligent Workplace" },
+      ]},
+    ],
+  },
+  {
+    label: "Contact Center",
+    icon: HeadsetMicOutlinedIcon, activeIcon: HeadsetMicIcon,
+    sectionTitle: "CONTACT CENTER",
+    sections: [
+      { heading: "ADMIN", items: [
+        { label: "Webex CC | Admin",  navTarget: "Contact Center" },
+        { label: "CCDM | Admin",      navTarget: "Contact Center" },
+        { label: "Five9 | Admin",     navTarget: "Contact Center" },
+      ]},
+      { heading: "MONITOR", items: [
+        { label: "Performance Monitoring", navTarget: "Contact Center" },
+        { label: "Performance Monitoring", navTarget: "Contact Center" },
+        { label: "Performance Monitoring", navTarget: "Contact Center" },
+      ]},
+      { heading: "REPORT", items: [
+        { label: "Webex CC | Report", navTarget: "Contact Center" },
+        { label: "SIP Reporting",     navTarget: "Contact Center" },
+        { label: "SIP Reporting",     navTarget: "Contact Center" },
+      ]},
+    ],
+  },
+  {
+    label: "Managed Security",
+    icon: GppGoodOutlinedIcon, activeIcon: GppGoodIcon,
+    sectionTitle: "MANAGED SECURITY",
+    sections: [
+      { heading: "ADMIN", items: [
+        { label: "SecureX | Admin",      navTarget: "Managed Security" },
+        { label: "Meraki | Admin",       navTarget: "Managed Security" },
+        { label: "Threat Investigation", navTarget: "Managed Security" },
+      ]},
+      { heading: "MONITOR", items: [
+        { label: "Performance Monitoring", navTarget: "Managed Security" },
+        { label: "Performance Monitoring", navTarget: "Managed Security" },
+      ]},
+      { heading: "REPORT", items: [
+        { label: "Patch Reporting", navTarget: "Managed Security" },
+        { label: "SOC Reporting",   navTarget: "Managed Security" },
+        { label: "Threat Insights", navTarget: "Managed Security" },
+      ]},
+    ],
+  },
+  {
+    label: "Unified Communications",
+    icon: VideocamOutlinedIcon, activeIcon: VideocamIcon,
+    sectionTitle: "UNIFIED COMMUNICATIONS",
+    sections: [
+      { heading: "ADMIN", items: [
+        { label: "Webex Control Hub | Admin", navTarget: "Visual Collaboration" },
+        { label: "Webex | Selfcare",          navTarget: "Visual Collaboration" },
+        { label: "Number Management",         navTarget: "Visual Collaboration" },
+      ]},
+      { heading: "MONITOR", items: [
+        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
+        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
+        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
+      ]},
+      { heading: "REPORT", items: [
+        { label: "Webex Call Detail", navTarget: "Visual Collaboration" },
+        { label: "Webex SIP Usage",   navTarget: "Visual Collaboration" },
+        { label: "Analytics",         navTarget: "Visual Collaboration" },
+      ]},
+    ],
+  },
+  {
+    label: "Visual Collaboration",
+    icon: GroupsOutlinedIcon, activeIcon: GroupsIcon,
+    sectionTitle: "VISUAL COLLABORATION",
+    sections: [
+      { heading: "ADMIN", items: [
+        { label: "Crestron | Admin",          navTarget: "Visual Collaboration" },
+        { label: "Microsoft | Admin",         navTarget: "Visual Collaboration" },
+        { label: "Cisco Control Hub | Admin", navTarget: "Visual Collaboration" },
+      ]},
+      { heading: "MONITOR", items: [
+        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
+        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
+        { label: "HP",                     navTarget: "Visual Collaboration" },
+        { label: "Poly",                   navTarget: "Visual Collaboration" },
+      ]},
+    ],
+  },
+  {
+    label: "Devices", icon: DevicesOutlinedIcon, activeIcon: DevicesIcon,
+    navTarget: "Managed Devices",
+  },
+  {
+    label: "Settings", icon: SettingsOutlinedIcon, activeIcon: SettingsIcon,
+    navTarget: "Settings",
+  },
 ];
 
-/* ── Primary nav items ───────────────────────────────────── */
-const navItems: NavItem[] = [
-  { icon: HomeOutlinedIcon,           activeIcon: HomeIcon,           label: "Home" },
-  { icon: MenuBookOutlinedIcon,       activeIcon: MenuBookIcon,       label: "Knowledge Base" },
-  { icon: ShoppingCartOutlinedIcon,   activeIcon: ShoppingCartIcon,   label: "Service Catalog" },
-  {
-    icon: HeadsetMicOutlinedIcon, activeIcon: HeadsetMicIcon, label: "Contact Center",
-    subSections: [
-      {
-        heading: "ADMIN",
-        links: [
-          { label: "Webex CC | Admin",  description: "Call center platform",      icon: VideoCallOutlinedIcon },
-          { label: "CCDM | Admin",      description: "Contact center management", icon: ManageAccountsOutlinedIcon },
-          { label: "Five9 | Admin",     description: "Cloud contact solution",    icon: PhoneOutlinedIcon },
-        ],
-      },
-      {
-        heading: "MONITOR",
-        links: [
-          { label: "Performance Monitoring", description: "System health & metrics",  icon: SpeedOutlinedIcon },
-          { label: "Performance Monitoring", description: "Network throughput stats", icon: SpeedOutlinedIcon },
-          { label: "Performance Monitoring", description: "Endpoint health checks",   icon: SpeedOutlinedIcon },
-        ],
-      },
-      {
-        heading: "REPORT",
-        links: [
-          { label: "Webex CC | Report", description: "CC analytics & activity", icon: AssessmentOutlinedIcon },
-          { label: "SIP Reporting",     description: "SIP trunk call reports",  icon: RouterOutlinedIcon },
-          { label: "SIP Reporting",     description: "SIP quality metrics",     icon: RouterOutlinedIcon },
-        ],
-      },
-    ],
-  },
-  {
-    icon: GppGoodOutlinedIcon, activeIcon: GppGoodIcon, label: "Managed Security",
-    subSections: [
-      {
-        heading: "ADMIN",
-        links: [
-          { label: "SecureX | Admin",      description: "Security platform",    icon: SecurityOutlinedIcon },
-          { label: "Meraki | Admin",       description: "Network management",   icon: RouterOutlinedIcon },
-          { label: "Threat Investigation", description: "Threat analysis",      icon: ManageSearchOutlinedIcon },
-        ],
-      },
-      {
-        heading: "MONITOR",
-        links: [
-          { label: "Performance Monitoring", description: "Security health metrics", icon: SpeedOutlinedIcon },
-          { label: "Performance Monitoring", description: "Network threat watch",    icon: SpeedOutlinedIcon },
-        ],
-      },
-      {
-        heading: "REPORT",
-        links: [
-          { label: "Patch Reporting", description: "Patch compliance status", icon: UpdateOutlinedIcon },
-          { label: "SOC Reporting",   description: "SOC activity & events",   icon: PolicyOutlinedIcon },
-          { label: "Threat Insights", description: "Threat intelligence",     icon: InsightsOutlinedIcon },
-        ],
-      },
-    ],
-  },
-  {
-    icon: GroupsOutlinedIcon, activeIcon: GroupsIcon, label: "Visual Collaboration",
-    subSections: [
-      {
-        heading: "ADMIN",
-        links: [
-          { label: "Crestron | Admin",          description: "AV control systems",   icon: DesktopWindowsOutlinedIcon },
-          { label: "Microsoft | Admin",         description: "Teams & M365 admin",   icon: CloudOutlinedIcon },
-          { label: "Cisco Control Hub | Admin", description: "Webex administration", icon: RouterOutlinedIcon },
-        ],
-      },
-      {
-        heading: "MONITOR",
-        links: [
-          { label: "Performance Monitoring", description: "System health & metrics",  icon: SpeedOutlinedIcon },
-          { label: "Performance Monitoring", description: "Collab endpoint health",   icon: SpeedOutlinedIcon },
-          { label: "HP",   description: "HP device monitoring",  icon: PrintOutlinedIcon },
-          { label: "Poly", description: "Poly endpoint status",  icon: HeadsetOutlinedIcon },
-        ],
-      },
-    ],
-  },
-  { icon: BusinessCenterOutlinedIcon, activeIcon: BusinessCenterIcon, label: "Intelligent Workplace", shortLabel: "Workplace" },
-  { icon: DevicesOutlinedIcon,        activeIcon: DevicesIcon,        label: "Managed Devices",      shortLabel: "Managed Devices" },
-];
-
-/* ── Home contextual sub-menu row ────────────────────────── */
-function HomeSubMenuItem({ label, description, icon: Icon, isActive, onClick }: {
-  label: string; description: string; icon: IconComponent; isActive: boolean; onClick: () => void; navTarget?: string;
-}) {
-  const [hov, setHov] = useState(false);
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      className="text-left flex items-center gap-3 border-0 cursor-pointer"
-      style={{
-        display: "flex",
-        padding: "10px 12px",
-        margin: "2px 8px",
-        width: "calc(100% - 16px)",
-        borderRadius: 12,
-        backgroundColor: isActive
-          ? "#FF6900"
-          : hov
-          ? "var(--sidebar-hover)"
-          : "transparent",
-        transition: "background-color 0.15s",
-      }}
-    >
-      <div style={{
-        width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-        backgroundColor: isActive ? "rgba(255,255,255,0.22)" : hov ? "var(--sidebar-active-container)" : "var(--sidebar-accent)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        transition: "background-color 0.15s",
-      }}>
-        <Icon style={{
-          fontSize: 18,
-          color: isActive ? "#FFFFFF" : hov ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-          transition: "color 0.15s",
-        }} />
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
-        <span style={{
-          fontSize: 13, fontFamily: "var(--font-body)",
-          fontWeight: isActive ? 700 : hov ? 600 : 500,
-          color: isActive ? "#FFFFFF" : hov ? "var(--sidebar-hover-fg)" : "var(--sidebar-foreground)",
-          lineHeight: 1.25,
-          transition: "color 0.15s",
-        }}>
-          {label}
-        </span>
-        <span style={{
-          fontSize: 11, fontFamily: "var(--font-body)", fontWeight: 400,
-          color: isActive ? "rgba(255,255,255,0.80)" : "var(--sidebar-icon)",
-          lineHeight: 1.25, marginTop: 2,
-          transition: "color 0.15s",
-        }}>
-          {description}
-        </span>
-      </div>
-    </button>
-  );
+/* Which rail item owns the active page */
+function getRailOwner(page: string): string {
+  for (const n of navConfig) {
+    if (n.navTarget === page) return n.label;
+    if (n.sections?.some((s) => s.items.some((i) => i.navTarget === page))) return n.label;
+  }
+  return "Home";
 }
 
-/* ── Nav sub-panel link row (card-style reference) ───────── */
-function SubPanelLink({ label, description, icon: Icon, href }: SubLink) {
-  const [hov, setHov] = useState(false);
-  return (
-    <a
-      href={href ?? "#"}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      className="no-underline"
-      style={{
-        display: "flex", alignItems: "center", gap: 12,
-        padding: "9px 12px",
-        margin: "2px 8px",
-        width: "calc(100% - 16px)",
-        borderRadius: 12,
-        backgroundColor: hov ? "var(--sidebar-hover)" : "transparent",
-        transition: "background-color 0.15s",
-        boxSizing: "border-box",
-      }}
-    >
-      {Icon && (
-        <div style={{
-          width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-          backgroundColor: hov ? "var(--sidebar-active-container)" : "var(--sidebar-accent)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          transition: "background-color 0.15s",
-        }}>
-          <Icon style={{
-            fontSize: 18,
-            color: hov ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-            transition: "color 0.15s",
-          }} />
-        </div>
-      )}
-      <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
-        <span style={{
-          fontSize: 13, fontFamily: "var(--font-body)",
-          fontWeight: hov ? 600 : 500,
-          color: hov ? "var(--sidebar-hover-fg)" : "var(--sidebar-foreground)",
-          lineHeight: 1.25, whiteSpace: "normal",
-          transition: "color 0.15s",
-        }}>
-          {label}
-        </span>
-        {description && (
-          <span style={{
-            fontSize: 11, fontFamily: "var(--font-body)", fontWeight: 400,
-            color: "var(--sidebar-icon)", lineHeight: 1.25, marginTop: 2,
-          }}>
-            {description}
-          </span>
-        )}
-      </div>
-    </a>
-  );
+/* Inject M3 panel animation once */
+const ANIMATION_ID = "m3-panel-anim";
+if (typeof document !== "undefined" && !document.getElementById(ANIMATION_ID)) {
+  const s = document.createElement("style");
+  s.id = ANIMATION_ID;
+  s.textContent = `
+    @keyframes m3PanelIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+  `;
+  document.head.appendChild(s);
 }
 
-/* ── Generic floating nav sub-panel ─────────────────────── */
-function NavSubPanel({ title, sections, pos, onMouseEnter, onMouseLeave }: {
-  title: string;
-  sections: SubSection[];
-  pos: { top: number; left: number; centerY: number };
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
+/* ── Full-height floating panel ──────────────────────────── */
+function FloatingPanel({
+  config, activePage, panelLeft, onNav, onMouseEnter, onMouseLeave,
+}: {
+  config: NavConfig; activePage: string; panelLeft: number;
+  onNav: (p: string) => void; onMouseEnter: () => void; onMouseLeave: () => void;
 }) {
   return createPortal(
     <>
-      {/* Pointer triangle bridging the gap */}
-      <div style={{
-        position: "fixed", zIndex: 10000,
-        top: pos.centerY - 6, left: pos.left - 8,
-        width: 0, height: 0,
-        borderTop: "6px solid transparent",
-        borderBottom: "6px solid transparent",
-        borderLeft: "8px solid var(--sidebar-submenu)",
-        pointerEvents: "none",
-      }} />
-    <div
-      style={{
-        position: "fixed", zIndex: 9999,
-        top: pos.top, left: pos.left,
-        minWidth: 272,
-        maxHeight: `calc(100vh - ${pos.top}px - 16px)`,
-        backgroundColor: "var(--sidebar-submenu)",
-        borderRadius: 16,
-        boxShadow: "0 8px 32px rgba(0,0,0,0.48), 0 2px 8px rgba(0,0,0,0.32)",
-        border: "1px solid var(--sidebar-border)",
-        overflow: "hidden",
-        display: "flex", flexDirection: "column",
-      }}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <div style={{
-        paddingTop: 8, paddingBottom: 8,
-        overflowY: "auto",
-        scrollbarWidth: "thin",
-        scrollbarColor: "var(--sidebar-ring) transparent",
-      }}>
+      {/* Invisible hover bridge */}
+      <div
+        style={{ position: "fixed", zIndex: 9998, top: 0, left: panelLeft - 6, width: 6, height: "100vh", pointerEvents: "auto" }}
+        onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
+      />
+
+      {/* Panel */}
+      <div
+        style={{
+          position: "fixed", zIndex: 9999,
+          top: 0, left: panelLeft, width: 264, height: "100vh",
+          backgroundColor: "#FFFFFF",
+          borderLeft: "1.5px solid rgba(0,40,85,0.13)",
+          borderRight: "1px solid rgba(0,40,85,0.07)",
+          boxShadow: "6px 0 24px rgba(0,0,0,0.07)",
+          display: "flex", flexDirection: "column",
+          overflowY: "auto", scrollbarWidth: "thin",
+          scrollbarColor: "rgba(0,40,85,0.10) transparent",
+          animation: "m3PanelIn 0.18s cubic-bezier(0.2, 0, 0, 1) both",
+        }}
+        onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
+      >
+        {/* Section title */}
         <p style={{
-          fontSize: 9, fontFamily: "var(--font-heading)", fontWeight: 700,
-          color: "var(--sidebar-ring)", textTransform: "uppercase", letterSpacing: "0.12em",
-          padding: "4px 20px 8px", margin: 0,
-          borderBottom: "1px solid var(--sidebar-border)",
-          marginBottom: 4,
+          margin: 0, padding: "24px 20px 12px",
+          fontSize: 11, fontFamily: "var(--font-heading)", fontWeight: 700,
+          color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.10em",
         }}>
-          {title}
+          {config.sectionTitle}
         </p>
-        {sections.map((section, si) => (
-          <div key={`${section.heading}-${si}`}>
-            {si > 0 && (
-              <div style={{ height: 1, backgroundColor: "var(--sidebar-border)", margin: "6px 16px" }} />
-            )}
-            <p style={{
-              fontSize: 9, fontFamily: "var(--font-heading)", fontWeight: 700,
-              color: "var(--sidebar-ring)", textTransform: "uppercase", letterSpacing: "0.12em",
-              padding: "8px 20px 4px", margin: 0,
-            }}>
-              {section.heading}
-            </p>
-            {section.links.map((link, li) => (
-              <SubPanelLink key={`${link.label}-${li}`} {...link} />
-            ))}
-          </div>
-        ))}
+
+        {/* Sections with optional group headings */}
+        <div style={{ padding: "0 10px 24px", flex: 1 }}>
+          {config.sections!.map((section, si) => (
+            <div key={si}>
+              {/* Group heading (ADMIN / MONITOR / REPORT) */}
+              {section.heading && (
+                <p style={{
+                  margin: si === 0 ? "0 0 4px 10px" : "12px 0 4px 10px",
+                  fontSize: 10, fontFamily: "var(--font-heading)", fontWeight: 700,
+                  color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.12em",
+                }}>
+                  {section.heading}
+                </p>
+              )}
+
+              {/* Items */}
+              {section.items.map((item, ii) => {
+                const isActive = activePage === item.navTarget;
+                return (
+                  <button
+                    key={`${si}-${ii}`}
+                    type="button"
+                    onClick={() => onNav(item.navTarget)}
+                    style={{
+                      width: "100%", display: "flex", alignItems: "center",
+                      padding: "11px 14px", marginBottom: 1,
+                      borderRadius: 8,
+                      border: 0, cursor: "pointer", textAlign: "left",
+                      backgroundColor: isActive ? "var(--sidebar-active-container)" : "transparent",
+                      transition: "background-color 0.12s",
+                    }}
+                    onMouseEnter={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(0,40,85,0.05)"; }}
+                    onMouseLeave={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
+                  >
+                    <span style={{
+                      fontSize: 14, fontFamily: "var(--font-body)",
+                      fontWeight: isActive ? 600 : 400,
+                      color: isActive ? "var(--sidebar-active-fg)" : "var(--foreground)",
+                      lineHeight: 1.4,
+                    }}>
+                      {item.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
     </>,
     document.body
   );
 }
 
 /* ── Sidebar ─────────────────────────────────────────────── */
-interface SidebarProps { activePage: string; onNav: (label: string) => void; }
+interface SidebarProps { activePage: string; onNav: (page: string) => void; onAiva?: () => void; }
 
-export function Sidebar({ activePage, onNav }: SidebarProps) {
-  const [hovered,     setHovered]     = useState<string | null>(null);
-  const [homeSubOpen, setHomeSubOpen] = useState(false);
-  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+export function Sidebar({ activePage, onNav, onAiva }: SidebarProps) {
+  const activeRail              = getRailOwner(activePage);
+  const [hovered, setHovered]   = useState<string | null>(null);
+  const [panelLeft, setPanelLeft] = useState(80);
+  const hideTimer               = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const homeButtonRef = useRef<HTMLButtonElement>(null);
-  const homeSubPos    = useRef({ top: 0, left: 0, centerY: 0 });
-  const subMenuPos    = useRef({ top: 0, left: 0, centerY: 0 });
-  const homeTimer     = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const subTimer      = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cancelHide  = () => { if (hideTimer.current) clearTimeout(hideTimer.current); };
+  const scheduleHide = () => { hideTimer.current = setTimeout(() => setHovered(null), 140); };
 
-  /* Home sub-menu */
-  const openHomeSub = () => {
-    if (homeTimer.current) clearTimeout(homeTimer.current);
-    if (homeButtonRef.current) {
-      const r = homeButtonRef.current.getBoundingClientRect();
-      homeSubPos.current = { top: r.top, left: r.right + 8, centerY: r.top + r.height / 2 };
-    }
-    setHomeSubOpen(true);
-  };
-  const scheduleCloseHomeSub = () => {
-    homeTimer.current = setTimeout(() => setHomeSubOpen(false), 140);
-  };
-
-  /* Generic nav sub-panel */
-  const openSub = (label: string, el: HTMLButtonElement) => {
-    if (subTimer.current) clearTimeout(subTimer.current);
-    const r = el.getBoundingClientRect();
-    subMenuPos.current = { top: r.top, left: r.right + 8, centerY: r.top + r.height / 2 };
-    setOpenSubMenu(label);
-  };
-  const scheduleCloseSub = () => {
-    subTimer.current = setTimeout(() => setOpenSubMenu(null), 140);
-  };
-
-  /* Pages reached via the Home sub-menu — Home stays active in the rail */
-  const homeSubTargets = new Set(["Home", "My Cases", "Reports"]);
-  const effectiveActive = homeSubTargets.has(activePage) ? "Home" : activePage;
-
-  const renderNavItem = (item: NavItem) => {
-    const { icon: Icon, activeIcon: ActiveIcon, label, shortLabel, subSections } = item;
-    const isActive  = effectiveActive === label;
-    const isHovered = hovered === label;
-    const DisplayIcon = isActive ? ActiveIcon : Icon;
-
-    return (
-      <button
-        key={label}
-        type="button"
-        aria-label={label}
-        aria-current={isActive ? "page" : undefined}
-        className="w-full flex flex-col items-center gap-1 pt-2 pb-1.5 px-0 cursor-pointer border-0 bg-transparent focus-visible:outline-none"
-        onClick={() => onNav(label)}
-        onMouseEnter={(e) => {
-          setHovered(label);
-          if (subSections) openSub(label, e.currentTarget);
-        }}
-        onMouseLeave={() => {
-          setHovered(null);
-          if (subSections) scheduleCloseSub();
-        }}
-      >
-        <div
-          style={{
-            width: 56, height: 32, borderRadius: 16,
-            display: "flex", alignItems: "center", justifyContent: "center",
-            backgroundColor: isActive
-              ? "var(--sidebar-active-container)"
-              : isHovered
-              ? "var(--sidebar-hover)"
-              : "transparent",
-            transition: "background-color 0.2s",
-          }}
-        >
-          <DisplayIcon style={{
-            fontSize: 24,
-            color: isActive ? "var(--sidebar-active-fg)" : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-            transition: "color 0.15s ease",
-          }} />
-        </div>
-        <span style={{
-          fontSize: 11, fontFamily: "var(--font-body)",
-          fontWeight: isActive ? 700 : isHovered ? 600 : 500,
-          color: isActive ? "var(--sidebar-active-fg)" : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-          letterSpacing: "0.01em", lineHeight: 1.3,
-          transition: "color 0.15s ease", textAlign: "center",
-          maxWidth: 72, whiteSpace: "normal", wordBreak: "break-word",
-        }}>
-          {shortLabel ?? label}
-        </span>
-      </button>
-    );
-  };
-
-  const isHomeActive  = effectiveActive === "Home";
-  const isHomeHovered = hovered === "Home";
-  const activeSubItem = navItems.find((n) => n.label === openSubMenu);
+  const hoveredConfig = navConfig.find((n) => n.label === hovered);
+  const showPanel     = !!hoveredConfig?.sections?.length;
 
   return (
     <>
-      <aside
-        style={{
-          width: 80, flexShrink: 0,
-          display: "flex", flexDirection: "column", alignItems: "center", height: "100%",
-          backgroundColor: "var(--sidebar)",
-          boxShadow: "2px 0 8px rgba(0,0,0,0.18)",
-        }}
-      >
+      <aside style={{
+        width: 80, flexShrink: 0,
+        display: "flex", flexDirection: "column", alignItems: "center",
+        backgroundColor: "var(--sidebar)",
+        borderRight: "1.5px solid rgba(0,40,85,0.13)",
+      }}>
+
+        {/* ── Aiva icon — global AI assistant ──────────────── */}
+        <div style={{ width: "100%", display: "flex", justifyContent: "center", padding: "14px 0 12px" }}>
+          <button
+            type="button"
+            aria-label="Open Aiva AI assistant"
+            onClick={onAiva}
+            style={{
+              width: 48, height: 48, borderRadius: 14,
+              backgroundColor: "var(--primary)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              border: 0, cursor: "pointer",
+              boxShadow: "0 2px 8px rgba(0,40,85,0.28)",
+              transition: "transform 0.15s, box-shadow 0.15s",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1.06)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 14px rgba(0,40,85,0.40)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(0,40,85,0.28)"; }}
+          >
+            <AutoAwesomeIcon style={{ fontSize: 22, color: "#FFFFFF" }} />
+          </button>
+        </div>
+
+        {/* Divider below Aiva */}
+        <div style={{ width: 48, height: 1, backgroundColor: "var(--sidebar-border)", marginBottom: 8 }} />
+
+        {/* ── Nav items ─────────────────────────────────────── */}
         <nav
-          style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", overflowY: "auto", scrollbarWidth: "none", paddingTop: 8 }}
+          style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", overflowY: "auto", scrollbarWidth: "none" }}
           aria-label="Main navigation"
         >
-          {/* Home */}
-          <button
-            ref={homeButtonRef}
-            type="button"
-            aria-label="Home"
-            aria-current={isHomeActive ? "page" : undefined}
-            className="w-full flex flex-col items-center gap-1 pt-2 pb-1.5 px-0 cursor-pointer border-0 bg-transparent focus-visible:outline-none"
-            onClick={() => onNav("Home")}
-            onMouseEnter={() => { setHovered("Home"); openHomeSub(); }}
-            onMouseLeave={() => { setHovered(null); scheduleCloseHomeSub(); }}
-          >
-            <div style={{
-              width: 56, height: 32, borderRadius: 16,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              backgroundColor: isHomeActive ? "var(--sidebar-active-container)" : isHomeHovered ? "var(--sidebar-hover)" : "transparent",
-              transition: "background-color 0.2s",
-            }}>
-              {isHomeActive
-                ? <HomeIcon style={{ fontSize: 24, color: "var(--sidebar-active-fg)", transition: "color 0.15s" }} />
-                : <HomeOutlinedIcon style={{ fontSize: 24, color: isHomeHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)", transition: "color 0.15s" }} />
-              }
-            </div>
-            <span style={{
-              fontSize: 11, fontFamily: "var(--font-body)",
-              fontWeight: isHomeActive ? 700 : isHomeHovered ? 600 : 500,
-              color: isHomeActive ? "var(--sidebar-active-fg)" : isHomeHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-              letterSpacing: "0.01em", lineHeight: 1.3, transition: "color 0.15s", textAlign: "center",
-            }}>
-              Home
-            </span>
-          </button>
+          {navConfig.map((item) => {
+            const isActive  = activeRail === item.label;
+            const isHovered = hovered    === item.label;
+            const Icon      = (isActive || isHovered) ? item.activeIcon : item.icon;
 
-          {navItems.slice(1).map(renderNavItem)}
+            return (
+              <button
+                key={item.label}
+                type="button"
+                aria-label={item.label}
+                aria-current={isActive ? "page" : undefined}
+                onClick={() => { if (item.navTarget) onNav(item.navTarget); }}
+                onMouseEnter={(e) => {
+                  cancelHide();
+                  setHovered(item.label);
+                  if (item.sections?.length) setPanelLeft(e.currentTarget.getBoundingClientRect().right);
+                }}
+                onMouseLeave={() => { item.sections?.length ? scheduleHide() : setHovered(null); }}
+                style={{
+                  width: "100%", display: "flex", flexDirection: "column", alignItems: "center",
+                  gap: 3, paddingTop: 8, paddingBottom: 10,
+                  border: 0, background: "transparent", cursor: "pointer", outline: "none",
+                }}
+              >
+                {/* MD3 56×32dp indicator pill */}
+                <div style={{
+                  width: 56, height: 32, borderRadius: 16,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  backgroundColor: isActive
+                    ? "var(--sidebar-active-container)"
+                    : isHovered ? "var(--sidebar-hover)" : "transparent",
+                  transition: "background-color 0.15s",
+                }}>
+                  <Icon style={{
+                    fontSize: 22,
+                    color: isActive
+                      ? "var(--sidebar-active-fg)"
+                      : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
+                    transition: "color 0.12s",
+                  }} />
+                </div>
+
+                {/* label — fixed 2-line height keeps all items uniform */}
+                <span style={{
+                  display: "block",
+                  fontSize: 10, fontFamily: "var(--font-body)", fontWeight: isActive ? 700 : 500,
+                  color: isActive
+                    ? "var(--sidebar-active-fg)"
+                    : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
+                  textAlign: "center", lineHeight: 1.3,
+                  width: 72,
+                  height: 26,
+                  overflow: "hidden",
+                  wordBreak: "break-word",
+                  transition: "color 0.12s",
+                }}>
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
         </nav>
-
       </aside>
 
-      {/* Home floating contextual sheet */}
-      {homeSubOpen && createPortal(
-        <>
-          {/* Pointer triangle */}
-          <div style={{
-            position: "fixed", zIndex: 10000,
-            top: homeSubPos.current.centerY - 6,
-            left: homeSubPos.current.left - 8,
-            width: 0, height: 0,
-            borderTop: "6px solid transparent",
-            borderBottom: "6px solid transparent",
-            borderLeft: "8px solid var(--sidebar-submenu)",
-            pointerEvents: "none",
-          }} />
-          <div
-            style={{
-              position: "fixed", zIndex: 9999,
-              top: homeSubPos.current.top, left: homeSubPos.current.left,
-              minWidth: 252,
-              backgroundColor: "var(--sidebar-submenu)",
-              borderRadius: 16,
-              boxShadow: "0 8px 32px rgba(0,0,0,0.48), 0 2px 8px rgba(0,0,0,0.32)",
-              border: "1px solid var(--sidebar-border)",
-              overflow: "hidden",
-            }}
-            onMouseEnter={openHomeSub}
-            onMouseLeave={scheduleCloseHomeSub}
-          >
-            <div style={{ paddingTop: 8, paddingBottom: 8 }}>
-              {homeSubMenuItems.map((item) => (
-                <HomeSubMenuItem
-                  key={item.label}
-                  label={item.label}
-                  description={item.description}
-                  icon={item.icon}
-                  isActive={activePage === item.navTarget}
-                  onClick={() => { setHomeSubOpen(false); onNav(item.navTarget); }}
-                />
-              ))}
-            </div>
-          </div>
-        </>,
-        document.body
-      )}
-
-      {/* Generic nav item floating sub-panel */}
-      {openSubMenu && activeSubItem?.subSections && (
-        <NavSubPanel
-          title={activeSubItem.label}
-          sections={activeSubItem.subSections}
-          pos={subMenuPos.current}
-          onMouseEnter={() => { if (subTimer.current) clearTimeout(subTimer.current); }}
-          onMouseLeave={scheduleCloseSub}
+      {/* ── Full-height floating panel on hover ─────────────── */}
+      {showPanel && hoveredConfig && (
+        <FloatingPanel
+          config={hoveredConfig}
+          activePage={activePage}
+          panelLeft={panelLeft}
+          onNav={(page) => { onNav(page); setHovered(null); }}
+          onMouseEnter={cancelHide}
+          onMouseLeave={scheduleHide}
         />
       )}
     </>
