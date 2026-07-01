@@ -20,7 +20,7 @@ import nwnLogoDark from "../../imports/nwn-logo-dark.png";
 import { useTheme, type Theme } from "../context/ThemeContext";
 import { Btn } from "./ui/Btn";
 import { NotificationDrawer } from "./NotificationDrawer";
-import { NewCaseDrawer } from "./NewCaseDrawer";
+import { NewTicketDrawer } from "./NewTicketDrawer";
 
 /* ── Amazon wordmark — CSS text for crisp rendering, SVG only for swoosh ── */
 function AmazonWordmark({ dark }: { dark: boolean }) {
@@ -247,8 +247,8 @@ function HelpPopover({ anchorEl, open, onClose, onNewCase }: {
         overflow: "hidden",
       }}>
         {/* Title */}
-        <div style={{ padding: "20px 20px 16px" }}>
-          <p style={{ fontSize: 18, fontFamily: "var(--font-heading)", fontWeight: 700, color: "var(--foreground)", margin: 0 }}>
+        <div style={{ padding: "16px 18px 14px" }}>
+          <p style={{ fontSize: 15, fontFamily: "var(--font-body)", fontWeight: 700, color: "var(--foreground)", margin: 0, lineHeight: 1.3 }}>
             Need Help?
           </p>
         </div>
@@ -256,15 +256,15 @@ function HelpPopover({ anchorEl, open, onClose, onNewCase }: {
         <div style={{ height: 1, backgroundColor: "var(--border)" }} />
 
         {/* Open a New Case CTA */}
-        <div style={{ padding: "16px 20px" }}>
+        <div style={{ padding: "14px 18px" }}>
           <button
             type="button"
             onClick={() => { onClose(); onNewCase(); }}
             style={{
-              width: "100%", padding: "14px 20px",
+              width: "100%", padding: "11px 18px",
               backgroundColor: "#002855", color: "#FFFFFF",
               borderRadius: 9999, border: 0, cursor: "pointer",
-              fontSize: 15, fontFamily: "var(--font-body)", fontWeight: 700,
+              fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 700,
               transition: "opacity 0.15s",
             }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; }}
@@ -277,26 +277,26 @@ function HelpPopover({ anchorEl, open, onClose, onNewCase }: {
         <div style={{ height: 1, backgroundColor: "var(--border)" }} />
 
         {/* Contact details */}
-        <div style={{ padding: "8px 0 8px" }}>
+        <div style={{ padding: "6px 0" }}>
           <a
             href="mailto:itsupport@nwncarousel.com"
-            style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 20px", textDecoration: "none", transition: "background-color 0.12s" }}
+            style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 18px", textDecoration: "none", transition: "background-color 0.12s" }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--accent)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
           >
-            <EmailOutlinedIcon style={{ fontSize: 20, color: "var(--foreground)", flexShrink: 0 }} />
-            <span style={{ fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--foreground)" }}>
+            <EmailOutlinedIcon style={{ fontSize: 18, color: "var(--foreground)", flexShrink: 0 }} />
+            <span style={{ fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--foreground)" }}>
               itsupport@nwncarousel.com
             </span>
           </a>
           <a
             href="tel:+17814346800"
-            style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 20px", textDecoration: "none", transition: "background-color 0.12s" }}
+            style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 18px", textDecoration: "none", transition: "background-color 0.12s" }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--accent)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
           >
-            <PhoneOutlinedIcon style={{ fontSize: 20, color: "var(--foreground)", flexShrink: 0 }} />
-            <span style={{ fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--foreground)" }}>
+            <PhoneOutlinedIcon style={{ fontSize: 18, color: "var(--foreground)", flexShrink: 0 }} />
+            <span style={{ fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 500, color: "var(--foreground)" }}>
               (781) 434-6800
             </span>
           </a>
@@ -382,7 +382,7 @@ export function Header() {
       <UserMenu    anchorEl={userBtnRef.current}   open={userMenuOpen} onClose={() => setUserMenuOpen(false)} />
       <HelpPopover anchorEl={helpBtnRef.current}   open={helpOpen}     onClose={() => setHelpOpen(false)} onNewCase={() => setNewCaseOpen(true)} />
       <NotificationDrawer open={notifOpen} onClose={() => setNotifOpen(false)} />
-      <NewCaseDrawer open={newCaseOpen} onClose={() => setNewCaseOpen(false)} />
+      <NewTicketDrawer open={newCaseOpen} onClose={() => setNewCaseOpen(false)} />
     </>
   );
 }

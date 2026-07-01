@@ -5,7 +5,7 @@ import { Header } from "./components/Header";
 import { AivaPanel } from "./components/AivaPanel";
 import { HomePage, KnowledgeBasePage, ServiceCatalogPage, MyTicketsPage, ReportsPage } from "./pages/HomePage";
 
-function PageContent({ page, onNav }: { page: string; onNav: (p: string) => void }) {
+function PageContent({ page, pageParam, onNav }: { page: string; pageParam?: string; onNav: (p: string, param?: string) => void }) {
   switch (page) {
     case "Home":
       return <HomePage onNav={onNav} />;
@@ -16,7 +16,7 @@ function PageContent({ page, onNav }: { page: string; onNav: (p: string) => void
     case "My Cases":
       return <MyTicketsPage onNav={onNav} />;
     case "Reports":
-      return <ReportsPage onNav={onNav} />;
+      return <ReportsPage onNav={onNav} initialReport={pageParam} />;
     default:
       return (
         <div className="flex-1 flex items-center justify-center bg-background transition-colors duration-200">
@@ -35,10 +35,12 @@ function pageToSlug(page: string) {
 
 export default function App() {
   const [activePage, setActivePage] = useState("Home");
+  const [pageParam, setPageParam] = useState<string | undefined>(undefined);
   const [aivaOpen, setAivaOpen] = useState(false);
 
-  const navigate = (page: string) => {
+  const navigate = (page: string, param?: string) => {
     setActivePage(page);
+    setPageParam(param);
     window.history.pushState({ page }, "", pageToSlug(page));
   };
 
@@ -57,7 +59,7 @@ export default function App() {
         <Sidebar activePage={activePage} onNav={navigate} onAiva={() => setAivaOpen(true)} />
         <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
           <Header />
-          <PageContent page={activePage} onNav={navigate} />
+          <PageContent page={activePage} pageParam={pageParam} onNav={navigate} />
         </div>
       </div>
       <AivaPanel open={aivaOpen} onClose={() => setAivaOpen(false)} />

@@ -1,13 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { createPortal } from "react-dom";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Autocomplete from "@mui/material/Autocomplete";
-import Chip from "@mui/material/Chip";
+import { NewTicketDrawer } from "../components/NewTicketDrawer";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
@@ -23,8 +17,6 @@ import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
 import SupportAgentOutlinedIcon from "@mui/icons-material/SupportAgentOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PhoneOutlinedIcon from "@mui/icons-material/PhoneOutlined";
 import AddIcCallOutlinedIcon from "@mui/icons-material/AddIcCallOutlined";
@@ -381,55 +373,27 @@ function CardFooter({ label, stat1, stat2, stat3, onClick }: { label: string; st
   );
 }
 
-/* ── Hero banner — compact two-column strip ──────────────── */
-/* ── NWN Brand tokens — sourced from official Style Guide ── */
-const NWN_NAVY   = "#002855";   // Pantone 295 C  — primary navy
-const NWN_ORANGE = "#FF6900";   // Pantone 1505 C — Blaze Orange
-const NWN_CYAN   = "#00A3E0";   // Pantone 299 C  — NWN Offering/Connected Experience
-const NWN_DKGRAY = "#333F48";   // Pantone 432 C  — dark warm gray
-
-function ContactTooltip({ icon: Icon, label, value, onHover, hovered, darkBg }: {
+/* ── Hero banner — flat MD3 surface, brand navy, no gradients ── */
+function ContactTooltip({ icon: Icon, label, value, onHover, hovered }: {
   icon: React.ComponentType<{ style?: React.CSSProperties }>;
   label: string; value: string;
   onHover: (v: boolean) => void;
   hovered: boolean;
-  darkBg?: boolean;
 }) {
-  const iconAlpha = NWN_ORANGE;
-  const ringColor = darkBg ? "rgba(255,105,0,0.30)" : "rgba(255,105,0,0.22)";
-  const hoverBg   = darkBg ? "rgba(255,105,0,0.20)" : "rgba(255,105,0,0.10)";
-  const restBg    = darkBg ? "rgba(255,105,0,0.12)" : "rgba(255,105,0,0.06)";
   return (
-    <div style={{ position: "relative" }}>
+    <div className="relative">
       <a href={label === "email" ? `mailto:${value}` : `tel:+17814346800`}
-        style={{
-          width: 28, height: 28, borderRadius: "50%",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          textDecoration: "none",
-          backgroundColor: hovered ? hoverBg : restBg,
-          border: `1px solid ${ringColor}`,
-          transition: "background-color 0.15s, transform 0.15s",
-          transform: hovered ? "scale(1.08)" : "scale(1)",
-        }}
+        className="flex items-center justify-center rounded-full w-8 h-8 bg-primary-foreground/12 hover:bg-primary-foreground/20 transition-colors duration-150"
         onMouseEnter={() => onHover(true)}
         onMouseLeave={() => onHover(false)}
       >
-        <Icon style={{ fontSize: 13, color: iconAlpha }} />
+        <Icon style={{ fontSize: 15 }} className="text-primary-foreground" />
       </a>
       {hovered && (
-        <div style={{
-          position: "absolute", top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)",
-          backgroundColor: "#FFFFFF", color: NWN_NAVY,
-          borderRadius: 8, padding: "6px 10px",
-          fontSize: 11, fontWeight: 600, whiteSpace: "nowrap",
-          boxShadow: "0 4px 16px rgba(0,0,0,0.16)", pointerEvents: "none", zIndex: 9999,
-        }}>
-          <div style={{ position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)",
-            width: 0, height: 0,
-            borderLeft: "5px solid transparent", borderRight: "5px solid transparent",
-            borderBottom: "5px solid #FFFFFF" }} />
-          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-            <Icon style={{ fontSize: 12, color: NWN_ORANGE }} />
+        <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 rounded-lg bg-card text-card-foreground text-xs font-semibold whitespace-nowrap px-2.5 py-1.5 shadow-lg pointer-events-none z-50">
+          <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-card" />
+          <div className="flex items-center gap-1.5">
+            <Icon style={{ fontSize: 13 }} />
             {value}
           </div>
         </div>
@@ -441,262 +405,31 @@ function ContactTooltip({ icon: Icon, label, value, onHover, hovered, darkBg }: 
 function HeroBanner({ onNewCase }: { onNewCase: () => void }) {
   const [emailTip, setEmailTip] = useState(false);
   const [phoneTip, setPhoneTip] = useState(false);
-  const [variant, setVariant] = useState<1|2|3|4|5>(1);
-
-  const activeCount  = allTickets.filter(t => t.status === "In Progress").length;
-  const pendingCount = allTickets.filter(t => t.status === "Pending" || t.status === "Approved").length;
-
-  /* ── Shared CTAs ─────────────────────────────────────── */
-  const OrangeCTA = ({ label = "New Case" }: { label?: string }) => (
-    <button type="button" onClick={onNewCase}
-      className="flex items-center gap-1.5 rounded-full border-0 cursor-pointer flex-shrink-0 transition-all duration-150"
-      style={{
-        backgroundColor: "#2563EB", color: "#FFFFFF",
-        padding: "7px 18px", fontSize: 12, fontWeight: 700,
-        boxShadow: "0 2px 12px rgba(37,99,235,0.35)", whiteSpace: "nowrap",
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; e.currentTarget.style.transform = "scale(1.02)"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}
-    >
-      <AddOutlinedIcon style={{ fontSize: 14 }} />{label}
-    </button>
-  );
-
-  /* ── Contact icons ───────────────────────────────────── */
-  const DarkContactIcons = () => (
-    <div className="flex items-center gap-1.5">
-      <ContactTooltip icon={EmailOutlinedIcon} label="email" value="itsupport@nwncarousel.com" hovered={emailTip} onHover={setEmailTip} darkBg />
-      <ContactTooltip icon={PhoneOutlinedIcon} label="phone" value="(781) 434-6800"             hovered={phoneTip} onHover={setPhoneTip} darkBg />
-    </div>
-  );
-
-  const LightContactIcons = () => (
-    <div className="flex items-center gap-1.5">
-      <ContactTooltip icon={EmailOutlinedIcon} label="email" value="itsupport@nwncarousel.com" hovered={emailTip} onHover={setEmailTip} darkBg={false} />
-      <ContactTooltip icon={PhoneOutlinedIcon} label="phone" value="(781) 434-6800"             hovered={phoneTip} onHover={setPhoneTip} darkBg={false} />
-    </div>
-  );
-
-  /* ── Variant selector ──────────────────────────────────── */
-  const VARIANTS: { id: 1|2|3|4|5; name: string }[] = [
-    { id: 1, name: "NWN Navy"      },
-    { id: 2, name: "Blaze Orange"  },
-    { id: 3, name: "White Surface" },
-    { id: 4, name: "Connected"     },
-    { id: 5, name: "Split Brand"   },
-  ];
 
   return (
     <div className="mb-6">
-      {/* ── Dev variant switcher — remove before ship ── */}
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Banner:</span>
-        {VARIANTS.map(v => (
-          <button key={v.id} type="button" onClick={() => setVariant(v.id)}
-            className="border-0 cursor-pointer rounded-full transition-all duration-150"
-            style={{
-              fontSize: 10, fontWeight: 600, padding: "3px 10px",
-              backgroundColor: variant === v.id ? "#2563EB" : "transparent",
-              color: variant === v.id ? "#FFFFFF" : "var(--muted-foreground)",
-              outline: variant === v.id ? "none" : `1px solid var(--border)`,
-            }}
-          >{v.name}</button>
-        ))}
+      <div className="flex flex-col gap-4 rounded-2xl bg-primary px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6">
+        <div className="min-w-0">
+          <h1 className="text-primary-foreground font-bold tracking-tight leading-tight text-xl sm:text-2xl">
+            {greeting()}, Nitin
+          </h1>
+          <p className="text-primary-foreground/65 text-sm leading-relaxed mt-1">
+            Access your knowledge base, request services, and manage support tickets.
+          </p>
+        </div>
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-1.5">
+            <ContactTooltip icon={EmailOutlinedIcon} label="email" value="itsupport@nwncarousel.com" hovered={emailTip} onHover={setEmailTip} />
+            <ContactTooltip icon={PhoneOutlinedIcon} label="phone" value="(781) 434-6800"             hovered={phoneTip} onHover={setPhoneTip} />
+          </div>
+          <div className="w-px h-6 bg-primary-foreground/15" />
+          <button type="button" onClick={onNewCase}
+            className="flex items-center gap-1.5 rounded-full border-0 cursor-pointer flex-shrink-0 bg-primary-foreground text-primary px-5 py-2.5 text-sm font-semibold whitespace-nowrap hover:opacity-90 transition-opacity duration-150"
+          >
+            <AddOutlinedIcon style={{ fontSize: 16 }} />New Case
+          </button>
+        </div>
       </div>
-
-      {/* ══════════════════════════════════════════════════════
-          V1 — NWN Navy
-          Brand Guide Pairing 3: White + Orange on Navy
-          Best for: standard dashboards, universal theming
-         ══════════════════════════════════════════════════════ */}
-      {variant === 1 && (
-        <div className="relative rounded-2xl flex items-center justify-between gap-4 px-8 py-4"
-          style={{ backgroundColor: NWN_NAVY, minHeight: 76, boxShadow: `inset 4px 0 0 ${NWN_ORANGE}` }}>
-          {/* Top-right orange radial glow */}
-          <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
-            background: `radial-gradient(ellipse 200px 140px at 96% -20%, ${NWN_ORANGE}2A 0%, transparent 65%)`,
-          }} />
-          <div className="min-w-0 flex-1 pl-3">
-            <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_ORANGE }}>
-              Innovation Delivered
-            </p>
-            <h1 className="text-white font-bold tracking-tight leading-tight" style={{ fontSize: 22 }}>
-              {greeting()}, Nitin
-            </h1>
-            <p className="text-[11px] leading-relaxed mt-0.5" style={{ color: "rgba(255,255,255,0.50)" }}>
-              Access your knowledge base, request services, and manage support tickets.
-            </p>
-          </div>
-          <div className="flex items-center gap-2.5 flex-shrink-0">
-            <DarkContactIcons />
-            <div className="w-px h-5" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
-            <OrangeCTA />
-          </div>
-        </div>
-      )}
-
-      {/* ══════════════════════════════════════════════════════
-          V2 — Blaze Orange (Subtle)
-          Card white · orange left rail + glow · navy text
-          Best for: readable, brand-present, airy feel
-         ══════════════════════════════════════════════════════ */}
-      {variant === 2 && (
-        <div className="relative rounded-2xl flex items-center justify-between gap-4 px-8 py-4"
-          style={{
-            backgroundColor: "var(--card)",
-            boxShadow: `inset 4px 0 0 ${NWN_ORANGE}, 0 2px 8px rgba(0,40,85,0.06)`,
-            minHeight: 76,
-          }}>
-          {/* Soft orange radial wash — top right */}
-          <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
-            background: "radial-gradient(ellipse 220px 110px at 100% 0%, rgba(255,105,0,0.07) 0%, transparent 70%)",
-          }} />
-          <div className="min-w-0 flex-1 pl-3">
-            <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_ORANGE }}>
-              Innovation Delivered
-            </p>
-            <h1 className="text-foreground font-bold tracking-tight leading-tight" style={{ fontSize: 22 }}>
-              {greeting()}, Nitin
-            </h1>
-            <p className="text-[11px] leading-relaxed mt-0.5 text-foreground/60">
-              Access your knowledge base, request services, and manage support tickets.
-            </p>
-          </div>
-          <div className="flex items-center gap-2.5 flex-shrink-0">
-            <LightContactIcons />
-            <div className="w-px h-5 bg-border" />
-            <OrangeCTA />
-          </div>
-        </div>
-      )}
-
-      {/* ══════════════════════════════════════════════════════
-          V3 — White Surface
-          Brand Guide Pairing 1: Navy + Orange on White
-          Best for: light theme, editorial / minimal feel
-         ══════════════════════════════════════════════════════ */}
-      {variant === 3 && (
-        <div className="relative rounded-2xl flex items-center justify-between gap-4 px-8 py-4"
-          style={{
-            backgroundColor: "var(--card)",
-            border: "1px solid var(--border)",
-            borderTop: `3px solid ${NWN_NAVY}`,
-            boxShadow: "0 2px 10px rgba(0,40,85,0.07)",
-            minHeight: 76,
-          }}>
-          {/* Orange corner flag */}
-          <div className="absolute top-0 right-0 w-0 h-0 pointer-events-none" style={{
-            borderTop: `36px solid ${NWN_ORANGE}`,
-            borderLeft: "36px solid transparent",
-            borderRadius: "0 14px 0 0",
-          }} />
-          <div className="min-w-0 flex-1">
-            <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_ORANGE }}>
-              Innovation Delivered
-            </p>
-            <h1 className="text-foreground font-bold tracking-tight leading-tight" style={{ fontSize: 22 }}>
-              {greeting()}, Nitin
-            </h1>
-            <p className="text-[11px] leading-relaxed mt-0.5 text-foreground/60">
-              Access your knowledge base, request services, and manage support tickets.
-            </p>
-          </div>
-          <div className="flex items-center gap-2.5 flex-shrink-0">
-            <LightContactIcons />
-            <div className="w-px h-5 bg-border" />
-            <OrangeCTA />
-          </div>
-        </div>
-      )}
-
-      {/* ══════════════════════════════════════════════════════
-          V4 — Connected Experience
-          NWN Offering Cyan · data-rich · KPI strip on Navy
-          Best for: power users, operations dashboards
-         ══════════════════════════════════════════════════════ */}
-      {variant === 4 && (
-        <div className="relative rounded-2xl px-8 py-4"
-          style={{ backgroundColor: NWN_NAVY, minHeight: 76, boxShadow: `inset 4px 0 0 ${NWN_CYAN}` }}>
-          {/* Cyan glow — bottom right */}
-          <div className="absolute inset-0 pointer-events-none rounded-2xl" style={{
-            background: `radial-gradient(ellipse 180px 130px at 100% 130%, ${NWN_CYAN}22 0%, transparent 65%)`,
-          }} />
-          <div className="flex items-center justify-between gap-4">
-            <div className="min-w-0 flex-1 pl-3">
-              <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_CYAN }}>
-                Connected Experience
-              </p>
-              <h1 className="text-white font-bold tracking-tight leading-tight" style={{ fontSize: 22 }}>
-                {greeting()}, Nitin
-              </h1>
-              <div className="flex items-center gap-5 mt-1.5">
-                {[
-                  { label: "Active",      value: activeCount,  color: NWN_CYAN   },
-                  { label: "Pending",     value: pendingCount, color: NWN_ORANGE },
-                  { label: "KB Articles", value: "13.5K",      color: "#6EE7B7"  },
-                ].map(({ label, value, color }) => (
-                  <div key={label} className="flex items-baseline gap-1.5">
-                    <span className="font-bold leading-none" style={{ fontSize: 15, color }}>{value}</span>
-                    <span className="font-medium leading-none" style={{ fontSize: 10, color: "rgba(255,255,255,0.40)" }}>{label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex items-center gap-2.5 flex-shrink-0">
-              <DarkContactIcons />
-              <div className="w-px h-5" style={{ backgroundColor: "rgba(255,255,255,0.15)" }} />
-              <OrangeCTA />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ══════════════════════════════════════════════════════
-          V5 — Split Brand Editorial
-          Navy left / Orange right · brand duality
-          Best for: welcome screens, brand-forward moments
-         ══════════════════════════════════════════════════════ */}
-      {variant === 5 && (
-        <div className="relative rounded-2xl overflow-hidden flex" style={{ minHeight: 88 }}>
-          {/* Left: NWN Navy */}
-          <div className="flex-1 flex items-center px-8 py-5" style={{ backgroundColor: NWN_NAVY }}>
-            <div className="min-w-0">
-              <p className="text-[10px] font-bold tracking-[0.18em] uppercase mb-1" style={{ color: NWN_ORANGE }}>
-                Innovation Delivered
-              </p>
-              <h1 className="text-white font-bold tracking-tight leading-tight" style={{ fontSize: "clamp(18px, 2.2vw, 26px)" }}>
-                {greeting()}, Nitin
-              </h1>
-              <p className="text-[11px] leading-relaxed mt-0.5" style={{ color: "rgba(255,255,255,0.45)", maxWidth: 320 }}>
-                Your experience management portal — powered by NWN.
-              </p>
-            </div>
-          </div>
-          {/* Angled transition — navy-to-orange */}
-          <div className="absolute top-0 bottom-0 pointer-events-none" style={{
-            left: "58%", width: 48,
-            background: `linear-gradient(to right, ${NWN_NAVY} 0%, ${NWN_ORANGE} 100%)`,
-            clipPath: "polygon(0 0, 100% 0, 60% 100%, 0% 100%)",
-          }} />
-          {/* Right: Blaze Orange */}
-          <div className="flex flex-col items-center justify-center gap-3 px-8 py-5 flex-shrink-0"
-            style={{ backgroundColor: NWN_ORANGE, minWidth: 190 }}>
-            <DarkContactIcons />
-            <button type="button" onClick={onNewCase}
-              className="flex items-center gap-1.5 rounded-full border-0 cursor-pointer transition-all duration-150 flex-shrink-0"
-              style={{
-                backgroundColor: "#2563EB", color: "#FFFFFF",
-                padding: "7px 18px", fontSize: 12, fontWeight: 800,
-                boxShadow: "0 2px 12px rgba(37,99,235,0.35)", whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.03)"; e.currentTarget.style.opacity = "0.90"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.opacity = "1"; }}
-            >
-              <AddOutlinedIcon style={{ fontSize: 14 }} />New Case
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -1299,7 +1032,7 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
 }
 
 /* ── Main page ───────────────────────────────────────────── */
-export function HomePage({ onNav }: { onNav?: (p: string) => void }) {
+export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => void }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { theme } = useTheme();
   const dark = theme === "dark";
@@ -1444,7 +1177,7 @@ export function HomePage({ onNav }: { onNav?: (p: string) => void }) {
               </div>
               <div className="flex flex-col flex-1">
                 {reportLinks.map(({ icon: Icon, label, color, bg }, i) => (
-                  <button key={label} type="button" onClick={() => onNav?.("Reports")}
+                  <button key={label} type="button" onClick={() => onNav?.("Reports", label)}
                     className="w-full flex items-center gap-3 border-0 bg-transparent text-left cursor-pointer transition-colors duration-150"
                     style={{ padding: "11px 20px" }}
                     onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.04)"; }}
@@ -2122,327 +1855,6 @@ export function ServiceCatalogPage({ onNav }: { onNav?: (p: string) => void }) {
   );
 }
 
-/* ── New Case Drawer ─────────────────────────────────────── */
-const CASE_TYPES    = ["Issue", "Request", "Question", "Problem"];
-const URGENCIES     = ["1 - Critical", "2 - High", "3 - Moderate", "4 - Low"];
-const LOCATIONS     = ["None", "HQ - Boston", "Remote", "Branch Office"];
-const ASSIGN_GROUPS = ["None", "IT Support", "Network Team", "Security"];
-const SERVICES      = ["Managed Services", "Cloud Services", "Contact Center", "Unified Communications"];
-const ASSETS        = ["None", "Laptop - NJ001", "Server - SRV01", "Phone - PH001"];
-
-const menuProps = {
-  PaperProps: {
-    sx: {
-      backgroundColor: "var(--card)",
-      boxShadow: "0 8px 24px rgba(0,40,85,0.12)",
-      borderRadius: "10px",
-      "& .MuiMenuItem-root": {
-        fontSize: 14, fontFamily: "var(--font-body)", color: "var(--foreground)",
-        "&:hover": { backgroundColor: "var(--state-hover)" },
-        "&.Mui-selected": { backgroundColor: "var(--primary-container)", color: "var(--primary)" },
-        "&.Mui-selected:hover": { backgroundColor: "var(--primary-container)" },
-      },
-    },
-  },
-};
-
-function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [callbackPhone,    setCallbackPhone]    = useState("");
-  const [purchasedService, setPurchasedService] = useState("");
-  const [asset,            setAsset]            = useState("None");
-  const [caseType,         setCaseType]         = useState("Issue");
-  const [urgency,          setUrgency]          = useState("");
-  const [affectedLocation, setAffectedLocation] = useState("None");
-  const [assignmentGroup,  setAssignmentGroup]  = useState("None");
-  const [subject,          setSubject]          = useState("");
-  const [description,      setDescription]      = useState("");
-  const [watchlistEmails,  setWatchlistEmails]  = useState<string[]>([]);
-  const [files,            setFiles]            = useState<File[]>([]);
-  const [dragOver,         setDragOver]         = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
-
-  const reset = () => {
-    setCallbackPhone(""); setPurchasedService(""); setAsset("None");
-    setCaseType("Issue"); setUrgency(""); setAffectedLocation("None");
-    setAssignmentGroup("None"); setSubject(""); setDescription("");
-    setWatchlistEmails([]); setFiles([]);
-  };
-
-  const handleClose = () => { reset(); onClose(); };
-
-  const fieldSx = {
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "8px",
-      fontSize: 14,
-      fontFamily: "var(--font-body)",
-      "& fieldset": { borderColor: "var(--border)" },
-      "&:hover fieldset": { borderColor: "var(--foreground)" },
-      "&.Mui-focused fieldset": { borderColor: "var(--primary)", borderWidth: "2px" },
-      "&.Mui-disabled": { opacity: 0.5 },
-    },
-    "& .MuiInputLabel-root": {
-      fontFamily: "var(--font-body)", fontSize: 14, color: "var(--muted-foreground)",
-      "&.Mui-focused": { color: "var(--primary)" },
-      "&.Mui-disabled": { color: "var(--muted-foreground)" },
-    },
-    "& .MuiFormLabel-asterisk": { color: "#C2410C" },
-    "& .MuiInputBase-input": {
-      color: "var(--foreground)",
-      "&.Mui-disabled": { WebkitTextFillColor: "var(--muted-foreground)" },
-    },
-    "& .MuiSelect-icon": { color: "var(--muted-foreground)" },
-    "& .MuiFormHelperText-root": {
-      fontFamily: "var(--font-body)", fontSize: 11, color: "var(--muted-foreground)", margin: "4px 0 0",
-    },
-  };
-
-  /* Section label + divider — no icons */
-  const SectionHeader = ({ title, first }: { title: string; first?: boolean }) => (
-    <div style={{ marginTop: first ? 20 : 0 }}>
-      {!first && <div style={{ height: 1, backgroundColor: "var(--border)", margin: "24px 0" }} />}
-      <span style={{
-        display: "block",
-        fontFamily: "var(--font-heading)", fontSize: 11, fontWeight: 700,
-        color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em",
-        marginBottom: 12,
-      }}>
-        {title}
-      </span>
-    </div>
-  );
-
-  return (
-    <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 z-40 transition-opacity duration-300"
-        style={{ backgroundColor: "rgba(0,0,0,0.32)", opacity: open ? 1 : 0, pointerEvents: open ? "auto" : "none" }}
-        onClick={handleClose}
-        aria-hidden="true"
-      />
-
-      {/* Drawer panel */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="New Case"
-        className="fixed top-0 right-0 z-50 h-full flex flex-col transition-transform duration-300 ease-out"
-        style={{
-          width: 680,
-          maxWidth: "95vw",
-          backgroundColor: "var(--card)",
-          boxShadow: "-8px 0 32px rgba(0,40,85,0.14)",
-          transform: open ? "translateX(0)" : "translateX(100%)",
-        }}
-      >
-        {/* Header */}
-        <div className="flex-shrink-0 px-6 pt-5 pb-4" style={{ borderBottom: "1px solid var(--border)" }}>
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h2 style={{ fontFamily: "var(--font-heading)", fontSize: 20, fontWeight: 700, color: "var(--foreground)", letterSpacing: "-0.02em", lineHeight: 1.2 }}>
-                New Case
-              </h2>
-              <p style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 3 }}>
-                Please provide the following details to help us assist you at the earliest.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={handleClose}
-              aria-label="Close drawer"
-              className="flex items-center justify-center rounded-full border-0 cursor-pointer transition-colors duration-150 flex-shrink-0"
-              style={{ width: 36, height: 36, backgroundColor: "var(--muted)", color: "var(--muted-foreground)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--state-pressed)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "var(--muted)"; }}
-            >
-              <CloseOutlinedIcon style={{ fontSize: 18 }} />
-            </button>
-          </div>
-        </div>
-
-        {/* Scrollable form body */}
-        <div className="flex-1 overflow-y-auto px-6 pb-6">
-
-          {/* ── Contact Information ───────────────────────── */}
-          <SectionHeader title="Contact Information" first />
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <div className="grid grid-cols-2" style={{ gap: 12 }}>
-              <TextField label="Contact" value="Nitin Jaryal" disabled size="small" fullWidth sx={fieldSx} />
-              <TextField
-                label="Callback #" required size="small" fullWidth
-                value={callbackPhone} onChange={(e) => setCallbackPhone(e.target.value)}
-                placeholder="Enter phone number" sx={fieldSx}
-              />
-            </div>
-            <div className="grid grid-cols-2" style={{ gap: 12 }}>
-              <FormControl required size="small" fullWidth sx={fieldSx}>
-                <InputLabel>My Purchased Service</InputLabel>
-                <Select value={purchasedService} onChange={(e) => setPurchasedService(e.target.value as string)} label="My Purchased Service" MenuProps={menuProps}>
-                  <MenuItem value=""><em>-- Select --</em></MenuItem>
-                  {SERVICES.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
-                </Select>
-              </FormControl>
-              <FormControl size="small" fullWidth sx={fieldSx}>
-                <InputLabel>Asset</InputLabel>
-                <Select value={asset} onChange={(e) => setAsset(e.target.value as string)} label="Asset" MenuProps={menuProps}>
-                  {ASSETS.map((a) => <MenuItem key={a} value={a}>{a === "None" ? "-- None --" : a}</MenuItem>)}
-                </Select>
-              </FormControl>
-            </div>
-          </div>
-
-          {/* ── Priority & Classification ─────────────────── */}
-          <SectionHeader title="Priority & Classification" />
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <div className="grid grid-cols-2" style={{ gap: 12 }}>
-              <FormControl required size="small" fullWidth sx={fieldSx}>
-                <InputLabel>Case Type</InputLabel>
-                <Select value={caseType} onChange={(e) => setCaseType(e.target.value as string)} label="Case Type" MenuProps={menuProps}>
-                  {CASE_TYPES.map((t) => <MenuItem key={t} value={t}>{t}</MenuItem>)}
-                </Select>
-              </FormControl>
-              <FormControl required size="small" fullWidth sx={fieldSx}>
-                <InputLabel>Urgency</InputLabel>
-                <Select value={urgency} onChange={(e) => setUrgency(e.target.value as string)} label="Urgency" MenuProps={menuProps}>
-                  <MenuItem value=""><em>-- Select --</em></MenuItem>
-                  {URGENCIES.map((u) => <MenuItem key={u} value={u}>{u}</MenuItem>)}
-                </Select>
-              </FormControl>
-            </div>
-            <div className="grid grid-cols-2" style={{ gap: 12 }}>
-              <FormControl size="small" fullWidth sx={fieldSx}>
-                <InputLabel>Affected Location</InputLabel>
-                <Select value={affectedLocation} onChange={(e) => setAffectedLocation(e.target.value as string)} label="Affected Location" MenuProps={menuProps}>
-                  {LOCATIONS.map((l) => <MenuItem key={l} value={l}>{l === "None" ? "-- None --" : l}</MenuItem>)}
-                </Select>
-              </FormControl>
-              <FormControl size="small" fullWidth sx={fieldSx}>
-                <InputLabel>Assignment Group</InputLabel>
-                <Select value={assignmentGroup} onChange={(e) => setAssignmentGroup(e.target.value as string)} label="Assignment Group" MenuProps={menuProps}>
-                  {ASSIGN_GROUPS.map((g) => <MenuItem key={g} value={g}>{g === "None" ? "-- None --" : g}</MenuItem>)}
-                </Select>
-              </FormControl>
-            </div>
-          </div>
-
-          {/* ── Case Details ──────────────────────────────── */}
-          <SectionHeader title="Case Details" />
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <TextField
-              label="Subject" required fullWidth size="small"
-              value={subject} onChange={(e) => setSubject(e.target.value.slice(0, 80))}
-              placeholder="Brief summary of your issue"
-              helperText={`${subject.length}/80 characters`}
-              sx={fieldSx}
-            />
-            <TextField
-              label="Description" required fullWidth multiline rows={4}
-              value={description} onChange={(e) => setDescription(e.target.value)}
-              placeholder="Please provide as much detail as possible"
-              sx={fieldSx}
-            />
-            {/* Upload */}
-            <div>
-              <span style={{ display: "block", fontSize: 12, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--foreground)", marginBottom: 8 }}>
-                Attachments
-              </span>
-              <input ref={fileRef} type="file" multiple className="hidden" accept=".pdf,.png,.jpg,.doc,.docx,.xls,.xlsx"
-                onChange={(e) => { if (e.target.files) setFiles(Array.from(e.target.files)); }} />
-              <div
-                onClick={() => fileRef.current?.click()}
-                onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-                onDragLeave={() => setDragOver(false)}
-                onDrop={(e) => { e.preventDefault(); setDragOver(false); if (e.dataTransfer.files) setFiles(Array.from(e.dataTransfer.files)); }}
-                className="flex flex-col items-center justify-center cursor-pointer transition-all duration-150"
-                style={{
-                  border: `1.5px dashed ${dragOver ? "var(--primary)" : "var(--border)"}`,
-                  borderRadius: 10, padding: "24px 20px",
-                  backgroundColor: dragOver ? "var(--primary-container)" : "var(--muted)",
-                }}
-              >
-                <span style={{ fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)", color: "var(--foreground)" }}>
-                  {files.length > 0 ? files.map((f) => f.name).join(", ") : "Click or drag files here"}
-                </span>
-                <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 4 }}>
-                  PDF, PNG, JPG, DOC, XLS — up to 50 MB each
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* ── Watchlist ─────────────────────────────────── */}
-          <SectionHeader title="Watchlist" />
-          <Autocomplete
-            multiple
-            freeSolo
-            options={[]}
-            value={watchlistEmails}
-            onChange={(_, newValue) => setWatchlistEmails(newValue as string[])}
-            renderTags={(value, getTagProps) =>
-              value.map((email, index) => (
-                <Chip
-                  key={email}
-                  label={email}
-                  size="small"
-                  {...getTagProps({ index })}
-                  sx={{
-                    backgroundColor: "var(--primary-container)",
-                    color: "var(--primary)",
-                    fontFamily: "var(--font-body)",
-                    fontSize: 12,
-                    fontWeight: 500,
-                    borderRadius: "6px",
-                    "& .MuiChip-deleteIcon": { color: "var(--primary)", opacity: 0.7, "&:hover": { opacity: 1 } },
-                  }}
-                />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Add Email Addresses"
-                placeholder={watchlistEmails.length === 0 ? "Type an email and press Enter" : ""}
-                helperText="Type an email address and press Enter to add"
-                size="small"
-                sx={fieldSx}
-              />
-            )}
-          />
-
-        </div>
-
-        {/* Footer */}
-        <div className="flex-shrink-0 flex items-center px-6 py-4" style={{ borderTop: "1px solid var(--border)" }}>
-          <span style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>
-            <span style={{ color: "#C2410C" }}>*</span> Required fields
-          </span>
-          <div className="flex items-center gap-3 ml-auto">
-            <button
-              type="button" onClick={handleClose}
-              className="border-0 bg-transparent cursor-pointer transition-colors duration-150"
-              style={{ fontSize: 14, fontWeight: 600, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", padding: "10px 16px" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--foreground)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--muted-foreground)"; }}
-            >
-              Cancel
-            </button>
-            <button
-              type="button" onClick={handleClose}
-              className="flex items-center gap-2 cursor-pointer border-0 transition-all duration-150"
-              style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderRadius: 9999, padding: "10px 22px", fontSize: 14, fontWeight: 600, fontFamily: "var(--font-body)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-            >
-              <SendOutlinedIcon style={{ fontSize: 16 }} />
-              Submit Case
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
-
 /* ── Row actions kebab menu ──────────────────────────────── */
 function RowActionsMenu() {
   const [open, setOpen] = useState(false);
@@ -2781,7 +2193,7 @@ const reportTableHeaders: Record<string, [string, string, string, string]> = {
   "DID Inventory":    ["DID",        "Assignment", "Status",  "Type"    ],
 };
 
-function ReportDetailView({ report, onBack, onNav }: { report: ReportType; onBack: () => void; onNav?: (p: string) => void }) {
+function ReportDetailView({ report, onSelect, onNav }: { report: ReportType; onSelect: (r: ReportType) => void; onNav?: (p: string) => void }) {
   const kpis    = reportKpis[report.label]    ?? [];
   const rows    = reportTableRows[report.label] ?? [];
   const headers = reportTableHeaders[report.label] ?? ["Col 1","Col 2","Col 3","Col 4"];
@@ -2789,17 +2201,42 @@ function ReportDetailView({ report, onBack, onNav }: { report: ReportType; onBac
   return (
     <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
       <PageHeader
-        title={report.label}
-        subtitle="Live data updated daily from your managed services."
-        breadcrumb={[
-          { label: "Home", page: "Home" },
-          { label: "Reports", page: "Reports" },
-          { label: report.label },
-        ]}
-        onNav={(p) => { if (p === "Reports") onBack(); else onNav?.(p); }}
+        title="Reports"
+        subtitle="View and analyze service reports across your managed environment."
+        breadcrumb={[{ label: "Home", page: "Home" }, { label: "Reports" }]}
+        onNav={onNav}
         transparent
       />
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-10" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+
+      {/* MD3 tab bar — switch report type without leaving the page */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-end gap-0 overflow-x-auto" style={{ borderBottom: "1px solid var(--border)" }}>
+          {reportLinks.map((r) => {
+            const active = r.label === report.label;
+            return (
+              <button
+                key={r.label}
+                type="button"
+                onClick={() => onSelect(r)}
+                className="flex items-center gap-2 border-0 bg-transparent cursor-pointer transition-all duration-150 flex-shrink-0"
+                style={{
+                  padding: "13px 18px 11px",
+                  fontSize: 13, fontWeight: active ? 700 : 500,
+                  fontFamily: "var(--font-body)",
+                  color: active ? "var(--primary)" : "var(--muted-foreground)",
+                  borderBottom: active ? "2px solid var(--primary)" : "2px solid transparent",
+                  marginBottom: -1, whiteSpace: "nowrap",
+                }}
+              >
+                <r.icon style={{ fontSize: 16, color: active ? r.color : "var(--muted-foreground)" }} />
+                {r.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-5" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
         {/* KPI row */}
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
@@ -2879,72 +2316,15 @@ function ReportDetailView({ report, onBack, onNav }: { report: ReportType; onBac
           </div>
         </div>
 
-        {/* Back */}
-        <button type="button" onClick={onBack}
-          className="flex items-center gap-2 self-start"
-          style={{ border: 0, background: "none", cursor: "pointer", padding: 0, fontSize: 13, fontFamily: "var(--font-body)", color: "var(--primary)", fontWeight: 600 }}>
-          <ArrowBackIcon style={{ fontSize: 16 }} />
-          Back to Reports
-        </button>
       </div>
     </div>
   );
 }
 
-export function ReportsPage({ onNav }: { onNav?: (p: string) => void }) {
-  const [selected, setSelected] = useState<ReportType | null>(null);
-
-  if (selected) {
-    return <ReportDetailView report={selected} onBack={() => setSelected(null)} onNav={onNav} />;
-  }
-
-  return (
-    <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
-      <PageHeader
-        title="Reports"
-        subtitle="View and analyze service reports across your managed environment."
-        breadcrumb={[{ label: "Home", page: "Home" }, { label: "Reports" }]}
-        onNav={onNav}
-        transparent
-      />
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pb-10">
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-          {reportLinks.map((report) => {
-            const { icon: Icon, label, color, bg } = report;
-            return (
-              <button
-                key={label}
-                type="button"
-                onClick={() => setSelected(report)}
-                className="flex flex-col items-center justify-center gap-4 border-0 cursor-pointer rounded-2xl bg-card transition-all duration-200 text-center"
-                style={{ padding: "32px 20px 28px", border: "1px solid var(--border)", boxShadow: "0 2px 8px rgba(0,40,85,0.06)" }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = color;
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,40,85,0.10)`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--border)";
-                  e.currentTarget.style.transform = "none";
-                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,40,85,0.06)";
-                }}
-              >
-                <div style={{ width: 72, height: 72, borderRadius: "50%", backgroundColor: bg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Icon style={{ fontSize: 36, color }} />
-                </div>
-                <div>
-                  <p style={{ fontSize: 16, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--foreground)", lineHeight: 1.3 }}>
-                    {label}
-                  </p>
-                  <p style={{ fontSize: 12, fontFamily: "var(--font-body)", color: "var(--muted-foreground)", marginTop: 4 }}>
-                    View report →
-                  </p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+export function ReportsPage({ onNav, initialReport }: { onNav?: (p: string) => void; initialReport?: string }) {
+  const [selected, setSelected] = useState<ReportType>(
+    reportLinks.find((r) => r.label === initialReport) ?? reportLinks[0]
   );
+
+  return <ReportDetailView report={selected} onSelect={setSelected} onNav={onNav} />;
 }
