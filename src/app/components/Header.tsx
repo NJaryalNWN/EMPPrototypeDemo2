@@ -325,13 +325,20 @@ export function Header() {
     <>
       <header className="h-16 bg-card border-b border-border flex items-center px-6 flex-shrink-0 transition-colors duration-200" style={{ position: "relative" }}>
 
-        {/* ── Centered NWN logo ─────────────────────────────── */}
-        <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+        {/* ── Centered NWN logo + EMP application name ────────── */}
+        <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", display: "flex", alignItems: "center", gap: 10 }}>
           <img
             src={theme === "dark" ? nwnLogoDark : nwnLogo}
             alt="NWN"
             style={{ height: 30, width: "auto", display: "block" }}
           />
+          <div style={{ width: 1, height: 18, backgroundColor: "var(--border)" }} />
+          <span style={{
+            fontSize: 13, fontFamily: "var(--font-heading)", fontWeight: 700,
+            color: "var(--primary)", letterSpacing: "0.06em",
+          }}>
+            EMP
+          </span>
         </div>
 
         {/* Right side */}
