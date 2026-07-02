@@ -196,7 +196,7 @@ function CardHeader({
           {icon}
         </div>
         <div>
-          <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">
+          <h3 className="text-foreground">
             {title}
           </h3>
           <p className="text-muted-foreground mt-0.5 text-[11px] leading-snug">
@@ -405,11 +405,11 @@ function HeroBanner({ onNewCase }: { onNewCase: () => void }) {
     <div className="w-full bg-primary">
       <div className="max-w-[1440px] mx-auto flex flex-col gap-6 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-10 lg:px-8">
         <div className="min-w-0">
-          <h1 className="font-bold tracking-tight leading-tight text-3xl sm:text-4xl">
+          <h1 className="font-extrabold leading-tight text-3xl sm:text-[40px] tracking-tight sm:tracking-[-0.03em]">
             <span className="text-primary-foreground block">{greeting()}, Nitin</span>
             <span className="text-secondary block">need to create a ticket?</span>
           </h1>
-          <p className="text-primary-foreground/65 text-sm leading-relaxed mt-3 max-w-md">
+          <p className="text-body text-primary-foreground/65 mt-3 max-w-md">
             Open a ticket, reach the NWN support team directly, or jump straight into any part of your relationship with us.
           </p>
         </div>
@@ -1056,7 +1056,7 @@ export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => voi
                   <AssignmentTurnedInOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />
                 </div>
                 <div className="min-w-0">
-                  <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">My Cases</h3>
+                  <h3 className="text-foreground">My Cases</h3>
                   <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">Active cases</p>
                 </div>
                 <span className="hidden md:inline-block flex-shrink-0" style={{ width: 3, height: 3, borderRadius: "50%", backgroundColor: "var(--muted-foreground)" }} />
@@ -1119,7 +1119,7 @@ export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => voi
                   <ShoppingCartOutlinedIcon style={{ fontSize: 17, color: "#EA580C" }} />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">Service Catalog</h3>
+                  <h3 className="text-foreground">Service Catalog</h3>
                   <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">Request services</p>
                 </div>
               </div>

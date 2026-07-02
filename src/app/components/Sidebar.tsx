@@ -18,6 +18,7 @@ import DevicesIcon                from "@mui/icons-material/Devices";
 import SettingsOutlinedIcon       from "@mui/icons-material/SettingsOutlined";
 import SettingsIcon               from "@mui/icons-material/Settings";
 import OpenInNewIcon              from "@mui/icons-material/OpenInNew";
+import { cn } from "./ui/utils";
 
 type IconComp = React.ComponentType<{ style?: React.CSSProperties }>;
 
@@ -180,7 +181,7 @@ function getRailOwner(page: string): string {
   return "Home";
 }
 
-/* Inject M3 panel animation once */
+/* Inject M3 panel-entrance keyframes once (Tailwind has no built-in equivalent) */
 const ANIMATION_ID = "m3-panel-anim";
 if (typeof document !== "undefined" && !document.getElementById(ANIMATION_ID)) {
   const s = document.createElement("style");
@@ -203,39 +204,26 @@ function FloatingPanel({
 }) {
   return createPortal(
     <>
-      {/* Invisible hover bridge */}
+      {/* Invisible hover bridge — dynamic position, must stay inline */}
       <div
-        style={{ position: "fixed", zIndex: 9998, top: 0, left: panelLeft - 6, width: 6, height: "100vh", pointerEvents: "auto" }}
+        className="fixed z-[9998] top-0 h-screen"
+        style={{ left: panelLeft - 6, width: 6 }}
         onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
       />
 
       {/* Panel */}
       <div
-        style={{
-          position: "fixed", zIndex: 9999,
-          top: 0, left: panelLeft, width: 264, height: "100vh",
-          backgroundColor: "#FFFFFF",
-          borderLeft: "1.5px solid rgba(0,40,85,0.13)",
-          borderRight: "1px solid rgba(0,40,85,0.07)",
-          boxShadow: "6px 0 24px rgba(0,0,0,0.07)",
-          display: "flex", flexDirection: "column",
-          overflowY: "auto", scrollbarWidth: "thin",
-          scrollbarColor: "rgba(0,40,85,0.10) transparent",
-          animation: "m3PanelIn 0.18s cubic-bezier(0.2, 0, 0, 1) both",
-        }}
+        className="fixed z-[9999] top-0 h-screen w-[264px] flex flex-col overflow-y-auto bg-white [scrollbar-width:thin] [scrollbar-color:rgba(0,40,85,0.10)_transparent] border-l-[1.5px] border-l-[rgba(0,40,85,0.13)] border-r border-r-[rgba(0,40,85,0.07)] shadow-[6px_0_24px_rgba(0,0,0,0.07)] animate-[m3PanelIn_0.18s_cubic-bezier(0.2,0,0,1)_both]"
+        style={{ left: panelLeft }}
         onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
       >
         {/* Section title */}
-        <p style={{
-          margin: 0, padding: "24px 20px 12px",
-          fontSize: 11, fontFamily: "var(--font-heading)", fontWeight: 700,
-          color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.10em",
-        }}>
+        <p className="m-0 px-5 pt-6 pb-3 text-[11px] font-[var(--font-heading)] font-bold text-muted-foreground uppercase tracking-[0.10em]">
           {config.sectionTitle}
         </p>
 
         {/* Sections with optional group headings */}
-        <div style={{ padding: "0 10px 24px", flex: 1 }}>
+        <div className="flex-1 px-2.5 pb-6">
           {(() => {
             /* Placeholder sub-items within a rail often share the same
                navTarget (no distinct page built yet) — only the first
@@ -244,13 +232,12 @@ function FloatingPanel({
             let firstMatchClaimed = false;
             return config.sections!.map((section, si) => (
             <div key={si}>
-              {/* Group heading (ADMIN / MONITOR / REPORT) */}
+              {/* Group heading (CONTROL / MONITOR / REPORT) */}
               {section.heading && (
-                <p style={{
-                  margin: si === 0 ? "0 0 4px 10px" : "12px 0 4px 10px",
-                  fontSize: 10, fontFamily: "var(--font-heading)", fontWeight: 700,
-                  color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.12em",
-                }}>
+                <p className={cn(
+                  "text-[10px] font-[var(--font-heading)] font-bold text-muted-foreground uppercase tracking-[0.12em] ml-2.5 mb-1",
+                  si === 0 ? "mt-0" : "mt-3",
+                )}>
                   {section.heading}
                 </p>
               )}
@@ -268,27 +255,21 @@ function FloatingPanel({
                       if (item.isExternal) window.open(item.navTarget, "_blank", "noopener,noreferrer");
                       else onNav(item.navTarget);
                     }}
-                    style={{
-                      width: "100%", display: "flex", alignItems: "center", gap: 8,
-                      padding: "11px 14px", marginBottom: 1,
-                      borderRadius: 8,
-                      border: 0, cursor: "pointer", textAlign: "left",
-                      backgroundColor: isActive ? "var(--sidebar-active-container)" : "transparent",
-                      transition: "background-color 0.12s",
-                    }}
-                    onMouseEnter={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(0,40,85,0.05)"; }}
-                    onMouseLeave={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
+                    className={cn(
+                      "w-full flex items-center gap-2 mb-px px-3.5 py-2.5 rounded-lg border-0 text-left cursor-pointer transition-colors duration-150",
+                      isActive
+                        ? "bg-[var(--sidebar-active-container)]"
+                        : "bg-transparent hover:bg-[rgba(0,40,85,0.05)]",
+                    )}
                   >
-                    <span style={{
-                      flex: 1, fontSize: 14, fontFamily: "var(--font-body)",
-                      fontWeight: isActive ? 600 : 400,
-                      color: isActive ? "var(--sidebar-active-fg)" : "var(--foreground)",
-                      lineHeight: 1.4,
-                    }}>
+                    <span className={cn(
+                      "flex-1 text-sm font-[var(--font-body)] leading-[1.4]",
+                      isActive ? "font-semibold text-[var(--sidebar-active-fg)]" : "font-normal text-foreground",
+                    )}>
                       {item.label}
                     </span>
                     {item.isExternal && (
-                      <OpenInNewIcon style={{ fontSize: 13, color: "var(--muted-foreground)", flexShrink: 0, opacity: 0.6 }} />
+                      <OpenInNewIcon style={{ fontSize: 13 }} className="flex-shrink-0 text-muted-foreground opacity-60" />
                     )}
                   </button>
                 );
@@ -320,40 +301,26 @@ export function Sidebar({ activePage, onNav, onAiva }: SidebarProps) {
 
   return (
     <>
-      <aside style={{
-        width: 88, flexShrink: 0,
-        display: "flex", flexDirection: "column", alignItems: "center",
-        backgroundColor: "var(--sidebar)",
-        borderRight: "1.5px solid rgba(0,40,85,0.13)",
-      }}>
+      <aside className="w-[88px] flex-shrink-0 flex flex-col items-center bg-sidebar border-r-[1.5px] border-r-[rgba(0,40,85,0.13)]">
 
-        {/* ── Aiva icon — global AI assistant ──────────────── */}
-        <div style={{ width: "100%", display: "flex", justifyContent: "center", padding: "14px 0 12px" }}>
+        {/* ── Aiva icon — global AI assistant (offering color #00A3E0) ── */}
+        <div className="w-full flex justify-center pt-3.5 pb-3">
           <button
             type="button"
             aria-label="Open Aiva AI assistant"
             onClick={onAiva}
-            style={{
-              width: 48, height: 48, borderRadius: 14,
-              backgroundColor: "#00A3E0",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              border: 0, cursor: "pointer",
-              boxShadow: "0 2px 8px rgba(0,163,224,0.35)",
-              transition: "transform 0.15s, box-shadow 0.15s",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1.06)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 14px rgba(0,163,224,0.48)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(0,163,224,0.35)"; }}
+            className="w-12 h-12 rounded-[14px] flex items-center justify-center border-0 cursor-pointer bg-[#00A3E0] shadow-[0_2px_8px_rgba(0,163,224,0.35)] transition-[transform,box-shadow] duration-150 hover:scale-[1.06] hover:shadow-[0_4px_14px_rgba(0,163,224,0.48)]"
           >
-            <AutoAwesomeIcon style={{ fontSize: 22, color: "#FFFFFF" }} />
+            <AutoAwesomeIcon style={{ fontSize: 22 }} className="text-white" />
           </button>
         </div>
 
         {/* Divider below Aiva */}
-        <div style={{ width: 48, height: 1, backgroundColor: "var(--sidebar-border)", marginBottom: 8 }} />
+        <div className="w-12 h-px bg-sidebar-border mb-2" />
 
         {/* ── Nav items ─────────────────────────────────────── */}
         <nav
-          style={{ flex: 1, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", overflowY: "auto", scrollbarWidth: "none" }}
+          className="flex-1 w-full flex flex-col items-center overflow-y-auto [scrollbar-width:none]"
           aria-label="Main navigation"
         >
           {navConfig.map((item) => {
@@ -374,44 +341,28 @@ export function Sidebar({ activePage, onNav, onAiva }: SidebarProps) {
                   if (item.sections?.length) setPanelLeft(e.currentTarget.getBoundingClientRect().right);
                 }}
                 onMouseLeave={() => { item.sections?.length ? scheduleHide() : setHovered(null); }}
-                style={{
-                  width: "100%", display: "flex", flexDirection: "column", alignItems: "center",
-                  gap: 3, paddingTop: 8, paddingBottom: 10,
-                  border: 0, background: "transparent", cursor: "pointer", outline: "none",
-                }}
+                className="w-full flex flex-col items-center gap-[3px] pt-2 pb-2.5 border-0 bg-transparent cursor-pointer outline-none"
               >
-                {/* Rounded-square indicator */}
-                <div style={{
-                  width: 44, height: 44, borderRadius: 14,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  backgroundColor: isActive
-                    ? "var(--sidebar-active-container)"
-                    : isHovered ? "var(--sidebar-hover)" : "transparent",
-                  transition: "background-color 0.15s",
-                }}>
+                {/* Rounded-square indicator — MD3 state layer: neutral on hover, brand on active */}
+                <div className={cn(
+                  "w-11 h-11 rounded-[14px] flex items-center justify-center transition-colors duration-150",
+                  isActive ? "bg-[var(--sidebar-active-container)]" : isHovered ? "bg-[var(--sidebar-hover)]" : "bg-transparent",
+                )}>
                   <Icon style={{
                     fontSize: 22,
                     color: isActive
                       ? "var(--sidebar-active-fg)"
                       : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-                    transition: "color 0.12s",
                   }} />
                 </div>
 
                 {/* label — fixed 2-line height keeps all items uniform */}
-                <span style={{
-                  display: "block",
-                  fontSize: 10, fontFamily: "var(--font-body)", fontWeight: isActive ? 700 : 500,
-                  color: isActive
-                    ? "var(--sidebar-active-fg)"
-                    : isHovered ? "var(--sidebar-hover-fg)" : "var(--sidebar-icon)",
-                  textAlign: "center", lineHeight: 1.3,
-                  width: 72,
-                  height: 26,
-                  overflow: "hidden",
-                  wordBreak: "break-word",
-                  transition: "color 0.12s",
-                }}>
+                <span className={cn(
+                  "block w-[72px] h-[26px] text-center text-[10px] font-[var(--font-body)] leading-[1.3] overflow-hidden break-words transition-colors duration-150",
+                  isActive
+                    ? "font-bold text-[var(--sidebar-active-fg)]"
+                    : isHovered ? "font-medium text-[var(--sidebar-hover-fg)]" : "font-medium text-[var(--sidebar-icon)]",
+                )}>
                   {item.label}
                 </span>
               </button>
