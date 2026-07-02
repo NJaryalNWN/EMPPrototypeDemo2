@@ -973,51 +973,56 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       aria-label={`${ticket.title} — ${s.label}`}
-      className="w-full flex items-center gap-3 border-0 text-left cursor-pointer transition-colors duration-150"
+      className="w-full border-0 text-left cursor-pointer transition-colors duration-150"
       style={{
-        padding: "10px 16px",
+        padding: "10px 16px 0",
         backgroundColor: hov ? "rgba(0,0,0,0.04)" : "var(--card)",
-        borderBottom: isLast ? "none" : "1px solid var(--border)",
       }}
     >
-      {/* Content */}
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-1.5 mb-0.5">
-          <span style={{ fontSize: 10, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--muted-foreground)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
-            {ticket.category}
+      {/* Inset divider — sits inside the button's own padding, so it never touches the card edges */}
+      <div
+        className="flex items-center gap-3"
+        style={{ paddingBottom: 10, borderBottom: isLast ? "none" : "1px solid var(--border)" }}
+      >
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <span style={{ fontSize: 10, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--muted-foreground)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              {ticket.category}
+            </span>
+            <span style={{ fontSize: 10, color: "var(--muted-foreground)" }}>·</span>
+            <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--muted-foreground)" }}>
+              {ticket.id}
+            </span>
+          </div>
+          <p
+            className="truncate"
+            style={{ fontSize: 13, fontWeight: 500, fontFamily: "var(--font-body)", color: "var(--foreground)", lineHeight: 1.4 }}
+          >
+            {ticket.title}
+          </p>
+        </div>
+
+        {/* Right side: status chip + date */}
+        <div className="flex flex-col items-end gap-1 flex-shrink-0">
+          {/* State label — outlined chip pattern (solid border, no fill) */}
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 4,
+            fontSize: 10, fontWeight: 700, fontFamily: "var(--font-body)",
+            color: s.textColor,
+            backgroundColor: "transparent",
+            border: `1.5px solid ${s.textColor}`,
+            borderRadius: 9999,
+            padding: "3px 10px",
+            whiteSpace: "nowrap",
+            letterSpacing: "0.01em",
+          }}>
+            {s.label}
           </span>
-          <span style={{ fontSize: 10, color: "var(--muted-foreground)" }}>·</span>
-          <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--muted-foreground)" }}>
-            {ticket.id}
+          <span style={{ fontSize: 10, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>
+            {relativeDate(ticket.updated)}
           </span>
         </div>
-        <p
-          className="truncate"
-          style={{ fontSize: 13, fontWeight: 500, fontFamily: "var(--font-body)", color: "var(--foreground)", lineHeight: 1.4 }}
-        >
-          {ticket.title}
-        </p>
-      </div>
-
-      {/* Right side: status chip + date */}
-      <div className="flex flex-col items-end gap-1 flex-shrink-0">
-        {/* State label — outlined chip pattern (solid border, no fill) */}
-        <span style={{
-          display: "inline-flex", alignItems: "center", gap: 4,
-          fontSize: 10, fontWeight: 700, fontFamily: "var(--font-body)",
-          color: s.textColor,
-          backgroundColor: "transparent",
-          border: `1.5px solid ${s.textColor}`,
-          borderRadius: 9999,
-          padding: "3px 10px",
-          whiteSpace: "nowrap",
-          letterSpacing: "0.01em",
-        }}>
-          {s.label}
-        </span>
-        <span style={{ fontSize: 10, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>
-          {relativeDate(ticket.updated)}
-        </span>
       </div>
     </button>
   );
