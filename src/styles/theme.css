@@ -10,27 +10,28 @@
 [data-theme="light"] {
   --font-size: 16px;
   --radius: 0.75rem;
-  --font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-heading: 'Sofia Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Sofia Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
 
   /* Surfaces — navy-tinted harmonised neutrals (MD3 2026 tonal containers) */
-  --background:         #F4F7FC;   /* surface-dim: barely blue-white, not neutral gray */
+  --background:         #F5F6FB;   /* Canvas */
   --foreground:         #0A1628;
   --card:               #FFFFFF;   /* surface: pure white pops off tinted background */
   --card-foreground:    #0A1628;
   --popover:            #FFFFFF;
   --popover-foreground: #0A1628;
 
-  /* Primary — NWN Navy #002855 */
-  --primary:                #002855;
+  /* Primary — NWN Brand Navy #001355 */
+  --primary:                #001355;
   --primary-foreground:     #FFFFFF;
   --primary-container:      #D6E5FF;   /* tonal container — selection/chip bg */
   --on-primary-container:   #001A3D;
 
-  /* Secondary — NWN Orange #FF6900 */
-  --secondary:              #C45200;
+  /* Secondary — NWN Coral #FF5C39 (the single accent — CTAs, emphasis, active state) */
+  --secondary:              #FF5C39;
   --secondary-foreground:   #FFFFFF;
-  --secondary-container:    #FFE4D5;   /* softer than #FFE0CC */
+  --secondary-container:    #FFE1D6;
   --on-secondary-container: #3D1500;
 
   /* Accent — NWN Blue #00A3E0 */
@@ -39,25 +40,25 @@
 
   /* Tonal surface variants — harmonised toward navy (not plain gray) */
   --muted:              #E8EDF6;   /* surface-container: navy-tinted, was neutral #EAECF0 */
-  --muted-foreground:   #4B5B6E;   /* on-surface-variant: navy-leaning, was #515A6B */
+  --muted-foreground:   #5A6274;   /* Slate 600 */
   --accent:             #DCE9FF;   /* hover / selected state bg — lighter than primary-container */
   --accent-foreground:  #0A1628;
 
   /* Semantic */
   --destructive:            #BA1A1A;
   --destructive-foreground: #FFFFFF;
-  --border:             rgba(0, 40, 85, 0.07);   /* whisper border — tonal layering over lines */
+  --border:             #E6E9F2;   /* Line */
   --input:              transparent;
   --input-background:   #E8EDF6;   /* harmonised with muted */
   --switch-background:  #8AA3CC;
-  --ring:               rgba(0, 40, 85, 0.20);
+  --ring:               rgba(0, 19, 85, 0.20);
   --font-weight-medium: 600;
   --font-weight-normal: 400;
 
   /* State layers — feather-light (MD3 2026 lower-opacity states) */
-  --state-hover:   rgba(0, 40, 85, 0.05);
-  --state-pressed: rgba(0, 40, 85, 0.10);
-  --state-focus:   rgba(0, 40, 85, 0.07);
+  --state-hover:   rgba(0, 19, 85, 0.05);
+  --state-pressed: rgba(0, 19, 85, 0.10);
+  --state-focus:   rgba(0, 19, 85, 0.07);
 
   /* Status */
   --status-error-bg:    #FFE8E8;
@@ -81,10 +82,10 @@
   --sidebar-submenu:            #FFFFFF;
   --sidebar-border:             rgba(0, 40, 85, 0.10);
   --sidebar-icon:               #49546B;                    /* onSurfaceVariant */
-  --sidebar-active-container:   #D6E5FF;                    /* primaryContainer */
-  --sidebar-active-fg:          #001A3D;                    /* onPrimaryContainer */
-  --sidebar-hover:              rgba(0, 40, 85, 0.07);
-  --sidebar-hover-fg:           #002855;
+  --sidebar-active-container:   #FFE1D6;                    /* secondary-container — coral tint */
+  --sidebar-active-fg:          #FF5C39;                    /* Coral */
+  --sidebar-hover:              rgba(73, 84, 107, 0.08);   /* MD3 state layer: onSurfaceVariant @ 8% */
+  --sidebar-hover-fg:           #0A1628;                    /* MD3 onSurface — darker than default onSurfaceVariant */
   --sidebar-logo-bg:            rgba(0, 40, 85, 0.06);
   --sidebar-logo-fg:            #002855;
   --sidebar-foreground:         #0A1628;
@@ -100,8 +101,9 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 .dark,
 [data-theme="dark"] {
-  --font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-heading: 'Sofia Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Sofia Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
 
   /* MD3 dark — surface tone-6, card tone-10 */
   --background:         #0F1420;
@@ -180,8 +182,9 @@
    OCEAN — MD3 Blue (seed #0061A4, accent teal)
    ═══════════════════════════════════════════════════════════════════════════ */
 [data-theme="ocean"] {
-  --font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-heading: 'Sofia Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Sofia Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
 
   /* MD3 tone-99 neutral-variant for ocean */
   --background:         #F4F7FC;
@@ -259,8 +262,9 @@
    Tailwind: amber-50/100/200/300/600/700/800 + orange-100/600/700
    ═══════════════════════════════════════════════════════════════════════════ */
 [data-theme="warm"] {
-  --font-heading: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-body:    'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-heading: 'Sofia Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body:    'Sofia Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
 
   /* Surfaces — amber-50 background, white card */
   --background:         #FFFBF5;

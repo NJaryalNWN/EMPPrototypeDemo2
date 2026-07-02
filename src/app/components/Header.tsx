@@ -262,9 +262,10 @@ function HelpPopover({ anchorEl, open, onClose, onNewCase }: {
             onClick={() => { onClose(); onNewCase(); }}
             style={{
               width: "100%", padding: "11px 18px",
-              backgroundColor: "#002855", color: "#FFFFFF",
+              backgroundColor: "var(--secondary)", color: "var(--secondary-foreground)",
               borderRadius: 9999, border: 0, cursor: "pointer",
               fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 700,
+              boxShadow: "0 8px 20px rgba(255,92,57,0.32)",
               transition: "opacity 0.15s",
             }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; }}

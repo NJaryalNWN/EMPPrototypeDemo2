@@ -269,7 +269,7 @@ export function NotificationDrawer({ open, onClose }: { open: boolean; onClose: 
             onClick={markAllRead}
             style={{
               fontSize: 14, fontFamily: "var(--font-body)", fontWeight: 600,
-              color: "var(--primary)", backgroundColor: "transparent", border: "none", cursor: "pointer",
+              color: "var(--secondary)", backgroundColor: "transparent", border: "none", cursor: "pointer",
             }}
           >
             Mark all as read

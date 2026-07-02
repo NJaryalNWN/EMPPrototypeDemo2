@@ -18,7 +18,7 @@ const base =
 
 const variants: Record<Variant, string> = {
   filled:
-    "rounded-lg bg-primary text-primary-foreground " +
+    "rounded-lg bg-secondary text-secondary-foreground " +
     "hover:brightness-90",
   outlined:
     "rounded-lg border border-border bg-transparent text-foreground " +

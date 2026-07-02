@@ -17,10 +17,11 @@ import DevicesOutlinedIcon        from "@mui/icons-material/DevicesOutlined";
 import DevicesIcon                from "@mui/icons-material/Devices";
 import SettingsOutlinedIcon       from "@mui/icons-material/SettingsOutlined";
 import SettingsIcon               from "@mui/icons-material/Settings";
+import OpenInNewIcon              from "@mui/icons-material/OpenInNew";
 
 type IconComp = React.ComponentType<{ style?: React.CSSProperties }>;
 
-interface SubItem  { label: string; navTarget: string; }
+interface SubItem  { label: string; navTarget: string; isExternal?: boolean; }
 interface Section  { heading?: string; items: SubItem[]; }
 interface NavConfig {
   label: string;
@@ -31,15 +32,15 @@ interface NavConfig {
   sections?: Section[];
 }
 
-/* ── Primary nav ─────────────────────────────────────────── */
+/* ── Primary nav — mirrors getEmpMenu API (labels/routes only, icons unchanged) ── */
 const navConfig: NavConfig[] = [
   {
     label: "Home", icon: HomeOutlinedIcon, activeIcon: HomeIcon,
     sectionTitle: "HOME",
     sections: [{ items: [
-      { label: "Home Overview", navTarget: "Home" },
-      { label: "My Cases",      navTarget: "My Cases" },
-      { label: "Reports",       navTarget: "Reports" },
+      { label: "Knowledge Base",  navTarget: "Knowledge Base" },
+      { label: "Service Catalog", navTarget: "Service Catalog" },
+      { label: "Tickets",         navTarget: "My Cases" },
     ]}],
   },
   {
@@ -47,22 +48,22 @@ const navConfig: NavConfig[] = [
     icon: StorageOutlinedIcon, activeIcon: StorageIcon,
     sectionTitle: "INTELLIGENT INFRASTRUCTURE",
     sections: [
-      { heading: "ADMIN", items: [
-        { label: "Meraki | Admin",        navTarget: "Intelligent Workplace" },
-        { label: "DNA Center Cloud",      navTarget: "Intelligent Workplace" },
-        { label: "Aruba | Admin",         navTarget: "Intelligent Workplace" },
-        { label: "Intersight | Admin",    navTarget: "Intelligent Workplace" },
-        { label: "HPE Infosight | Admin", navTarget: "Intelligent Workplace" },
+      { heading: "CONTROL", items: [
+        { label: "Meraki | Admin",        navTarget: "https://account.meraki.com/secure/login/dashboard_login", isExternal: true },
+        { label: "DNA Center Cloud",      navTarget: "https://dnacentercloud.cisco.com/auth/login", isExternal: true },
+        { label: "Aruba | Admin",         navTarget: "https://portal-prod2.central.arubanetworks.com/platform/login/user", isExternal: true },
+        { label: "Intersight | Admin",    navTarget: "https://intersight.com/", isExternal: true },
+        { label: "HPE Infosight | Admin", navTarget: "https://infosight.hpe.com/app/login", isExternal: true },
       ]},
       { heading: "MONITOR", items: [
-        { label: "Contrivian | Northstar",  navTarget: "Intelligent Workplace" },
-        { label: "Speedcast | Compass",     navTarget: "Intelligent Workplace" },
-        { label: "Performance Monitoring",  navTarget: "Intelligent Workplace" },
-        { label: "Performance Monitoring",  navTarget: "Intelligent Workplace" },
+        { label: "Contrivian | Northstar",  navTarget: "https://connectivitymgr.nwn.ai/", isExternal: true },
+        { label: "Speedcast | Compass",     navTarget: "https://compass.speedcast.com/login", isExternal: true },
+        { label: "Performance Monitoring",  navTarget: "https://nwnc.zenoss.io/", isExternal: true },
+        { label: "Performance Monitoring",  navTarget: "https://its.ez.nwnit.com/", isExternal: true },
       ]},
       { heading: "REPORT", items: [
-        { label: "Contrivian | Northstar", navTarget: "Intelligent Workplace" },
-        { label: "Speedcast | Compass",    navTarget: "Intelligent Workplace" },
+        { label: "Contrivian | Northstar", navTarget: "https://connectivitymgr.nwn.ai/", isExternal: true },
+        { label: "Speedcast | Compass",    navTarget: "https://compass.speedcast.com/login", isExternal: true },
       ]},
     ],
   },
@@ -71,20 +72,20 @@ const navConfig: NavConfig[] = [
     icon: HeadsetMicOutlinedIcon, activeIcon: HeadsetMicIcon,
     sectionTitle: "CONTACT CENTER",
     sections: [
-      { heading: "ADMIN", items: [
-        { label: "Webex CC | Admin",  navTarget: "Contact Center" },
-        { label: "CCDM | Admin",      navTarget: "Contact Center" },
-        { label: "Five9 | Admin",     navTarget: "Contact Center" },
+      { heading: "CONTROL", items: [
+        { label: "Webex CC | Admin",  navTarget: "https://admin.webex.com/login", isExternal: true },
+        { label: "CCDM | Admin",      navTarget: "https://ccdm.nwncloud.com/Portal", isExternal: true },
+        { label: "Five9 | Admin",     navTarget: "https://admin.us.five9.net", isExternal: true },
       ]},
       { heading: "MONITOR", items: [
-        { label: "Performance Monitoring", navTarget: "Contact Center" },
-        { label: "Performance Monitoring", navTarget: "Contact Center" },
-        { label: "Performance Monitoring", navTarget: "Contact Center" },
+        { label: "Performance Monitoring", navTarget: "https://nwnc.zenoss.io/", isExternal: true },
+        { label: "Performance Monitoring", navTarget: "https://its.ez.nwnit.com/", isExternal: true },
+        { label: "Performance Monitoring", navTarget: "https://its.ez.nwnit.com/", isExternal: true },
       ]},
       { heading: "REPORT", items: [
-        { label: "Webex CC | Report", navTarget: "Contact Center" },
-        { label: "SIP Reporting",     navTarget: "Contact Center" },
-        { label: "SIP Reporting",     navTarget: "Contact Center" },
+        { label: "Webex CC | Report", navTarget: "https://admin.webex.com/login", isExternal: true },
+        { label: "SIP Reporting",     navTarget: "https://customer.nwncloud.com/SSO/Login.aspx?ClientID=NWNCommReporting", isExternal: true },
+        { label: "SIP Reporting",     navTarget: "https://customer.nwncloud.com/SSO/Login.aspx?ClientID=NWNCommReporting", isExternal: true },
       ]},
     ],
   },
@@ -93,19 +94,19 @@ const navConfig: NavConfig[] = [
     icon: GppGoodOutlinedIcon, activeIcon: GppGoodIcon,
     sectionTitle: "MANAGED SECURITY",
     sections: [
-      { heading: "ADMIN", items: [
-        { label: "SecureX | Admin",      navTarget: "Managed Security" },
-        { label: "Meraki | Admin",       navTarget: "Managed Security" },
-        { label: "Threat Investigation", navTarget: "Managed Security" },
+      { heading: "CONTROL", items: [
+        { label: "SecureX | Admin",      navTarget: "https://sign-on.security.cisco.com/", isExternal: true },
+        { label: "Meraki | Admin",       navTarget: "https://account.meraki.com/secure/login/dashboard_login", isExternal: true },
+        { label: "Threat Investigation", navTarget: "https://us1-prosearch.proficio.com/", isExternal: true },
       ]},
       { heading: "MONITOR", items: [
-        { label: "Performance Monitoring", navTarget: "Managed Security" },
-        { label: "Performance Monitoring", navTarget: "Managed Security" },
+        { label: "Performance Monitoring", navTarget: "https://nwnc.zenoss.io/", isExternal: true },
+        { label: "Performance Monitoring", navTarget: "https://its.ez.nwnit.com/", isExternal: true },
       ]},
       { heading: "REPORT", items: [
-        { label: "Patch Reporting", navTarget: "Managed Security" },
-        { label: "SOC Reporting",   navTarget: "Managed Security" },
-        { label: "Threat Insights", navTarget: "Managed Security" },
+        { label: "Patch Reporting", navTarget: "https://pa.ez.nwnit.com", isExternal: true },
+        { label: "SOC Reporting",   navTarget: "https://deepwatch.okta.com/signin", isExternal: true },
+        { label: "Threat Insights", navTarget: "https://login.proficio.com", isExternal: true },
       ]},
     ],
   },
@@ -114,20 +115,20 @@ const navConfig: NavConfig[] = [
     icon: VideocamOutlinedIcon, activeIcon: VideocamIcon,
     sectionTitle: "UNIFIED COMMUNICATIONS",
     sections: [
-      { heading: "ADMIN", items: [
-        { label: "Webex Control Hub | Admin", navTarget: "Visual Collaboration" },
-        { label: "Webex | Selfcare",          navTarget: "Visual Collaboration" },
-        { label: "Number Management",         navTarget: "Visual Collaboration" },
+      { heading: "CONTROL", items: [
+        { label: "Webex Control Hub | Admin", navTarget: "https://admin.webex.com/login", isExternal: true },
+        { label: "Webex | Selfcare",          navTarget: "https://settings.webex.com/login", isExternal: true },
+        { label: "Number Management",         navTarget: "https://carousel.ipilot.io", isExternal: true },
       ]},
       { heading: "MONITOR", items: [
-        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
-        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
-        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
+        { label: "Performance Monitoring", navTarget: "https://nwnc.zenoss.io/", isExternal: true },
+        { label: "Performance Monitoring", navTarget: "https://its.ez.nwnit.com/", isExternal: true },
+        { label: "Performance Monitoring", navTarget: "https://its.ez.nwnit.com/", isExternal: true },
       ]},
       { heading: "REPORT", items: [
-        { label: "Webex Call Detail", navTarget: "Visual Collaboration" },
-        { label: "Webex SIP Usage",   navTarget: "Visual Collaboration" },
-        { label: "Analytics",         navTarget: "Visual Collaboration" },
+        { label: "Webex Call Detail", navTarget: "https://admin.webex.com/login", isExternal: true },
+        { label: "Webex SIP Usage",   navTarget: "https://customer.nwncloud.com/SSO/Login.aspx?ClientID=NWNCommReporting", isExternal: true },
+        { label: "Analytics",         navTarget: "https://customer.nwncloud.com/SSO/Login.aspx?ClientID=NWNCommReporting", isExternal: true },
       ]},
     ],
   },
@@ -136,22 +137,33 @@ const navConfig: NavConfig[] = [
     icon: GroupsOutlinedIcon, activeIcon: GroupsIcon,
     sectionTitle: "VISUAL COLLABORATION",
     sections: [
-      { heading: "ADMIN", items: [
-        { label: "Crestron | Admin",          navTarget: "Visual Collaboration" },
-        { label: "Microsoft | Admin",         navTarget: "Visual Collaboration" },
-        { label: "Cisco Control Hub | Admin", navTarget: "Visual Collaboration" },
+      { heading: "CONTROL", items: [
+        { label: "Crestron | Admin",          navTarget: "https://portal.crestron.io/", isExternal: true },
+        { label: "Microsoft | Admin",         navTarget: "https://portal.rooms.microsoft.com/", isExternal: true },
+        { label: "Cisco Control Hub | Admin", navTarget: "https://admin.webex.com/login", isExternal: true },
       ]},
       { heading: "MONITOR", items: [
-        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
-        { label: "Performance Monitoring", navTarget: "Visual Collaboration" },
-        { label: "HP",                     navTarget: "Visual Collaboration" },
-        { label: "Poly",                   navTarget: "Visual Collaboration" },
+        { label: "Performance Monitoring", navTarget: "https://nwnc.zenoss.io/", isExternal: true },
+        { label: "Performance Monitoring", navTarget: "https://portal.crestron.io/", isExternal: true },
+        { label: "HP",                     navTarget: "https://www.hpdaas.com/", isExternal: true },
+        { label: "Poly",                   navTarget: "https://lens.poly.com/", isExternal: true },
       ]},
     ],
   },
   {
-    label: "Devices", icon: DevicesOutlinedIcon, activeIcon: DevicesIcon,
-    navTarget: "Managed Devices",
+    label: "Devices",
+    icon: DevicesOutlinedIcon, activeIcon: DevicesIcon,
+    sectionTitle: "DEVICES",
+    sections: [
+      { heading: "MONITOR", items: [
+        { label: "Performance Monitoring", navTarget: "https://nwnc.zenoss.io/", isExternal: true },
+        { label: "Performance Monitoring", navTarget: "http://hpdaas.com", isExternal: true },
+      ]},
+      { heading: "REPORT", items: [
+        { label: "Analytics",          navTarget: "http://hpdaas.com", isExternal: true },
+        { label: "CSC Call Analytics", navTarget: "https://customer.nwncloud.com/SSO/Login.aspx?ClientID=NWNCommReporting", isExternal: true },
+      ]},
+    ],
   },
   {
     label: "Settings", icon: SettingsOutlinedIcon, activeIcon: SettingsIcon,
@@ -163,7 +175,7 @@ const navConfig: NavConfig[] = [
 function getRailOwner(page: string): string {
   for (const n of navConfig) {
     if (n.navTarget === page) return n.label;
-    if (n.sections?.some((s) => s.items.some((i) => i.navTarget === page))) return n.label;
+    if (n.sections?.some((s) => s.items.some((i) => !i.isExternal && i.navTarget === page))) return n.label;
   }
   return "Home";
 }
@@ -224,7 +236,13 @@ function FloatingPanel({
 
         {/* Sections with optional group headings */}
         <div style={{ padding: "0 10px 24px", flex: 1 }}>
-          {config.sections!.map((section, si) => (
+          {(() => {
+            /* Placeholder sub-items within a rail often share the same
+               navTarget (no distinct page built yet) — only the first
+               match should ever read as active, otherwise every item
+               sharing that target lights up at once. */
+            let firstMatchClaimed = false;
+            return config.sections!.map((section, si) => (
             <div key={si}>
               {/* Group heading (ADMIN / MONITOR / REPORT) */}
               {section.heading && (
@@ -239,14 +257,19 @@ function FloatingPanel({
 
               {/* Items */}
               {section.items.map((item, ii) => {
-                const isActive = activePage === item.navTarget;
+                const matchesTarget = activePage === item.navTarget;
+                const isActive = matchesTarget && !firstMatchClaimed;
+                if (matchesTarget) firstMatchClaimed = true;
                 return (
                   <button
                     key={`${si}-${ii}`}
                     type="button"
-                    onClick={() => onNav(item.navTarget)}
+                    onClick={() => {
+                      if (item.isExternal) window.open(item.navTarget, "_blank", "noopener,noreferrer");
+                      else onNav(item.navTarget);
+                    }}
                     style={{
-                      width: "100%", display: "flex", alignItems: "center",
+                      width: "100%", display: "flex", alignItems: "center", gap: 8,
                       padding: "11px 14px", marginBottom: 1,
                       borderRadius: 8,
                       border: 0, cursor: "pointer", textAlign: "left",
@@ -257,18 +280,22 @@ function FloatingPanel({
                     onMouseLeave={(e) => { if (!isActive) (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
                   >
                     <span style={{
-                      fontSize: 14, fontFamily: "var(--font-body)",
+                      flex: 1, fontSize: 14, fontFamily: "var(--font-body)",
                       fontWeight: isActive ? 600 : 400,
                       color: isActive ? "var(--sidebar-active-fg)" : "var(--foreground)",
                       lineHeight: 1.4,
                     }}>
                       {item.label}
                     </span>
+                    {item.isExternal && (
+                      <OpenInNewIcon style={{ fontSize: 13, color: "var(--muted-foreground)", flexShrink: 0, opacity: 0.6 }} />
+                    )}
                   </button>
                 );
               })}
             </div>
-          ))}
+            ));
+          })()}
         </div>
       </div>
     </>,
@@ -282,7 +309,7 @@ interface SidebarProps { activePage: string; onNav: (page: string) => void; onAi
 export function Sidebar({ activePage, onNav, onAiva }: SidebarProps) {
   const activeRail              = getRailOwner(activePage);
   const [hovered, setHovered]   = useState<string | null>(null);
-  const [panelLeft, setPanelLeft] = useState(80);
+  const [panelLeft, setPanelLeft] = useState(88);
   const hideTimer               = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const cancelHide  = () => { if (hideTimer.current) clearTimeout(hideTimer.current); };
@@ -294,7 +321,7 @@ export function Sidebar({ activePage, onNav, onAiva }: SidebarProps) {
   return (
     <>
       <aside style={{
-        width: 80, flexShrink: 0,
+        width: 88, flexShrink: 0,
         display: "flex", flexDirection: "column", alignItems: "center",
         backgroundColor: "var(--sidebar)",
         borderRight: "1.5px solid rgba(0,40,85,0.13)",
@@ -308,14 +335,14 @@ export function Sidebar({ activePage, onNav, onAiva }: SidebarProps) {
             onClick={onAiva}
             style={{
               width: 48, height: 48, borderRadius: 14,
-              backgroundColor: "var(--primary)",
+              backgroundColor: "#00A3E0",
               display: "flex", alignItems: "center", justifyContent: "center",
               border: 0, cursor: "pointer",
-              boxShadow: "0 2px 8px rgba(0,40,85,0.28)",
+              boxShadow: "0 2px 8px rgba(0,163,224,0.35)",
               transition: "transform 0.15s, box-shadow 0.15s",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1.06)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 14px rgba(0,40,85,0.40)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(0,40,85,0.28)"; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1.06)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 14px rgba(0,163,224,0.48)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = "scale(1)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 2px 8px rgba(0,163,224,0.35)"; }}
           >
             <AutoAwesomeIcon style={{ fontSize: 22, color: "#FFFFFF" }} />
           </button>
@@ -353,9 +380,9 @@ export function Sidebar({ activePage, onNav, onAiva }: SidebarProps) {
                   border: 0, background: "transparent", cursor: "pointer", outline: "none",
                 }}
               >
-                {/* MD3 56×32dp indicator pill */}
+                {/* Rounded-square indicator */}
                 <div style={{
-                  width: 56, height: 32, borderRadius: 16,
+                  width: 44, height: 44, borderRadius: 14,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   backgroundColor: isActive
                     ? "var(--sidebar-active-container)"

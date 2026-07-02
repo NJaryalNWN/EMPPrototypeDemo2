@@ -316,7 +316,7 @@ export function NewTicketDrawer({ open, onClose }: { open: boolean; onClose: () 
             <button
               type="button" onClick={handleClose}
               className="flex items-center gap-2 cursor-pointer border-0 transition-all duration-150"
-              style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderRadius: 9999, padding: "10px 22px", fontSize: 14, fontWeight: 600, fontFamily: "var(--font-body)" }}
+              style={{ backgroundColor: "var(--secondary)", color: "var(--secondary-foreground)", borderRadius: 9999, padding: "10px 22px", fontSize: 14, fontWeight: 600, fontFamily: "var(--font-body)" }}
               onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
               onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
             >

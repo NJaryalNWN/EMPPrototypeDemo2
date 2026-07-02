@@ -4,7 +4,6 @@ import { createPortal } from "react-dom";
 import { NewTicketDrawer } from "../components/NewTicketDrawer";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import NorthEastIcon from "@mui/icons-material/NorthEast";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
@@ -157,6 +156,20 @@ function PortalCard({
       />
       {children}
     </div>
+  );
+}
+
+/* ── Header stat pill — filled soft chip (count + label) ─── */
+function HeaderStatPill({ value, label, bg, color }: { value: number; label: string; bg: string; color: string }) {
+  return (
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 4,
+      backgroundColor: bg, color, borderRadius: 9999,
+      padding: "5px 12px 5px 10px", whiteSpace: "nowrap",
+    }}>
+      <span style={{ fontSize: 14, fontWeight: 800, fontFamily: "var(--font-heading)", lineHeight: 1 }}>{value}</span>
+      <span style={{ fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)" }}>{label}</span>
+    </span>
   );
 }
 
@@ -360,74 +373,56 @@ function CardFooter({ label, stat1, stat2, stat3, onClick }: { label: string; st
         onClick={onClick}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="flex items-center gap-1 border-0 cursor-pointer transition-all duration-150 flex-shrink-0 rounded-lg text-xs font-semibold text-primary"
+        className="flex items-center gap-1 border-0 cursor-pointer transition-all duration-150 flex-shrink-0 rounded-lg text-xs font-semibold text-secondary"
         style={{
-          backgroundColor: hovered ? "var(--primary-container)" : "transparent",
+          backgroundColor: hovered ? "var(--secondary-container)" : "transparent",
           padding: "4px 8px",
         }}
       >
         {label}
-        <ArrowForwardIcon style={{ fontSize: 13, transition: "transform 0.15s", transform: hovered ? "translateX(3px)" : "none" }} />
+        <ChevronRightIcon style={{ fontSize: 16, transition: "transform 0.15s", transform: hovered ? "translateX(3px)" : "none" }} />
       </button>
     </div>
   );
 }
 
-/* ── Hero banner — flat MD3 surface, brand navy, no gradients ── */
-function ContactTooltip({ icon: Icon, label, value, onHover, hovered }: {
-  icon: React.ComponentType<{ style?: React.CSSProperties }>;
-  label: string; value: string;
-  onHover: (v: boolean) => void;
-  hovered: boolean;
+/* ── Hero banner — gradient navy, two-line coral-accented headline ── */
+function BannerContactRow({ href, icon: Icon, value }: {
+  href: string; icon: React.ComponentType<{ style?: React.CSSProperties }>; value: string;
 }) {
   return (
-    <div className="relative">
-      <a href={label === "email" ? `mailto:${value}` : `tel:+17814346800`}
-        className="flex items-center justify-center rounded-full w-8 h-8 bg-primary-foreground/12 hover:bg-primary-foreground/20 transition-colors duration-150"
-        onMouseEnter={() => onHover(true)}
-        onMouseLeave={() => onHover(false)}
-      >
-        <Icon style={{ fontSize: 15 }} className="text-primary-foreground" />
-      </a>
-      {hovered && (
-        <div className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 rounded-lg bg-card text-card-foreground text-xs font-semibold whitespace-nowrap px-2.5 py-1.5 shadow-lg pointer-events-none z-50">
-          <div className="absolute bottom-full left-1/2 -translate-x-1/2 border-x-4 border-x-transparent border-b-4 border-b-card" />
-          <div className="flex items-center gap-1.5">
-            <Icon style={{ fontSize: 13 }} />
-            {value}
-          </div>
-        </div>
-      )}
-    </div>
+    <a href={href}
+      className="flex items-center justify-end gap-2 text-primary-foreground/75 hover:text-primary-foreground text-sm no-underline transition-colors duration-150"
+    >
+      <Icon style={{ fontSize: 16 }} />
+      {value}
+    </a>
   );
 }
 
 function HeroBanner({ onNewCase }: { onNewCase: () => void }) {
-  const [emailTip, setEmailTip] = useState(false);
-  const [phoneTip, setPhoneTip] = useState(false);
-
   return (
-    <div className="mb-6">
-      <div className="flex flex-col gap-4 rounded-2xl bg-primary px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-6">
+    <div className="w-full bg-primary">
+      <div className="max-w-[1440px] mx-auto flex flex-col gap-6 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-10 lg:px-8">
         <div className="min-w-0">
-          <h1 className="text-primary-foreground font-bold tracking-tight leading-tight text-xl sm:text-2xl">
-            {greeting()}, Nitin
+          <h1 className="font-bold tracking-tight leading-tight text-3xl sm:text-4xl">
+            <span className="text-primary-foreground block">{greeting()}, Nitin</span>
+            <span className="text-secondary block">need to create a ticket?</span>
           </h1>
-          <p className="text-primary-foreground/65 text-sm leading-relaxed mt-1">
-            Access your knowledge base, request services, and manage support tickets.
+          <p className="text-primary-foreground/65 text-sm leading-relaxed mt-3 max-w-md">
+            Open a ticket, reach the NWN support team directly, or jump straight into any part of your relationship with us.
           </p>
         </div>
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <div className="flex items-center gap-1.5">
-            <ContactTooltip icon={EmailOutlinedIcon} label="email" value="itsupport@nwncarousel.com" hovered={emailTip} onHover={setEmailTip} />
-            <ContactTooltip icon={PhoneOutlinedIcon} label="phone" value="(781) 434-6800"             hovered={phoneTip} onHover={setPhoneTip} />
-          </div>
-          <div className="w-px h-6 bg-primary-foreground/15" />
+        <div className="flex flex-col items-stretch sm:items-end gap-4 flex-shrink-0">
           <button type="button" onClick={onNewCase}
-            className="flex items-center gap-1.5 rounded-full border-0 cursor-pointer flex-shrink-0 bg-primary-foreground text-primary px-5 py-2.5 text-sm font-semibold whitespace-nowrap hover:opacity-90 transition-opacity duration-150"
+            className="flex items-center justify-center gap-1.5 rounded-full border-0 cursor-pointer bg-secondary text-secondary-foreground hover:text-primary min-w-[200px] px-8 py-3.5 text-sm font-bold whitespace-nowrap shadow-lg transition-colors duration-150"
           >
-            <AddOutlinedIcon style={{ fontSize: 16 }} />New Case
+            <AddOutlinedIcon style={{ fontSize: 18 }} />New Case
           </button>
+          <div className="flex flex-col items-stretch sm:items-end gap-2">
+            <BannerContactRow href="mailto:itsupport@nwncarousel.com" icon={EmailOutlinedIcon} value="itsupport@nwncarousel.com" />
+            <BannerContactRow href="tel:+17814346800" icon={PhoneOutlinedIcon} value="(781) 434-6800" />
+          </div>
         </div>
       </div>
     </div>
@@ -994,7 +989,7 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
             {ticket.category}
           </span>
           <span style={{ fontSize: 10, color: "var(--muted-foreground)" }}>·</span>
-          <span style={{ fontSize: 10, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>
+          <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--muted-foreground)" }}>
             {ticket.id}
           </span>
         </div>
@@ -1008,19 +1003,18 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
 
       {/* Right side: status chip + date */}
       <div className="flex flex-col items-end gap-1 flex-shrink-0">
-        {/* State label — outlined pill, dot as the color cue */}
+        {/* State label — outlined chip pattern (solid border, no fill) */}
         <span style={{
           display: "inline-flex", alignItems: "center", gap: 4,
-          fontSize: 10, fontWeight: 600, fontFamily: "var(--font-body)",
+          fontSize: 10, fontWeight: 700, fontFamily: "var(--font-body)",
           color: s.textColor,
           backgroundColor: "transparent",
-          border: `1.5px solid ${s.textColor}50`,
+          border: `1.5px solid ${s.textColor}`,
           borderRadius: 9999,
-          padding: "2px 8px 2px 6px",
+          padding: "3px 10px",
           whiteSpace: "nowrap",
           letterSpacing: "0.01em",
         }}>
-          <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: s.textColor, flexShrink: 0, display: "inline-block" }} />
           {s.label}
         </span>
         <span style={{ fontSize: 10, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>
@@ -1045,39 +1039,41 @@ export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => voi
 
   return (
     <div className="flex-1 overflow-y-auto bg-background transition-colors duration-200">
+      <HeroBanner onNewCase={() => setDrawerOpen(true)} />
+
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <HeroBanner onNewCase={() => setDrawerOpen(true)} />
-
 
         <NewTicketDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
 
         {/* Portal grid — 12-col base, My Tickets leads at col-span-6 */}
         <div className="grid grid-cols-12 gap-6">
 
-          {/* ── My Cases — col-span-3 ────────────────────────── */}
-          <div className="col-span-12 xl:col-span-3 flex">
+          {/* ── My Cases — col-span-6 ────────────────────────── */}
+          <div className="col-span-12 xl:col-span-6 flex">
             <PortalCard className="flex-1" accentColor="var(--primary)">
               <div className="px-5 pt-4 pb-3 flex items-center gap-3" style={{ borderBottom: "1px solid var(--border)" }}>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--primary-container)" }}>
                   <AssignmentTurnedInOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />
                 </div>
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0">
                   <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">My Cases</h3>
                   <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">Active cases</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setDrawerOpen(true)}
-                  aria-label="Create new case"
-                  className="flex items-center gap-1 cursor-pointer border-0 transition-all duration-150 flex-shrink-0"
-                  style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderRadius: 9999, padding: "5px 10px", fontSize: 11, fontWeight: 600, fontFamily: "var(--font-body)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-                >
-                  <AddOutlinedIcon style={{ fontSize: 12 }} />
-                  New Case
-                </button>
+                <span className="hidden md:inline-block flex-shrink-0" style={{ width: 3, height: 3, borderRadius: "50%", backgroundColor: "var(--muted-foreground)" }} />
+                <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
+                  <HeaderStatPill
+                    value={allTickets.filter(t => t.status === "In Progress" || t.status === "Pending" || t.status === "Approved").length}
+                    label="Active" bg="#DBEAFE" color="#1D4ED8"
+                  />
+                  <HeaderStatPill
+                    value={allTickets.filter(t => t.status === "Resolved").length}
+                    label="Resolved" bg="#D1FAE5" color="#065F46"
+                  />
+                  <HeaderStatPill
+                    value={allTickets.filter(t => t.status === "Closed").length}
+                    label="Closed" bg="#F3F4F6" color="#374151"
+                  />
+                </div>
               </div>
               <div className="flex flex-col flex-1 overflow-y-auto" style={{ maxHeight: 260 }}>
                 {/* Active group */}
@@ -1126,14 +1122,6 @@ export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => voi
                   <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">Service Catalog</h3>
                   <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">Request services</p>
                 </div>
-                <button type="button" onClick={() => onNav?.("Service Catalog")}
-                  className="flex-shrink-0 border-0 bg-transparent cursor-pointer p-1 rounded"
-                  style={{ color: "var(--muted-foreground)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--foreground)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--muted-foreground)"; }}
-                  aria-label="Open Service Catalog">
-                  <NorthEastIcon style={{ fontSize: 16 }} />
-                </button>
               </div>
               <div className="flex flex-col flex-1">
                 {catalogItems.map((item, i, arr) => (
@@ -1144,52 +1132,15 @@ export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => voi
                     onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
                   >
                     <InventoryOutlinedIcon className="flex-shrink-0" style={{ fontSize: 15, color: "var(--muted-foreground)", marginTop: 2 }} />
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <p className="text-[10px] font-semibold text-muted-foreground leading-tight">Most popular #{item.rank}</p>
                       <p className="truncate text-[13px] font-normal text-foreground leading-snug">{item.title}</p>
                     </div>
+                    <ChevronRightIcon style={{ fontSize: 14, color: "var(--muted-foreground)", flexShrink: 0 }} />
                   </button>
                 ))}
               </div>
               <CardFooter label="View All" stat1="169 services" stat2="169 categories" stat3="" onClick={() => onNav?.("Service Catalog")} />
-            </PortalCard>
-          </div>
-
-          {/* ── Reports — col-span-3 ─────────────────────────── */}
-          <div className="col-span-12 xl:col-span-3 flex">
-            <PortalCard className="flex-1" accentColor="var(--primary)">
-              <div className="px-5 pt-4 pb-3 flex items-center gap-3" style={{ borderBottom: "1px solid var(--border)" }}>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: "var(--primary-container)" }}>
-                  <BarChartOutlinedIcon style={{ fontSize: 17, color: "var(--primary)" }} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-foreground text-sm font-semibold tracking-tight leading-tight">Reports</h3>
-                  <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">View and analyze reports</p>
-                </div>
-                <button type="button" onClick={() => onNav?.("Reports")}
-                  className="flex-shrink-0 border-0 bg-transparent cursor-pointer p-1 rounded"
-                  style={{ color: "var(--muted-foreground)" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--foreground)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--muted-foreground)"; }}
-                  aria-label="Open Reports">
-                  <NorthEastIcon style={{ fontSize: 16 }} />
-                </button>
-              </div>
-              <div className="flex flex-col flex-1">
-                {reportLinks.map(({ icon: Icon, label, color, bg }, i) => (
-                  <button key={label} type="button" onClick={() => onNav?.("Reports", label)}
-                    className="w-full flex items-center gap-3 border-0 bg-transparent text-left cursor-pointer transition-colors duration-150"
-                    style={{ padding: "11px 20px" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.04)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
-                  >
-                    <Icon style={{ fontSize: 18, color, flexShrink: 0 }} />
-                    <span className="flex-1 text-[13px] font-normal text-foreground">{label}</span>
-                    <ChevronRightIcon style={{ fontSize: 16, color: "var(--muted-foreground)", flexShrink: 0 }} />
-                  </button>
-                ))}
-              </div>
-              <CardFooter label="View All" stat1="4 report types" stat2="Updated daily" stat3="" onClick={() => onNav?.("Reports")} />
             </PortalCard>
           </div>
 
@@ -1211,7 +1162,7 @@ function Breadcrumb({ items, onNav }: { items: { label: string; page?: string }[
               type="button"
               onClick={() => onNav(item.page!)}
               className="border-0 bg-transparent cursor-pointer p-0 transition-colors duration-150"
-              style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--primary)", fontWeight: i === items.length - 1 ? 600 : 400 }}
+              style={{ fontSize: 13, fontFamily: "var(--font-body)", color: "var(--secondary)", fontWeight: i === items.length - 1 ? 600 : 400 }}
             >
               {item.label}
             </button>
@@ -2009,7 +1960,7 @@ export function MyTicketsPage({ onNav }: { onNav?: (p: string) => void }) {
                 type="button"
                 onClick={() => setDrawerOpen(true)}
                 className="flex items-center gap-2 cursor-pointer border-0 transition-all duration-150 flex-shrink-0"
-                style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)", borderRadius: 9999, padding: "9px 20px", fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)" }}
+                style={{ backgroundColor: "var(--secondary)", color: "var(--secondary-foreground)", borderRadius: 9999, padding: "9px 20px", fontSize: 13, fontWeight: 600, fontFamily: "var(--font-body)" }}
                 onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.88"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
               >
