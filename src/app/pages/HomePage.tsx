@@ -226,7 +226,7 @@ function RowItem({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="w-full flex items-start gap-2.5 px-5 py-2 border-0 bg-transparent text-left cursor-pointer transition-colors duration-150 group"
+      className="w-full flex items-center gap-2.5 px-5 py-2 border-0 bg-transparent text-left cursor-pointer transition-colors duration-150 group"
       style={{
         backgroundColor: hovered ? "rgba(0,0,0,0.04)" : "transparent",
       }}
@@ -235,7 +235,6 @@ function RowItem({
         style={{
           fontSize: 14,
           color: "var(--muted-foreground)",
-          marginTop: 2,
           flexShrink: 0,
         }}
       />
@@ -252,9 +251,8 @@ function RowItem({
           fontSize: 14,
           color: "var(--muted-foreground)",
           flexShrink: 0,
-          marginTop: 3,
-          opacity: hovered ? 1 : 0,
-          transition: "opacity 0.15s",
+          transition: "transform 0.15s",
+          transform: hovered ? "translateX(2px)" : "none",
         }}
       />
     </button>
@@ -1403,7 +1401,7 @@ function KBArticleRow({ article, isLast, onClick }: { article: KBArticleItem; is
           <span style={{ fontSize: 11, fontFamily: "var(--font-body)", color: "var(--muted-foreground)" }}>{article.date}</span>
         </div>
       </div>
-      <ChevronRightIcon style={{ fontSize: 16, color: "var(--primary)", flexShrink: 0, opacity: hov ? 1 : 0, transition: "opacity 0.15s" }} />
+      <ChevronRightIcon style={{ fontSize: 16, color: "var(--primary)", flexShrink: 0, transition: "transform 0.15s", transform: hov ? "translateX(2px)" : "none" }} />
     </div>
   );
 }
