@@ -199,7 +199,7 @@ function CardHeader({
           <h3 className="text-foreground">
             {title}
           </h3>
-          <p className="text-muted-foreground mt-0.5 text-[11px] leading-snug">
+          <p className="text-muted-foreground mt-0.5 text-xs leading-snug">
             {subtitle}
           </p>
         </div>
@@ -239,10 +239,10 @@ function RowItem({
         }}
       />
       <div className="min-w-0 flex-1">
-        <p className="text-muted-foreground text-[10px] leading-snug">
+        <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-[0.04em] leading-snug">
           {label}
         </p>
-        <p className="text-foreground truncate mt-px text-xs font-normal leading-normal">
+        <p className="text-foreground truncate mt-0.5 text-[13px] font-medium leading-[1.4]">
           {title}
         </p>
       </div>
@@ -983,7 +983,7 @@ function ActiveTicketRow({ ticket, isLast, onClick }: { ticket: TicketRow; isLas
       {/* Content */}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1.5 mb-0.5">
-          <span style={{ fontSize: 10, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--muted-foreground)", letterSpacing: "0.02em", textTransform: "uppercase" }}>
+          <span style={{ fontSize: 10, fontFamily: "var(--font-body)", fontWeight: 600, color: "var(--muted-foreground)", letterSpacing: "0.04em", textTransform: "uppercase" }}>
             {ticket.category}
           </span>
           <span style={{ fontSize: 10, color: "var(--muted-foreground)" }}>·</span>
@@ -1055,7 +1055,7 @@ export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => voi
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-foreground">My Cases</h3>
-                  <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">Active cases</p>
+                  <p className="text-muted-foreground text-xs leading-snug mt-0.5">Active cases</p>
                 </div>
                 <span className="hidden md:inline-block flex-shrink-0" style={{ width: 3, height: 3, borderRadius: "50%", backgroundColor: "var(--muted-foreground)" }} />
                 <div className="hidden md:flex items-center gap-1.5 flex-shrink-0">
@@ -1118,7 +1118,7 @@ export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => voi
                 </div>
                 <div className="min-w-0 flex-1">
                   <h3 className="text-foreground">Service Catalog</h3>
-                  <p className="text-muted-foreground text-[11px] leading-snug mt-0.5">Request services</p>
+                  <p className="text-muted-foreground text-xs leading-snug mt-0.5">Request services</p>
                 </div>
               </div>
               <div className="flex flex-col flex-1">
@@ -1131,8 +1131,8 @@ export function HomePage({ onNav }: { onNav?: (p: string, param?: string) => voi
                   >
                     <InventoryOutlinedIcon className="flex-shrink-0" style={{ fontSize: 15, color: "var(--muted-foreground)", marginTop: 2 }} />
                     <div className="min-w-0 flex-1">
-                      <p className="text-[10px] font-semibold text-muted-foreground leading-tight">Most popular #{item.rank}</p>
-                      <p className="truncate text-[13px] font-normal text-foreground leading-snug">{item.title}</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.04em] text-muted-foreground leading-snug">Most popular #{item.rank}</p>
+                      <p className="truncate mt-0.5 text-[13px] font-medium text-foreground leading-[1.4]">{item.title}</p>
                     </div>
                     <ChevronRightIcon style={{ fontSize: 14, color: "var(--muted-foreground)", flexShrink: 0 }} />
                   </button>
