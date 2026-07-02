@@ -343,9 +343,9 @@ export function Sidebar({ activePage, onNav, onAiva }: SidebarProps) {
                 onMouseLeave={() => { item.sections?.length ? scheduleHide() : setHovered(null); }}
                 className="w-full flex flex-col items-center gap-[3px] pt-2 pb-2.5 border-0 bg-transparent cursor-pointer outline-none"
               >
-                {/* Rounded-square indicator — MD3 state layer: neutral on hover, brand on active */}
+                {/* Stadium pill indicator — MD3 nav-rail active indicator shape: neutral on hover, brand on active */}
                 <div className={cn(
-                  "w-11 h-11 rounded-[14px] flex items-center justify-center transition-colors duration-150",
+                  "w-16 h-10 rounded-full flex items-center justify-center transition-colors duration-150",
                   isActive ? "bg-[var(--sidebar-active-container)]" : isHovered ? "bg-[var(--sidebar-hover)]" : "bg-transparent",
                 )}>
                   <Icon style={{
